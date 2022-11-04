@@ -1,13 +1,54 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.homeWelcome, .signUp, .dashboardlinks{
+    background-color: inherit;
+    min-height: 500px;
+    font-family: "lucida-calligraphy";
+    align-items: center;
+    color:#fff;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.input-group-text{
+    color:#000;
+    border:none;
 }
+
+.form-control{
+    caret-color: red;
+}
+
+#welcomeMessage, #signUpHeader, .navbar-brand{
+    color:#E1E2EF;
+}
+
+/* Signup styles*/
+#emailFeedback{
+    color:greenyellow;
+}
+
+
+
+/* Dashboard Styles*/
+
+.quickDashboardLinks{
+    text-decoration: none;
+    color:#fff;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+#dashboardNav{
+    border-right:1px solid gold;
+}
+
+.dashboardInfo{
+    border-right:1px solid gold;
+}
+
+.dashboardInfo h4{
+    color:gold;
+}
+
+Link:hover{
+    background-color: gold;
+}
+
+/*New Project*/
