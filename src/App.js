@@ -8,43 +8,43 @@ import Error from "./components/Error";
 import Signup from "./components/Signup";
 import SharedDashboardLinks from "./components/SharedDashboardLinks";
 import Newproject from "./components/NewProject";
-
-export const Usercontext = createContext()
-
-
-const currentUser={
-  username:"The El_Olam",
-}
-
-
+import Addbug from "./components/Addbug";
+import ProtectDashboard from "./components/Protectdashboard";
 
 
 
 function App(){
+  const [user, setUser]=useState(null)
+  const [userSession, setUserSession]=useState(null)
+
   return(
     <div className="App">
-      <Usercontext.Provider value={currentUser}>
-        <BrowserRouter>
-          <Routes>
+      <BrowserRouter>
+        <Routes>
 
-            <Route path="/" element={ <Home/> } />
+          <Route path="/" element={ <Home setUser={setUser} setUserSession={setUserSession}/> } />
 
-            <Route path="signup" element={ <Signup/> } />
+          <Route path="signup" element={ <Signup/> } />
 
-            <Route path="navigation" element={ <Navigation/> } />
+          <Route path="navigation" element={ <Navigation/> } />
 
-            <Route path="sharedlayout" element={ <SharedDashboardLinks/> } />
+          <Route path="sharedlayout" element={ <SharedDashboardLinks/> } />
 
-            <Route path="*" element={ <Error/> } />
+          <Route path="*" element={ <Error/> } />
 
+          
+          <Route path='/dashboard' element={ 
+            <ProtectDashboard user={user}>
+              <SharedDashboardLinks user={user} userSession={userSession} setUser={setUser} setUserSession={setUserSession}/> 
+            </ProtectDashboard>
+            }>
 
-            <Route path='/dashboard' element={ <SharedDashboardLinks/> }>
-              <Route index element={<Dashboard/>} />
-              <Route path="newproject" element={ <Newproject/> } />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </Usercontext.Provider>
+            <Route index element={<Dashboard userSession={userSession}/>} />
+            <Route path="newproject" element={ <Newproject userSession={userSession}/> } />
+            <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }

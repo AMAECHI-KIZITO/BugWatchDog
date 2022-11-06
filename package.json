@@ -41,6 +41,6 @@
       "localhost",
       ".localhost"
     ],
-    "proxy": "http://localhost:6200/"
+    "proxy": "http://localhost:5000/"
   }
 }

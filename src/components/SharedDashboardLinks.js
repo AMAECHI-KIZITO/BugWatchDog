@@ -1,7 +1,17 @@
 import React, {useState, useEffect} from "react"
 import {Link, Outlet} from "react-router-dom"
-function SharedDashboardLinks(){
-  
+
+
+function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
+  const clearSession=()=>setUserSession(null);
+  const clearUser=()=>setUser(null);
+
+  const logout=()=>{
+    clearSession();
+    clearUser();
+  }
+
+
   return(
     <>
       <div className="row">
@@ -14,6 +24,10 @@ function SharedDashboardLinks(){
               </button>
             </div>
           </nav>
+        </div>
+
+        <div className="col-12" style={{color:"gold"}}>
+          <p className="float-end">Hi, {user}</p><br/>
         </div>
       </div>
 
@@ -28,7 +42,7 @@ function SharedDashboardLinks(){
           <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks">New Project</Link></p><br/>
           <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p><br/>
           <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/logout" className="quickDashboardLinks">Logout</Link></p><br/>
+          <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
 
         </div>
 
@@ -57,7 +71,7 @@ function SharedDashboardLinks(){
             <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks text-warning">New Project</Link></p>
             <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks text-warning">Add Bug</Link></p>
             <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning">Find Help</Link></p>
-            <p className="text-center"><Link to="/dashboard/logout" className="quickDashboardLinks text-warning">Logout</Link></p>
+            <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
           </div>
         </div>
       </div>

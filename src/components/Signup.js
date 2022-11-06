@@ -22,7 +22,7 @@ const Signup = ()=>{
 
     const checkEmailAvailability = ()=>{
         if(regemail != ""){
-            fetch(`http://localhost:6200/api/v1/check_email_availability/?email=${regemail}`)
+            fetch(`http://localhost:5000/api/v1/check_email_availability/?email=${regemail}`)
             .then(resp=> resp.json())
             .then(data=>{
                 let feedback=data;
@@ -52,7 +52,7 @@ const Signup = ()=>{
             regemail,
             pswd
         }
-        fetch("http://localhost:6200/api/v1/registeruser/", {
+        fetch("http://localhost:5000/api/v1/registeruser/", {
             method:"POST",
             mode:'cors',
             headers: {

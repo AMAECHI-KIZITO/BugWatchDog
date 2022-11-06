@@ -1,16 +1,18 @@
 import React, {useState,useEffect} from "react";
-import {Link} from "react-router-dom";
+import {Link,useNavigate} from "react-router-dom";
 
 
 
-function Home(){
+function Home({setUser, setUserSession}){
     const [emailInput,setEmailInput]=useState(null)
     const [passwordInput, setPasswordInput]=useState(null)
 
     const emailEntry = (event) => setEmailInput(event.target.value)
     const passwordEntry = (event) => setPasswordInput(event.target.value)
 
-    
+    const navigate=useNavigate()
+
+
     //login user
     const loginUser=(event) => {
         event.preventDefault();
@@ -18,9 +20,9 @@ function Home(){
             alert("Fill out all fields");
             return;
         }
-        const loginData={
-            emailInput, passwordInput
-        }
+        // const loginData={
+        //     emailInput, passwordInput
+        // }
 
         
         // fetch("http://localhost:5000/api/v1/login-user/", {
@@ -38,9 +40,19 @@ function Home(){
         // })
 
 
-        fetch(`http://localhost:6200/api/v1/login-user/?email=${emailInput}&password=${passwordInput}`)
+        fetch(`http://localhost:5000/api/v1/login-user/?email=${emailInput}&password=${passwordInput}`)
         .then( resp => resp.json())
-        .then( data => console.log(data))
+        .then( data =>{
+            let logindata=data
+            if(logindata.status=="True"){
+                setUser(logindata.dev_username);
+                setUserSession(logindata.sessionId);
+                navigate("/dashboard");
+            }else{
+                alert("Incorrect credentials");
+                return;
+            }
+        })
         .catch(error => console.log(error))
     }
 

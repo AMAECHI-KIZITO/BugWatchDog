@@ -88,8 +88,63 @@ def login_user():
     
     if verify_user and check_password_hash(protected_password, user_password):
         return {
-            "status":"Login Successful",
-            "username":f"{verify_user.user_nickname}"
+            "status":"True",
+            "dev_username":f"{verify_user.user_nickname}",
+            "sessionId":f"{verify_user.user_id}"
         }
     else:
         return {"status":"Invalid Credentials"} 
+    
+
+@app.route('/api/v1/get_dashboard_numbers/')
+def get_dashboard_stats():
+    dev_user_id=request.args.get("userId")
+
+    project_ids=[]
+    total_bugs=0
+    outstanding_bugs=0
+    dev_total_projects=db.session.query(Project).filter(Project.project_owner==dev_user_id).count()
+    
+    
+    if dev_total_projects != 0:
+        dev_projects=db.session.query(Project).filter(Project.project_owner==dev_user_id).all()
+        
+        for project in dev_projects:
+            project_ids.append(project.project_id)
+        
+        for x in project_ids:
+            project_bugs= db.session.query(Bugsheet).filter(Bugsheet.bug_project==x).count()
+            if project_bugs > 0:
+                total_bugs=total_bugs + project_bugs
+                
+                project_outstanding_bugs= db.session.query(Bugsheet).filter(Bugsheet.bug_project==x, Bugsheet.bug_status=="Unsolved").count()
+                outstanding_bugs = outstanding_bugs + project_outstanding_bugs
+            
+        
+        average_bugs=total_bugs/dev_total_projects
+
+        return {
+            "total_projects":f"{dev_total_projects}",
+            "bugs_outstanding": f"{outstanding_bugs}",
+            "average_bugs": f"{average_bugs}"
+        }
+    else:
+        return {
+            "total_projects":0,
+            "bugs_outstanding":0,
+            "average_bugs":0
+        }
+
+
+@app.route("/api/v1/createnewproject/", methods=["POST"])
+def create_new_project():
+    data=request.get_json()
+    project_name_received=data.get('projectname')
+    project_description_received=data.get('projectsummary')
+    userid=data.get('userId')
+    
+    new_project=Project(project_name=project_name_received, project_description=project_description_received, project_owner=userid)
+    db.session.add(new_project)
+    db.session.commit()
+    
+    return {"status":"True", "message":"Project Added"}
