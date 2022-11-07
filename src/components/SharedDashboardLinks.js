@@ -26,8 +26,8 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           </nav>
         </div>
 
-        <div className="col-12" style={{color:"gold"}}>
-          <p className="float-end">Hi, {user}</p><br/>
+        <div className="col-md-11" style={{color:"gold"}}>
+          <p className="float-end" style={{fontSize:"13px"}}>Hi, {user} <i className="fa-solid fa-smile"></i></p><br/>
         </div>
       </div>
 

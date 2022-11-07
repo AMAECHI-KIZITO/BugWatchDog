@@ -45,7 +45,7 @@ function Newproject({userSession}){
   return(
     <>
       <div className="row dashboardlinks">
-        <div className="col-12">
+        <div className="col-md-11">
           <div className="row">
             <div className="col-12">
 

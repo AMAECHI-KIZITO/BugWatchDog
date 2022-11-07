@@ -58,25 +58,7 @@ def check_email_availability():
     else:
         return {"status":"No email Provided"}
     
-    
-# @app.route('/api/v1/login-user/', methods=["POST"])
-# def login_user():
-#     data=request.get_json()
-    
-#     user_email=data.get('emailInput')
-#     user_password=data.get('passwordInput')
-    
-#     verify_user=db.session.query(User).filter(User.user_email==user_email).first()
-#     protected_password=verify_user.user_pswd
-    
-#     if verify_user and check_password_hash(protected_password, user_password):
-#         return {
-#             "status":"Login Successful",
-#             "username":f"{verify_user.user_nickname}"
-#         }
-#     else:
-#         return {"status":"Invalid Credentials"} 
-    
+
 @app.route('/api/v1/login-user/')
 def login_user():
     
@@ -85,15 +67,17 @@ def login_user():
     
     verify_user=db.session.query(User).filter(User.user_email==user_email).first()
     protected_password=verify_user.user_pswd
-    
-    if verify_user and check_password_hash(protected_password, user_password):
-        return {
-            "status":"True",
-            "dev_username":f"{verify_user.user_nickname}",
-            "sessionId":f"{verify_user.user_id}"
-        }
+    if verify_user:
+        if verify_user and check_password_hash(protected_password, user_password):
+            return {
+                "status":"True",
+                "dev_username":f"{verify_user.user_nickname}",
+                "sessionId":f"{verify_user.user_id}"
+            }
+        else:
+            return {"status":"Invalid Credentials"} 
     else:
-        return {"status":"Invalid Credentials"} 
+        return {"status":"User Not Found"} 
     
 
 @app.route('/api/v1/get_dashboard_numbers/')
@@ -148,3 +132,34 @@ def create_new_project():
     db.session.commit()
     
     return {"status":"True", "message":"Project Added"}
+
+@app.route("/api/v1/fetch-user-projects/")
+def get_user_projects():
+    user_id=request.args.get("userId")
+    user_projects=db.session.query(Project).filter(Project.project_owner==user_id).all()
+    developer_projects=[]
+    
+    if user_projects:
+        for prj in user_projects:
+            project_info={}
+            project_info['project_id']=prj.project_id
+            project_info['project_name']=prj.project_name
+            developer_projects.append(project_info)
+            
+        return {"status":True, "projects_list":developer_projects}
+    else:
+        return {"status":False, "projects_list":0}
+
+
+@app.route("/api/v1/create-new-bug/", methods=["POST"])
+def create_new_bug():
+    data=request.get_json()
+    project_affected=data.get('affectedProject')
+    bug_description_received=data.get('bugDescription')
+    userid=data.get('userId')
+    
+    new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved")
+    db.session.add(new_bug)
+    db.session.commit()
+    
+    return {"status":"True", "message":"Bug Added"}

@@ -15,10 +15,9 @@ function Dashboard({userSession}){
     .then( rsp => rsp.json())
     .then( data => {
       let statistics=data
-      setTotalProjects(statistics.total_projects)
-      setOutstandingBugs(statistics.bugs_outstanding)
-      setAverageBugs(statistics.average_bugs)
-      console.log(statistics)
+      setTotalProjects(statistics.total_projects);
+      setOutstandingBugs(statistics.bugs_outstanding);
+      setAverageBugs(statistics.average_bugs);
     })
     .catch((error)=> console.log(error))
 
@@ -30,7 +29,7 @@ function Dashboard({userSession}){
     <>
       <div className="row dashboardlinks">
 
-        <div className="col-12">
+        <div className="col-md-11">
           <div className="row">
             <div className="dashboardInfo col-md-4">
               <h4 className="text-center">Total Projects</h4>
