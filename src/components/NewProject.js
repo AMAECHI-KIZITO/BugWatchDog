@@ -48,9 +48,9 @@ function Newproject({userSession}){
         <div className="col-md-11">
           <div className="row">
             <div className="col-12">
-
+              <h2 className="mb-3" style={{color:"gold"}}>Create Project</h2>
               <form onSubmit={createProject}>
-                <div className="mb-3">
+                <div className="mb-3 mt-3">
                   <label htmlFor="projectname" style={{color:"gold"}}>Project Name</label>
                   <input type='text' className="form-control py-3" name="projectname" id="projectname" placeholder="Enter project name" onChange={nameProject}/>
                 </div>

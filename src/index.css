@@ -1,10 +1,17 @@
-.homeWelcome, .signUp, .dashboardlinks{
+.homeWelcome, .signUp{
     background-color: inherit;
     min-height: 500px;
     font-family: "lucida-calligraphy";
     align-items: center;
     color:#fff;
 }
+/*.homeWelcome, .signUp, .dashboardlinks{
+    background-color: inherit;
+    min-height: 500px;
+    font-family: "lucida-calligraphy";
+    align-items: center;
+    color:#fff;
+}*/
 
 .input-group-text{
     color:#000;
@@ -47,8 +54,9 @@
     color:gold;
 }
 
-Link:hover{
-    background-color: gold;
-}
 
-/*New Project*/
+/* View project Styles*/
+.table{
+    color:#fff;
+    font-size: 13px;
+}

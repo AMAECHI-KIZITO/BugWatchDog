@@ -10,6 +10,7 @@ import SharedDashboardLinks from "./components/SharedDashboardLinks";
 import Newproject from "./components/NewProject";
 import Addbug from "./components/Addbug";
 import ProtectDashboard from "./components/Protectdashboard";
+import Viewprojects from "./components/Viewprojects";
 
 
 
@@ -42,6 +43,7 @@ function App(){
             <Route index element={<Dashboard userSession={userSession}/>} />
             <Route path="newproject" element={ <Newproject userSession={userSession}/> } />
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
+            <Route path="myprojects" element={ <Viewprojects userSession={userSession}/> } />
           </Route>
         </Routes>
       </BrowserRouter>

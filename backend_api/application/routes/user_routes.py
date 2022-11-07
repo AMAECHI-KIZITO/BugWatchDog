@@ -156,10 +156,27 @@ def create_new_bug():
     data=request.get_json()
     project_affected=data.get('affectedProject')
     bug_description_received=data.get('bugDescription')
-    userid=data.get('userId')
     
     new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved")
     db.session.add(new_bug)
     db.session.commit()
     
     return {"status":"True", "message":"Bug Added"}
+
+@app.route("/api/v1/view-projects/<id>")
+def view_my_projects(id):
+    developer_projects=[]
+    
+    projects=db.session.query(Project).filter(Project.project_owner==id).all()
+    if projects:
+        for p in projects:
+            project_details={}
+            project_details["project_id"]=p.project_id
+            project_details["project_name"]=p.project_name
+            project_details["project_description"]=p.project_description
+            project_details["date_created"]=p.date_added
+            
+            developer_projects.append(project_details)
+        return {"status":True, "dev_projects":developer_projects}
+    else:
+        return {"status":False, "dev_projects":"No Projects Created"}
