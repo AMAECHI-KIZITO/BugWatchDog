@@ -1,4 +1,6 @@
 import React,{useState, useEffect} from "react"
+import { Link } from "react-router-dom"
+
 
 const Viewprojects=({userSession})=>{
     const [allDevProjects, setAllDevProjects]=useState([])
@@ -11,6 +13,8 @@ const Viewprojects=({userSession})=>{
             setAllDevProjects(data.dev_projects)
         })
     },[])
+
+    
     return(
         <>
             <div className="row">
@@ -24,7 +28,8 @@ const Viewprojects=({userSession})=>{
                                         <th>S/N</th>
                                         <th>Name</th>
                                         <th>Description</th>
-                                        <th>Created</th>
+                                        <th className="d-none d-md-block">Created</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -33,7 +38,12 @@ const Viewprojects=({userSession})=>{
                                             <td key={creation.project_id}>{creation.project_id}</td>
                                             <td key={creation.project_name}>{creation.project_name}</td>
                                             <td key={creation.project_description}>{creation.project_description}</td>
-                                            <td key={creation.date_created}>{creation.date_created}</td>
+                                            <td key={creation.date_created} className="d-none d-md-block">{creation.date_created}</td>
+                                            <td key={`viewProject${creation.project_id}`}>
+                                                <Link to={`/dashboard/myprojects/${creation.project_id}`}>
+                                                    <button className="btn btn-sm btn-warning">View</button>
+                                                </Link>
+                                            </td>
                                         </tr>
                                     )}
                                 </tbody>

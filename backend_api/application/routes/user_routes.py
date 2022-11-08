@@ -10,7 +10,7 @@ def test_backend():
         "members":["Amaechi","Sandra","Cynthia","Chinedu 69rc","Iyovwaro Mary"]
     }
     
-    
+# Registration of a new user 
 @app.route('/api/v1/registeruser/', methods=["POST"])
 def register_user():
     data=request.get_json()
@@ -43,7 +43,7 @@ def register_user():
             "message":"Registration Failed. Incomplete Form Data"
         })
     
-    
+# Check if email availability
 @app.route('/api/v1/check_email_availability/')
 def check_email_availability():
     email_entered=request.args.get("email",None)
@@ -58,7 +58,8 @@ def check_email_availability():
     else:
         return {"status":"No email Provided"}
     
-
+    
+# Login User
 @app.route('/api/v1/login-user/')
 def login_user():
     
@@ -79,7 +80,7 @@ def login_user():
     else:
         return {"status":"User Not Found"} 
     
-
+# get dashboard statistics
 @app.route('/api/v1/get_dashboard_numbers/')
 def get_dashboard_stats():
     dev_user_id=request.args.get("userId")
@@ -119,7 +120,7 @@ def get_dashboard_stats():
             "average_bugs":0
         }
 
-
+# Create a new project
 @app.route("/api/v1/createnewproject/", methods=["POST"])
 def create_new_project():
     data=request.get_json()
@@ -133,6 +134,8 @@ def create_new_project():
     
     return {"status":"True", "message":"Project Added"}
 
+
+# Fetch all the users projects for choosing the project affected by a bug
 @app.route("/api/v1/fetch-user-projects/")
 def get_user_projects():
     user_id=request.args.get("userId")
@@ -150,7 +153,7 @@ def get_user_projects():
     else:
         return {"status":False, "projects_list":0}
 
-
+# Create new bug
 @app.route("/api/v1/create-new-bug/", methods=["POST"])
 def create_new_bug():
     data=request.get_json()
@@ -163,6 +166,8 @@ def create_new_bug():
     
     return {"status":"True", "message":"Bug Added"}
 
+
+# Fetch all the users projects
 @app.route("/api/v1/view-projects/<id>")
 def view_my_projects(id):
     developer_projects=[]
@@ -180,3 +185,26 @@ def view_my_projects(id):
         return {"status":True, "dev_projects":developer_projects}
     else:
         return {"status":False, "dev_projects":"No Projects Created"}
+    
+    
+# Find a particular project
+@app.route("/api/v1/find/project/")
+def find_specific_project():
+    project_id=request.args.get("projectId")
+    
+    developer_projects=[]
+    
+    the_project=db.session.query(Project).filter(Project.project_id==project_id).first()
+    
+    
+    if the_project:
+        project_details={}
+        project_details["project_id"]=the_project.project_id
+        project_details["project_name"]=the_project.project_name
+        project_details["project_description"]=the_project.project_description
+        project_details["date_created"]=the_project.date_added
+        developer_projects.append(project_details)
+        
+        return {"status":True, "dev_projects":developer_projects}
+    else:
+        return {"status":False, "dev_projects":"Project Not Found"}

@@ -11,7 +11,8 @@ import Newproject from "./components/NewProject";
 import Addbug from "./components/Addbug";
 import ProtectDashboard from "./components/Protectdashboard";
 import Viewprojects from "./components/Viewprojects";
-
+import Sharedprojectslayout from "./components/Sharedprojectslayout";
+import SingleProject from "./Singleproject";
 
 
 function App(){
@@ -43,7 +44,12 @@ function App(){
             <Route index element={<Dashboard userSession={userSession}/>} />
             <Route path="newproject" element={ <Newproject userSession={userSession}/> } />
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
-            <Route path="myprojects" element={ <Viewprojects userSession={userSession}/> } />
+
+            <Route path="myprojects" element={<Sharedprojectslayout userSession={userSession}/>}>
+              <Route index element={ <Viewprojects userSession={userSession}/> } />
+              <Route path=":projectId" element={ <SingleProject userSession={userSession}/> } />
+            </Route>
+            
           </Route>
         </Routes>
       </BrowserRouter>
