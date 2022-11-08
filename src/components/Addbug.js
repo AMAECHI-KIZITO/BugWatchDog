@@ -58,7 +58,7 @@ function Addbug({userSession}){
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="mb-3" style={{color:"gold"}}>Create Bug</h2>
+                            <h2 className="mb-3" style={{color:"gold"}}>Create Bug</h2><hr/>
                             <form onSubmit={submitBug}>
                                 <div className="mb-3 mt-3">
                                     <label htmlFor="bugdescription" style={{color:"gold"}}>Bug Description</label>

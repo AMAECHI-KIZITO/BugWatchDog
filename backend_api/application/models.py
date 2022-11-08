@@ -9,15 +9,15 @@ class User(db.Model):
     user_nickname=db.Column(db.String(50), nullable=False)
     user_email=db.Column(db.String(80), nullable=False, unique=True)
     user_pswd=db.Column(db.String(200),nullable=False)
-    date_reg=db.Column(db.Date(), nullable=False, default=date.today())
+    date_reg=db.Column(db.DateTime(), nullable=False, default=date.today())
     
     
 class Project(db.Model):
     project_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     project_owner=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
-    project_name=db.Column(db.String(200),nullable=False)
-    project_description=db.Column(db.Text(), nullable=False)
-    date_added=db.Column(db.Date(), nullable=False, default=date.today())
+    project_name=db.Column(db.String(80),nullable=False)
+    project_description=db.Column(db.String(200), nullable=False)
+    date_added=db.Column(db.Date(), nullable=False, default=datetime.now())
     
     
 class Bugsheet(db.Model):

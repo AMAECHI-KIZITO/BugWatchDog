@@ -12,7 +12,7 @@ import Addbug from "./components/Addbug";
 import ProtectDashboard from "./components/Protectdashboard";
 import Viewprojects from "./components/Viewprojects";
 import Sharedprojectslayout from "./components/Sharedprojectslayout";
-import SingleProject from "./Singleproject";
+import SingleProject from "./components/Singleproject";
 
 
 function App(){
