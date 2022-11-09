@@ -171,12 +171,13 @@ def create_new_bug():
 @app.route("/api/v1/view-projects/<id>")
 def view_my_projects(id):
     developer_projects=[]
-    
+    counter=0
     projects=db.session.query(Project).filter(Project.project_owner==id).all()
-    if projects:
+    if projects !=[]:
         for p in projects:
+            counter+=1
             project_details={}
-            project_details["project_id"]=p.project_id
+            project_details["serial_no"]=counter
             project_details["project_name"]=p.project_name
             project_details["project_description"]=p.project_description
             project_details["date_created"]=p.date_added
@@ -208,3 +209,27 @@ def find_specific_project():
         return {"status":True, "dev_projects":developer_projects}
     else:
         return {"status":False, "dev_projects":"Project Not Found"}
+    
+    
+# Get all developers
+@app.route("/api/v1/developers/")
+def retieve_all_developers():
+    logged_in_dev=request.args.get("currentDev")
+    
+    developers_list=[]
+    counter=0
+    developers=db.session.query(User).filter(User.user_id != logged_in_dev).all()
+    if developers != []:
+        for dev in developers:
+            counter+=1
+            stack_id=dev.user_stack
+            stack=db.session.query(Techstack).filter(Techstack.stack_id==stack_id).first()
+            stack_name=stack.stack_name
+            dev_info={}
+            dev_info["serial_no"]=counter
+            dev_info["dev_nickname"]=dev.user_nickname
+            dev_info["dev_stack"]=stack_name
+            developers_list.append(dev_info)
+        return {"status":True, "developers":developers_list}
+    else:
+        return {"status":True, "developers":"No Developers registered at this time"}

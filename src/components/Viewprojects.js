@@ -45,7 +45,7 @@ const Viewprojects=({userSession})=>{
                                         <tbody>
                                             {Object.values(allDevProjects).map(creation=> 
                                                 <tr>
-                                                    <td key={creation.project_id}>{creation.project_id}</td>
+                                                    <td key={creation.serial_no}>{creation.serial_no}</td>
                                                     <td key={creation.project_name}>{creation.project_name}</td>
                                                     <td key={creation.project_description}>{creation.project_description}</td>
                                                     <td key={`viewProject${creation.project_id}`}>
