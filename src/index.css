@@ -68,3 +68,12 @@ hr{
 .specificProjectDetails{
     color:#ffffff;
 }
+
+/* error styling*/
+.error404{
+    background-color: inherit;
+    min-height: 450px;
+    font-family: "lucida-calligraphy";
+    align-items: center;
+    color:grey;
+}
