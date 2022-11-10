@@ -1,14 +1,18 @@
 import React, {useEffect, useState} from "react"
-
+import { useNavigate } from "react-router-dom"
 
 const Seekhelp=({userSession})=>{
+    const navigate=useNavigate()
     const [availableDevelopers, setAvailableDevelopers]=useState([])
-    const [receiver, setReceiver]=useState('ochendo')
+    const [message, setMessage]=useState(null)
+    const [receiver, setReceiver]=useState("")
 
     const messageRecipient=(userId)=>{
         setReceiver(userId)
     }
-
+    const messageContent=(event)=>{
+        setMessage(event.target.value)
+    }
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/developers/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
@@ -19,8 +23,33 @@ const Seekhelp=({userSession})=>{
 
     const sendMessage=(event)=>{
         event.preventDefault();
-        alert(`You are about to send message to ${receiver}`);
-        return;
+        
+        if(!message || message.trim().length==0){
+            alert("Nothing to send.")
+            return;
+        }
+
+        let messageData={
+            message,receiver,userSession
+        }
+        
+
+        fetch("http://localhost:5000/api/v1/sendmessage/",{
+            method:"POST",
+            mode:'cors',
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Credentials":true
+            },
+            body: JSON.stringify(messageData)
+        })
+        .then(resp=> {
+        if(resp.status=="200"){
+            alert('Message Sent');
+            setMessage(null);
+        }
+        })
     }
 
     return(
@@ -72,7 +101,7 @@ const Seekhelp=({userSession})=>{
                                             <form>
                                                 <div className='mb-2'>
                                                     <label><b>Type your message</b></label>
-                                                    <textarea className="form-control" name="messageContent"></textarea>
+                                                    <textarea className="form-control" name="messageContent" onChange={messageContent}></textarea>
                                                 </div>
                                                 <div className='mb-2'>
                                                     <input type="hidden" className="form-control" value={receiver} readOnly/>

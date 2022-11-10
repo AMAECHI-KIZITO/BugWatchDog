@@ -30,17 +30,19 @@ function Dashboard({userSession}){
       <div className="row dashboardlinks">
 
         <div className="col-md-11">
+          <h2 style={{color:"gold"}}>Statistics</h2><hr/>
+
           <div className="row" style={{minHeight:"400px", alignItems:'center', color:"white"}}>
             <div className="dashboardInfo col-md-4">
-              <h4 className="text-center">Total Projects</h4>
+              <h4 className="text-center">Total <br/> Projects</h4>
               <p className="text-center">{totalProjects}</p>
             </div>
             <div className="dashboardInfo col-md-4">
-              <h4 className="text-center">Bugs Outstanding</h4>
+              <h4 className="text-center"><i className="fa-solid fa-bugs"></i> Outstanding</h4>
               <p className="text-center">{outstandingBugs}</p>
             </div>
             <div className="dashboardInfo col-md-4">
-              <h4 className="text-center">Average Bugs per Project</h4>
+              <h4 className="text-center">Average <i className="fa-solid fa-bugs"></i> per Project</h4>
               <p className="text-center">{averageBugs}</p>
             </div>
           </div>
