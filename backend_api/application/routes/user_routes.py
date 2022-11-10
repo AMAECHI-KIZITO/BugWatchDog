@@ -1,6 +1,6 @@
-from application import app
 from flask import jsonify, session,request
 from werkzeug.security import generate_password_hash,check_password_hash
+from application import app
 from application.models import *
 
 
@@ -10,78 +10,6 @@ def test_backend():
         "members":["Amaechi","Sandra","Cynthia","Chinedu 69rc","Iyovwaro Mary"]
     }
 
-
-# Check if email availability
-@app.route('/api/v1/check_email_availability/')
-def check_email_availability():
-    email_entered=request.args.get("email",None)
-    
-    if email_entered:
-        checking_email=db.session.query(User).filter(User.user_email==email_entered).first()
-        
-        if checking_email is None:
-            return {"status":"Email Is Available"}
-        else:
-            return {"status":"Email Already Registered"}
-    else:
-        return {"status":"No email Provided"}
-    
-       
-# Registration of a new user 
-@app.route('/api/v1/registeruser/', methods=["POST"])
-def register_user():
-    data=request.get_json()
-    
-    fname=data.get("fname",None)
-    lname=data.get("lname",None)
-    n_name= data.get("nickname",None)
-    email=data.get("regemail",None)
-    passwd=data.get("pswd",None)
-    stack=data.get("developerStack",None)
-    if fname != None and lname!= None and n_name!= None and email!= None and passwd!= None and stack!="#":
-        
-        email_availability=db.session.query(User).filter(User.user_email==email).first()
-        
-        if email_availability is None:
-            hashed_password=generate_password_hash(passwd)
-            newUser=User(user_firstname=fname, user_lastname=lname, user_nickname=n_name, user_email=email, user_pswd=hashed_password, user_stack=stack)
-            db.session.add(newUser)
-            db.session.commit()
-            
-            return jsonify({
-                "message":"Registration Successful"
-            })
-        else:
-            return jsonify({
-                "message":"This email has already been registered. Try again"
-            })
-    else:
-        return jsonify({
-            "message":"Registration Failed. Incomplete Form Data"
-        })
-    
-    
-# Login User
-@app.route('/api/v1/login-user/')
-def login_user():
-    
-    user_email=request.args.get('email')
-    user_password=request.args.get('password')
-    
-    verify_user=db.session.query(User).filter(User.user_email==user_email).first()
-    protected_password=verify_user.user_pswd
-    if verify_user:
-        if verify_user and check_password_hash(protected_password, user_password):
-            return {
-                "status":"True",
-                "dev_username":f"{verify_user.user_nickname}",
-                "sessionId":f"{verify_user.user_id}"
-            }
-        else:
-            return {"status":"Invalid Credentials"} 
-    else:
-        return {"status":"User Not Found"} 
-    
 # get dashboard statistics
 @app.route('/api/v1/get_dashboard_numbers/')
 def get_dashboard_stats():
@@ -227,8 +155,10 @@ def retieve_all_developers():
             stack_id=dev.user_stack
             stack=db.session.query(Techstack).filter(Techstack.stack_id==stack_id).first()
             stack_name=stack.stack_name
+            
             dev_info={}
             dev_info["serial_no"]=counter
+            dev_info["dev_id"]=dev.user_id
             dev_info["dev_nickname"]=dev.user_nickname
             dev_info["dev_stack"]=stack_name
             developers_list.append(dev_info)
@@ -237,7 +167,7 @@ def retieve_all_developers():
         return {"status":True, "developers":"No Developers registered at this time"}
     
     
-# Get all developers
+# Get all tech stacks
 @app.route("/api/v1/tech-stacks/")
 def retrieve_tech_stacks():
     tech_stacks=db.session.query(Techstack).all()

@@ -14,6 +14,7 @@ import Viewprojects from "./components/Viewprojects";
 import Sharedprojectslayout from "./components/Sharedprojectslayout";
 import SingleProject from "./components/Singleproject";
 import Seekhelp from "./components/Seekhelp";
+import Inbox from "./components/Inbox";
 
 
 function App(){
@@ -46,6 +47,7 @@ function App(){
             <Route path="newproject" element={ <Newproject userSession={userSession}/> } />
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
             <Route path="seekhelp" element={<Seekhelp userSession={userSession}/>}/>
+            <Route path="inbox" element={<Inbox userSession={userSession}/>}/>
 
             <Route path="myprojects" element={<Sharedprojectslayout userSession={userSession}/>}>
               <Route index element={ <Viewprojects userSession={userSession}/> } />

@@ -31,4 +31,11 @@ class Bugsheet(db.Model):
 class Techstack(db.Model):
     stack_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     stack_name=db.Column(db.String(80), nullable=False)
-    
+
+
+class Inbox(db.Model):
+    msg_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    msg_sender=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    msg_recipient=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    message=db.Column(db.Text(), nullable=False)
+    datesent=db.Column(db.DateTime(), nullable=False, default=datetime.now())

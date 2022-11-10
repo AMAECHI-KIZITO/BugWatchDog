@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, session,request
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from application import config
@@ -19,6 +19,6 @@ app.config.from_object(config.ApplicationSettings)
 db=SQLAlchemy(app)
 
 migrate=Migrate(app,db)
-from application.routes import user_routes
+from application.routes import user_routes, create_acct_and_login_routes, inbox_routes
 from application import models
 
