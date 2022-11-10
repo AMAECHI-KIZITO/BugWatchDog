@@ -9,40 +9,8 @@ def test_backend():
     return {
         "members":["Amaechi","Sandra","Cynthia","Chinedu 69rc","Iyovwaro Mary"]
     }
-    
-# Registration of a new user 
-@app.route('/api/v1/registeruser/', methods=["POST"])
-def register_user():
-    data=request.get_json()
-    
-    fname=data.get("fname",None)
-    lname=data.get("lname",None)
-    n_name= data.get("nickname",None)
-    email=data.get("regemail",None)
-    passwd=data.get("pswd",None)
-    
-    if fname != None and lname!= None and n_name!= None and email!= None and passwd!= None:
-        
-        email_availability=db.session.query(User).filter(User.user_email==email).first()
-        
-        if email_availability is None:
-            hashed_password=generate_password_hash(passwd)
-            newUser=User(user_firstname=fname, user_lastname=lname, user_nickname=n_name, user_email=email, user_pswd=hashed_password)
-            db.session.add(newUser)
-            db.session.commit()
-            
-            return jsonify({
-                "message":"Registration Successful"
-            })
-        else:
-            return jsonify({
-                "message":"This email has already been registered. Try again"
-            })
-    else:
-        return jsonify({
-            "message":"Registration Failed. Incomplete Form Data"
-        })
-    
+
+
 # Check if email availability
 @app.route('/api/v1/check_email_availability/')
 def check_email_availability():
@@ -57,6 +25,40 @@ def check_email_availability():
             return {"status":"Email Already Registered"}
     else:
         return {"status":"No email Provided"}
+    
+       
+# Registration of a new user 
+@app.route('/api/v1/registeruser/', methods=["POST"])
+def register_user():
+    data=request.get_json()
+    
+    fname=data.get("fname",None)
+    lname=data.get("lname",None)
+    n_name= data.get("nickname",None)
+    email=data.get("regemail",None)
+    passwd=data.get("pswd",None)
+    stack=data.get("developerStack",None)
+    if fname != None and lname!= None and n_name!= None and email!= None and passwd!= None and stack!="#":
+        
+        email_availability=db.session.query(User).filter(User.user_email==email).first()
+        
+        if email_availability is None:
+            hashed_password=generate_password_hash(passwd)
+            newUser=User(user_firstname=fname, user_lastname=lname, user_nickname=n_name, user_email=email, user_pswd=hashed_password, user_stack=stack)
+            db.session.add(newUser)
+            db.session.commit()
+            
+            return jsonify({
+                "message":"Registration Successful"
+            })
+        else:
+            return jsonify({
+                "message":"This email has already been registered. Try again"
+            })
+    else:
+        return jsonify({
+            "message":"Registration Failed. Incomplete Form Data"
+        })
     
     
 # Login User
@@ -233,3 +235,16 @@ def retieve_all_developers():
         return {"status":True, "developers":developers_list}
     else:
         return {"status":True, "developers":"No Developers registered at this time"}
+    
+    
+# Get all developers
+@app.route("/api/v1/tech-stacks/")
+def retrieve_tech_stacks():
+    tech_stacks=db.session.query(Techstack).all()
+    tech=[]
+    for stack in tech_stacks:
+        data_to_send={}
+        data_to_send["id"]=stack.stack_id
+        data_to_send["name"]=stack.stack_name
+        tech.append(data_to_send)
+    return {"status":True, "stacks":tech}

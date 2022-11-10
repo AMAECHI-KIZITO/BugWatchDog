@@ -74,7 +74,7 @@ function Home({setUser, setUserSession}){
                             <button className="btn btn-success form-control">Login</button>
                         </div><br/>
                     </form><br/>
-                    <h6 className="text-center">Don't have an account? <Link to="/signup" className="btn btn-sm btn-md-lg btn-outline-success">Sign Up</Link></h6>
+                    <h6 className="text-center">Don't have an account? <Link to="/signup" className="btn btn-sm btn-md-lg btn-outline-warning">Sign Up</Link></h6>
                 </div>
             </div>
         </>
