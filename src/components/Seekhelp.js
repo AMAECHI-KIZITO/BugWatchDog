@@ -17,7 +17,7 @@ const Seekhelp=({userSession})=>{
         fetch(`http://localhost:5000/api/v1/developers/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            setAvailableDevelopers(data.developers)
+            setAvailableDevelopers(data.developers);
         })
     },[])
 
@@ -78,7 +78,7 @@ const Seekhelp=({userSession})=>{
                                                 <tr>
                                                     <td key={dev.serial_no}>{dev.serial_no}</td>
                                                     <td key={dev.dev_nickname}>{dev.dev_nickname}</td>
-                                                    <td key={dev.dev_stack}>{dev.dev_stack}</td>
+                                                    <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>
                                                     <td key={`message${dev.dev_id}`}><button className="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#sendMessage" onClick={()=>messageRecipient(dev.dev_id)}>Message</button></td>
                                                 </tr>
                                             )}
