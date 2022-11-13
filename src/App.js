@@ -15,6 +15,8 @@ import Sharedprojectslayout from "./components/Sharedprojectslayout";
 import SingleProject from "./components/Singleproject";
 import Seekhelp from "./components/Seekhelp";
 import Inbox from "./components/Inbox";
+import Sharedinboxlayout from "./components/Sharedinboxlayout";
+import Inboxmessage from "./components/Inboxmessages";
 
 
 function App(){
@@ -52,6 +54,11 @@ function App(){
             <Route path="myprojects" element={<Sharedprojectslayout userSession={userSession}/>}>
               <Route index element={ <Viewprojects userSession={userSession}/> } />
               <Route path=":projectId" element={ <SingleProject userSession={userSession}/> } />
+            </Route>
+
+            <Route path="inbox" element={<Sharedinboxlayout userSession={userSession}/>}>
+              <Route index element={ <Inbox userSession={userSession}/> } />
+              <Route path=":msg" element={ <Inboxmessage userSession={userSession}/> } />
             </Route>
             
           </Route>

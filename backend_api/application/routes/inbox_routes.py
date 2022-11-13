@@ -18,28 +18,6 @@ def send_message():
     
 
 
-# @app.route("/api/v1/inbox/")
-# def inbox():
-#     developer_id=request.args.get("devId")
-#     messages=db.session.query(Inbox).filter(Inbox.msg_recipient==developer_id).all()
-    
-    
-#     inbox_info=[]
-    
-#     if messages!= []:
-#         for msg in messages:
-#             message_sender=db.session.query(User).filter(User.user_id==msg.msg_sender).first()
-#             sender_name=message_sender.user_nickname
-            
-#             msg_details={}
-#             msg_details["sender"]=sender_name
-#             msg_details["message_body"]=msg.message
-#             inbox_info.append(msg_details)
-#         return {"status":True, "message":inbox_info}
-#     else:
-#         return {"status":True, "message":"You have no mesages at this time"}
-
-
 @app.route("/api/v1/inbox/")
 def inbox():
     developer_id=request.args.get("devId")
@@ -48,7 +26,6 @@ def inbox():
     allsenders=[]
     names_of_senders=[]
     last_message_sent=[]
-    inbox_info=[]
     timesent=[]
     
     if messages!= []:
@@ -68,14 +45,14 @@ def inbox():
             last_sent_message = db.session.query(Inbox).filter(Inbox.msg_sender==x).order_by(Inbox.datesent.desc()).first()
             timesent.append(last_sent_message.datesent)
             last_message_sent.append(last_sent_message.message)
-            
-        for msg in messages:
-            message_sender=db.session.query(User).filter(User.user_id==msg.msg_sender).first()
-            sender_name=message_sender.user_nickname
-            msg_details={}
-            msg_details["sender"]=sender_name
-            msg_details["message_body"]=msg.message
-            inbox_info.append(msg_details)
         return {"status":True, "message":last_message_sent, 'list_of_senders':allsenders, "names":names_of_senders, 'timestamp':timesent}
     else:
-        return {"status":True, "message":"You have no mesages at this time"}
+        return {"status":False, "message":"You have no mesages at this time"}
+    
+@app.route("/api/v1/inbox-details/<id>")
+def get_inbox_messages(id):
+    sender_details=db.session.query(User).get(id)
+    sender_name=sender_details.user_nickname
+    
+    
+    return {"status":True, "senderName":sender_name}

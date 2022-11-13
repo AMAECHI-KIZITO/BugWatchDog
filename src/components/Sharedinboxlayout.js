@@ -2,7 +2,7 @@ import React from "react"
 import { Outlet } from "react-router-dom"
 
 
-function Sharedprojectslayout(){
+function Sharedinboxlayout(){
     
 
     return(
@@ -11,4 +11,4 @@ function Sharedprojectslayout(){
 }
 
 
-export default Sharedprojectslayout
+export default Sharedinboxlayout
