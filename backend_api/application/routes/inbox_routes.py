@@ -36,13 +36,14 @@ def inbox():
             else:
                 allsenders.append(i.msg_sender)
         
-        for x in allsenders:
+        for x in sorted(allsenders):
             the_msg_sender=db.session.query(User).filter(User.user_id==x).first()
             name=the_msg_sender.user_nickname
             names_of_senders.append(name)
             
             #getting last message sent
-            last_sent_message = db.session.query(Inbox).filter(Inbox.msg_sender==x).order_by(Inbox.datesent.desc()).first()
+            last_sent= db.session.query(Inbox).filter((Inbox.msg_sender==x)|(Inbox.msg_recipient==x)).all()
+            last_sent_message=last_sent[-1]
             timesent.append(last_sent_message.datesent)
             last_message_sent.append(last_sent_message.message)
         return {"status":True, "message":last_message_sent, 'list_of_senders':allsenders, "names":names_of_senders, 'timestamp':timesent}

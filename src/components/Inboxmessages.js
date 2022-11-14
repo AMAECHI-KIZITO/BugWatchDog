@@ -9,6 +9,10 @@ const Inboxmessage= ({userSession}) => {
     const[specificMessage, setSpecificMessage]=useState([])
     const[senderName, setSenderName]=useState('')
 
+    //sending a new message variables
+    const[message,setNewMessage]=useState(null)
+    const[msgStatus, setMsgStatus]=useState(0)
+    let receiver=msg;
 
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/inbox-details/${msg}/?loggedInDev=${userSession}`)
@@ -16,11 +20,51 @@ const Inboxmessage= ({userSession}) => {
         .then(data=>{
             setSenderName(data.senderName[0].toUpperCase() + data.senderName.substring(1));
             setSpecificMessage(data.details);
-            console.log(data);
         })
-    }, [])
+    }, [msgStatus])
 
 
+    const content=(event)=>{
+        if(msgStatus==0){
+            setNewMessage(event.target.value);
+        }
+        setMsgStatus(0);
+        setNewMessage(event.target.value);
+    }
+
+
+
+    //send a new message
+    const sendMessage=(event)=>{
+        event.preventDefault();
+        
+        if(!message || message.trim().length==0){
+            alert("Nothing to send.")
+            return;
+        }
+
+        let messageData={
+            message,receiver,userSession
+        }
+        
+
+        fetch("http://localhost:5000/api/v1/sendmessage/",{
+            method:"POST",
+            mode:'cors',
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Credentials":true
+            },
+            body: JSON.stringify(messageData)
+        })
+        .then(resp=> {
+            if(resp.status=="200"){
+                setMsgStatus(1);
+                document.getElementById("writeMessage").value="";
+            }
+        })
+    }
 
     return(
         <>
@@ -40,14 +84,14 @@ const Inboxmessage= ({userSession}) => {
                         <h3 style={{color:"gold"}}>{senderName}</h3>
                     </div><hr/>
 
-                    <div className="row" style={{minHeight:"400px"}}>
-                        <div className="col-md-11" id="messageSection">
+                    <div className="row">
+                        <div className="col-md-11" style={{height:"400px"}} id="messageSection">
                             {specificMessage.map((msgRecord) =>
                                 {
                                     if(userSession==msgRecord.senderId){
-                                        return <p className="col-6 offset-6 py-2 px-1" id="messageSentByMe">{msgRecord.message}</p>
+                                        return <p className="col-6 offset-6 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p>
                                     }
-                                    return <p className="col-6 py-2 px-1" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p>
+                                    return <p className="col-6 py-2 px-3" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p>
                                 }
                             )}
                         </div>
@@ -56,8 +100,8 @@ const Inboxmessage= ({userSession}) => {
                         <div className="col-md-11">
                             <form>
                                 <div className="input-group mb-2">
-                                    <input className="form-control" style={{backgroundColor:"inherit", color:"white", borderRadius:"30px"}} placeholder="Message Here"/>
-                                    <button type="button" className="input-group-text btn btn-warning" style={{borderRadius:"50%"}}>
+                                    <input className="form-control" style={{backgroundColor:"inherit", color:"white", borderRadius:"30px"}} placeholder="Message Here" onChange={content} id="writeMessage"/>
+                                    <button className="input-group-text btn btn-warning" style={{borderRadius:"50%"}} onClick={sendMessage}>
                                         <i className="fa-regular fa-paper-plane"></i>
                                     </button>
                                 </div>
