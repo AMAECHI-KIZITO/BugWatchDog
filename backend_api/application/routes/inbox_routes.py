@@ -49,10 +49,31 @@ def inbox():
     else:
         return {"status":False, "message":"You have no mesages at this time"}
     
-@app.route("/api/v1/inbox-details/<id>")
+@app.route("/api/v1/inbox-details/<id>/")
 def get_inbox_messages(id):
+    loggedInDev=request.args.get("loggedInDev")
     sender_details=db.session.query(User).get(id)
     sender_name=sender_details.user_nickname
+    message_records=[]
+    all_message_log=[]
     
+    sender_to_receiver_records=db.session.query(Inbox).filter(Inbox.msg_sender==id, Inbox.msg_recipient==loggedInDev).all()
+    receiver_to_sender_records=db.session.query(Inbox).filter(Inbox.msg_sender==loggedInDev, Inbox.msg_recipient==id).all()
     
-    return {"status":True, "senderName":sender_name}
+    for s in sender_to_receiver_records:
+        message_records.append(s.msg_id)
+    for r in receiver_to_sender_records:
+        message_records.append(r.msg_id)
+    sorted_records=sorted(message_records)
+    
+    for msg in sorted_records:
+        msg_details=db.session.query(Inbox).filter(Inbox.msg_id==msg).first()
+        
+        info={}
+        info['msgId']=msg_details.msg_id
+        info['senderId']=msg_details.msg_sender
+        info['receiverId']=msg_details.msg_recipient
+        info['message']=msg_details.message
+        info['timestamp']=msg_details.datesent
+        all_message_log.append(info)
+    return {"status":True, "senderName":sender_name, 'details':all_message_log}

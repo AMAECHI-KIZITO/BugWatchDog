@@ -5,13 +5,6 @@
     align-items: center;
     color:#fff;
 }
-/*.homeWelcome, .signUp, .dashboardlinks{
-    background-color: inherit;
-    min-height: 500px;
-    font-family: "lucida-calligraphy";
-    align-items: center;
-    color:#fff;
-}*/
 
 .input-group-text{
     color:#000;
@@ -76,4 +69,24 @@ hr{
     font-family: "lucida-calligraphy";
     align-items: center;
     color:grey;
+}
+
+/*Message Side*/
+#messageSection{
+    color:#fff;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#messageSentByMe{
+    color:#fff;
+    border:1px solid gold;
+    border-radius:30px;
+    font-size:13px;
+}
+
+#messageSentByThem{
+    color:#fff;
+    border:1px solid grey;
+    border-radius:30px;
+    font-size:13px;
 }
