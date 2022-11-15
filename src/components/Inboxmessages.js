@@ -89,14 +89,14 @@ const Inboxmessage= ({userSession}) => {
                             {specificMessage.map((msgRecord) =>
                                 {
                                     if(userSession==msgRecord.senderId){
-                                        return <p className="col-6 offset-6 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p>
+                                        return <><p  className="col-6 offset-6 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p> <p className="col-5 offset-7 col-lg-2 offset-lg-10" style={{fontSize:"8px"}}>{msgRecord.timestamp}</p></>
                                     }
-                                    return <p className="col-6 py-2 px-3" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p>
+                                    return <><p className="col-6 py-2 px-3" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p> <p className="col-5" style={{fontSize:"8px"}}>{msgRecord.timestamp}</p></>
                                 }
                             )}
                         </div>
                     </div>
-                    <div className="row mx-1" style={{position:"sticky", bottom:"0px"}}>
+                    <div className="row mx-1" style={{position:"sticky", bottom:"0px",backgroundColor:'#05204a'}}>
                         <div className="col-md-11">
                             <form>
                                 <div className="input-group mb-2">

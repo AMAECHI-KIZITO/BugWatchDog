@@ -8,7 +8,6 @@ const Inbox=({userSession})=>{
     const [sendersIdentityNumber, setSendersIdentityNumber]=useState([]);
     const [myInbox, setMyInbox]=useState([]);
     const [timeDelivered, setTimeDelivered]=useState([]);
-    let [openInbox,setOpenInbox]=useState('');
 
 
     useEffect( ()=>{
@@ -58,11 +57,8 @@ const Inbox=({userSession})=>{
                                                                     {value[0].toUpperCase()  + value.substring(1)}
                                                                 </span>
 
-                                                                <span style={{fontSize:"9px"}} className="float-end">
-                                                                    {timeDelivered[key].toLocaleString("en-US").split(' ')[1]  + " "}
-                                                                    {timeDelivered[key].toLocaleString("en-US").split(' ')[2] + " "}
-                                                                    {timeDelivered[key].toLocaleString("en-US").split(' ')[3]+ " "}
-                                                                    {timeDelivered[key].toLocaleString("en-US").split(' ')[4]+ " "}
+                                                                <span style={{fontSize:"9px"}} className="float-end pe-3">
+                                                                    {timeDelivered[key]}
                                                                 </span>
                                                                 <p style={{fontSize:"12px"}}>{myInbox[key][0].toUpperCase()  + myInbox[key].substring(1)}</p>
                                                             </div>
