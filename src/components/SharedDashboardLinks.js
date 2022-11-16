@@ -19,7 +19,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
               <a className="navbar-brand">DEBUGGER <i className="fa-solid fa-bugs"></i></a>
-              <button className='btn btn-success btn-lg float-end d-md-none' type="button" data-bs-toggle="offcanvas" data-bs-target="#debuggerAppLinks" aria-controls="debuggerAppLinks">
+              <button className='btn btn-success btn-lg float-end d-md-none' type="button" data-bs-toggle="offcanvas" data-bs-target="#debuggerAppLinks" aria-controls="debuggerAppLinks" style={{backgroundColor:"gold"}}>
                 <i className="fa-solid fa-bars"></i>
               </button>
             </div>
@@ -27,7 +27,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
         </div>
 
         <div className="col-md-11" style={{color:"gold"}}>
-          <p className="float-end pe-3" style={{fontSize:"13px"}}>Hi, {user} <i className="fa-solid fa-smile"></i></p><br/>
+          <p className="float-end pe-3" style={{fontSize:"13px"}}>Hi, {user[0].toUpperCase() + user.substring(1)} <i className="fa-solid fa-smile"></i></p><br/>
         </div>
       </div>
 
@@ -65,11 +65,11 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           
           <div className="offcanvas-header">
             <h5 id="debuggerApp" className="text-light">Quick Links <i className="fa-solid fa-bugs"></i></h5>
-            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
           </div>
 
 
-          <div className="row offcanvas-body" id="songLinks">
+          <div className="row offcanvas-body">
             <p className="text-center"><Link to="/dashboard" className="quickDashboardLinks text-warning">Dashboard</Link></p>
             <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks text-warning">New Project</Link></p>
             <p className="text-center"><Link to="/dashboard/myprojects" className="quickDashboardLinks text-warning">View Projects</Link></p>

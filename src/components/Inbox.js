@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 
 
 const Inbox=({userSession})=>{
+    const [availableDevelopers, setAvailableDevelopers]=useState([])
     const [senders, setSenders]=useState([]);
     const [sendersIdentityNumber, setSendersIdentityNumber]=useState([]);
     const [myInbox, setMyInbox]=useState([]);
     const [timeDelivered, setTimeDelivered]=useState([]);
 
-
+    //getting the inbox
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/inbox/?devId=${userSession}`)
         .then(rsp=>rsp.json())
@@ -25,6 +26,15 @@ const Inbox=({userSession})=>{
         })
     },[])
 
+    useEffect( ()=>{
+        fetch(`http://localhost:5000/api/v1/developers/?currentDev=${userSession}`)
+        .then(rsp=>rsp.json())
+        .then(data=>{
+            setAvailableDevelopers(data.developers);
+        })
+    },[])
+
+
     return(
         <>
             <div className="row dashboardlinks">
@@ -38,7 +48,10 @@ const Inbox=({userSession})=>{
                                 <div className="col-12 text-center" style={{color:"grey"}}>
                                     <h3>Inbox Empty</h3>
                                     <p>Start a chat by clicking below</p>
-                                    <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}}><i className="fa-regular fa-comment"></i></button>
+
+                                    <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
+                                        <i className="fa-regular fa-comment"></i>
+                                    </button>
                                 </div>
                             </div>
                             ):(
@@ -60,7 +73,7 @@ const Inbox=({userSession})=>{
                                                                 <span style={{fontSize:"9px"}} className="float-end pe-3">
                                                                     {timeDelivered[key]}
                                                                 </span>
-                                                                <p style={{fontSize:"12px"}}>{myInbox[key][0].toUpperCase()  + myInbox[key].substring(1)}</p>
+                                                                <p style={{fontSize:"12px"}}>{myInbox[key]}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -68,7 +81,57 @@ const Inbox=({userSession})=>{
                                             </>
                                         ))
                                     }
+                                    <button className="btn btn-warning float-end" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
+                                        <i className="fa-regular fa-comment"></i>
+                                    </button>
                                 </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="OffcanvasSection">
+                <div className="offcanvas offcanvas-end" tabIndex="-1" id="developersContact" aria-labelledby="developersContactList" style={{backgroundColor:"#05204a"}}>
+
+                
+                    <div className="offcanvas-header">
+                        <h5 id="developersContacts" className="text-light">Contact a Developer <i className="fa-solid fa-bugs"></i></h5>
+                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
+                    </div><hr/>
+
+
+                    <div className="row offcanvas-body">
+                        <div className="col-12">
+                            {(typeof availableDevelopers==="string")?(
+                                <h2 style={{color:"white"}}>No Developers Available</h2>
+                            ):(
+                                <>
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Developer</th>
+                                                <th>Stack</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.values(availableDevelopers).map(dev => 
+                                                <tr>
+                                                    <td key={dev.serial_no}>{dev.serial_no}</td>
+                                                    <td key={dev.dev_nickname}>{dev.dev_nickname[0].toUpperCase()  + dev.dev_nickname.substring(1)}</td>
+                                                    <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>
+                                                    <td key={`message${dev.dev_id}`}>
+                                                        <Link to={`/dashboard/inbox/${dev.dev_id}`} style={{textDecoration:'None'}}>
+                                                            <button className="btn btn-warning btn-sm">Msg</button>
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </>
                             )}
                         </div>
                     </div>
