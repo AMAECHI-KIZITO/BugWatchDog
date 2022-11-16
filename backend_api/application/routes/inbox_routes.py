@@ -1,4 +1,4 @@
-from datetime import datetime,date
+from datetime import datetime
 from flask import jsonify,request
 from application import app
 from application.models import *
@@ -21,25 +21,37 @@ def send_message():
 @app.route("/api/v1/inbox/")
 def inbox():
     developer_id=request.args.get("devId")
-    messages=db.session.query(Inbox).filter(Inbox.msg_recipient==developer_id).order_by(Inbox.datesent.desc()).all()
     
-    allsenders=[]
-    names_of_senders=[]
+    messages=db.session.query(Inbox).filter(Inbox.msg_recipient==developer_id).order_by(Inbox.datesent.desc()).all()
+    unread_messages_cases=db.session.query(Inbox).filter(Inbox.msg_sender==developer_id).order_by(Inbox.datesent.desc()).all()
+    
+    all_persons_involved_user_id_list=[]
+    the_names_of_persons_involved_in_the_conversations=[]
     last_message_sent=[]
     timesent=[]
     
-    if messages!= []:
+    if messages != [] or unread_messages_cases != []:
         #getting all distinct senders
         for i in messages:
-            if i.msg_sender in allsenders:
+            if i.msg_sender in all_persons_involved_user_id_list:
                 pass
             else:
-                allsenders.append(i.msg_sender)
+                all_persons_involved_user_id_list.append(i.msg_sender)
         
-        for x in allsenders:
+        
+        #trying to get the unreplied messages cases
+        for unreplied in unread_messages_cases:
+            if unreplied.msg_recipient in all_persons_involved_user_id_list:
+                pass
+            else:
+                all_persons_involved_user_id_list.append(unreplied.msg_recipient)
+        
+        for x in all_persons_involved_user_id_list:
+            #get the person nickname
             the_msg_sender=db.session.query(User).filter(User.user_id==x).first()
             name=the_msg_sender.user_nickname
-            names_of_senders.append(name)
+            
+            the_names_of_persons_involved_in_the_conversations.append(name)
             the_latest_msg_id=[]
             
             last_msg_i_received= db.session.query(Inbox).filter(Inbox.msg_sender==x, Inbox.msg_recipient==developer_id).all()
@@ -62,128 +74,11 @@ def inbox():
                     deets=db.session.query(Inbox).get(nos)
                     timesent.append(deets.datesent.strftime("%a, %d %b %y %H:%M:%S %p"))
                     last_message_sent.append(deets.message)
-        return {"status":True, "message":last_message_sent, 'list_of_senders':allsenders, "names":names_of_senders, 'timestamp':timesent}
+          
+        return {"status":True, "message":last_message_sent, 'list_of_senders':all_persons_involved_user_id_list, "names":the_names_of_persons_involved_in_the_conversations, 'timestamp':timesent}
     else:
         return {"status":False, "message":"You have no mesages at this time"}
 
-
-
-
-
-
-# class Get_chat_history:
-#     def __init__(self,devid):
-#         self.dev_id=devid
-#         self.allSenders=[]
-#         self.msg_ids=[]
-#         self.names_of_senders=[]
-#         self.last_message=[]
-#         self.last_msg_timestamp=[]
-        
-        
-#     def get_developer_chats_senders(self):
-#         records_of_dev=db.session.query(Inbox).filter((Inbox.msg_sender==self.dev_id)|(Inbox.msg_recipient==self.dev_id)).all()
-#         if records_of_dev != []:
-#             for i in records_of_dev:
-                
-#                 if i.msg_sender in self.allSenders or i.msg_sender==self.dev_id:
-#                     pass
-#                 else:
-#                     self.allSenders.append(i.msg_sender)
-                    
-#                 if i.msg_recipient in self.allSenders or i.msg_recipient==self.dev_id:
-#                     pass
-#                 else:
-#                     self.allSenders.append(i.msg_recipient)
-#             self.get_my_messages_ids()
-#         else:
-#             pass
-    
-    
-#     def get_my_messages_ids(self):
-#         for x in self.allSenders:
-#             sms=Inbox.query.filter(Inbox.msg_sender==x).all()
-#             if sms != []:
-#                 for deets in sms:
-#                     if deets.msg_sender==self.dev_id or deets.msg_recipient == self.dev_id:
-#                         if deets.msg_id not in self.msg_ids:
-#                             self.msg_ids.append(deets.msg_id)
-#                     else:
-#                         pass
-#             else: 
-#                 sms=Inbox.query.filter(Inbox.msg_recipient==x).all()
-#                 for deets in sms:
-#                     if deets.msg_sender==self.dev_id or deets.msg_recipient == self.dev_id:
-#                         if deets.msg_id not in self.msg_ids:
-#                             self.msg_ids.append(deets.msg_id)
-#                     else:
-#                         pass
-                
-#         self.get_senders_names()
-#         self.get_last_chat()
-        
-#         #print(sorted(self.msg_ids))
-#         print(self.allSenders)
-#         print(self.last_message)
-#         print(self.names_of_senders)
-        
-#     def get_senders_names(self):
-#         for sender in self.allSenders:
-#             sender_info=User.query.filter(User.user_id==sender).first()
-#             sender_name=sender_info.user_nickname
-            
-#             if sender_name not in self.names_of_senders:
-#                 self.names_of_senders.append(sender_name)
-#             else:
-#                 pass
-        
-            
-            
-#     def get_last_chat(self):
-#         for x in self.allSenders:
-#             last_chat=Inbox.query.filter(Inbox.msg_sender==x, Inbox.msg_recipient==self.dev_id).all()
-            
-#             if last_chat!=[]:
-#                 last_msg=last_chat[-1].message
-#                 last_msg_time=last_chat[-1].datesent.strftime("%a, %d %b %y %H:%M:%S %p")
-                    
-#                 self.last_message.append(last_msg)
-#                 self.last_msg_timestamp.append(last_msg_time)
-#             else:
-#                 last_chat=Inbox.query.filter(Inbox.msg_sender==self.dev_id, Inbox.msg_recipient==x).all()
-                
-#                 last_msg=last_chat[-1].message
-#                 last_msg_time=last_chat[-1].datesent.strftime("%a, %d %b %y %H:%M:%S %p")
-                    
-#                 self.last_message.append(last_msg)
-#                 self.last_msg_timestamp.append(last_msg_time)
-         
-# chat=Get_chat_history(1)
-# chat.get_developer_chats_senders()       
-
-
-
-
-# @app.route("/api/v1/inbox/")
-# def my_inbox():
-#     developer_id=request.args.get("devId")
-    
-#     chat=Get_chat_history(developer_id)
-#     chat.get_developer_chats_senders()
-    
-    
-#     allsenders=chat.allSenders
-#     messages_ids=chat.msg_ids
-#     names_of_senders=chat.names_of_senders
-#     last_message=chat.last_message
-#     last_message_timestamp=chat.last_msg_timestamp
-
-#     if allsenders!=[]:
-#         return {"status":True, "message":last_message, 'list_of_senders':allsenders, "names":names_of_senders, 'timestamp':last_message_timestamp}
-#     else:
-#         return {"status":False, "message":"You have no mesages at this time"}
-    
-    
 
 # Viewing each specific inbox messages    
 @app.route("/api/v1/inbox-details/<id>/")
