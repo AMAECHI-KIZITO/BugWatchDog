@@ -10,7 +10,7 @@ const Viewprojects=({userSession})=>{
         fetch(`http://localhost:5000/api/v1/view-projects/${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            setAllDevProjects(data.dev_projects)
+            setAllDevProjects(data.dev_projects);
         })
     },[])
 

@@ -12,7 +12,7 @@
 }
 
 .form-control{
-    caret-color: gold;
+    caret-color: orangered;
 }
 
 #welcomeMessage, #signUpHeader, .navbar-brand{
@@ -83,10 +83,16 @@ hr{
     border-radius:30px;
     font-size:13px;
 }
+#messageSentByMeTimeStamp{
+    line-height: 0px;
+}
 
 #messageSentByThem{
     color:#fff;
     border:1px solid grey;
     border-radius:30px;
     font-size:13px;
+}
+#messageSentByThemTimeStamp{
+    line-height: 0px;
 }

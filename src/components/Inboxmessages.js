@@ -89,9 +89,9 @@ const Inboxmessage= ({userSession}) => {
                             {specificMessage.map((msgRecord) =>
                                 {
                                     if(userSession==msgRecord.senderId){
-                                        return <><p  className="col-8 offset-4 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p> <p className="float-end" style={{fontSize:"8px"}}>{msgRecord.timestamp}</p></>
+                                        return <div className='mb-4'><p  className="col-8 offset-4 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p> <p className="float-end" style={{fontSize:"8px"}} id="messageSentByMeTimeStamp">{msgRecord.timestamp}</p></div>
                                     }
-                                    return <><p className="col-8 py-2 px-3" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p> <p style={{fontSize:"8px"}}>{msgRecord.timestamp}</p></>
+                                    return <><p className="col-8 py-2 px-3" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p> <p style={{fontSize:"8px"}} id="messageSentByThemTimeStamp">{msgRecord.timestamp}</p></>
                                 }
                             )}
                         </div>
