@@ -58,15 +58,15 @@ function Addbug({userSession}){
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="mb-3" style={{color:"gold"}}>Create Bug</h2><hr/>
+                            <h2 className="mb-3 ms-1" style={{color:"gold"}}>Create Bug</h2><hr/>
                             <form onSubmit={submitBug}>
                                 <div className="mb-3 mt-3">
-                                    <label htmlFor="bugdescription" style={{color:"gold"}}>Bug Description</label>
+                                    <label htmlFor="bugdescription" style={{color:"gold"}} className="ms-1 form-label">Bug Description</label>
                                     <textarea className='form-control' name='bugdescription' onBlur={describeBug}></textarea>
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="bugName" style={{color:"gold"}}>Affected Project</label>
+                                    <label htmlFor="bugName" style={{color:"gold"}} className="ms-1 form-label">Affected Project</label>
                                     <select className="form-select" onChange={chooseAffectedProject}>
                                         <option value="#">Choose the affected project</option>
                                         {Object.values(projects).map(project => <option value={project.project_id} key={project.project_id}>{project.project_name}</option>)}
@@ -74,7 +74,7 @@ function Addbug({userSession}){
                                 </div>
 
                                 <div>
-                                    <button className="btn" id="btnCreateBug" style={{backgroundColor:"gold"}}>Create</button>
+                                    <button className="btn ms-1" id="btnCreateBug" style={{backgroundColor:"gold"}}>Create</button>
                                 </div>
                             </form>
                         </div>

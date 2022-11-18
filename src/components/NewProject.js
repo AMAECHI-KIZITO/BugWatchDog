@@ -61,20 +61,20 @@ function Newproject({userSession}){
         <div className="col-md-11">
           <div className="row">
             <div className="col-12">
-              <h2 className="mb-3" style={{color:"gold"}}>Create Project</h2><hr/>
+              <h2 className="mb-3 ms-1" style={{color:"gold"}}>Create Project</h2><hr/>
               <form onSubmit={createProject}>
                 <div className="mb-3 mt-3">
-                  <label htmlFor="projectname" style={{color:"gold"}}>Project Name</label>
+                  <label htmlFor="projectname" style={{color:"gold"}} className="ms-1 form-label">Project Name</label>
                   <input type='text' className="form-control py-3" name="projectname" id="projectname" placeholder="Enter project name" onChange={nameProject}/>
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="projectdescription" style={{color:"gold"}}>Short Description</label>
+                  <label htmlFor="projectdescription" style={{color:"gold"}} className="ms-1 form-label">Short Description</label>
                   <textarea className='form-control' name='projectdescription' onChange={describeProject}></textarea>
                 </div>
 
                 <div>
-                  <button className="btn" id="btnCreateNewProject" style={{backgroundColor:"gold"}}>Create Project</button>
+                  <button className="btn ms-1" id="btnCreateNewProject" style={{backgroundColor:"gold"}}>Create Project</button>
                 </div>
               </form>
             </div>

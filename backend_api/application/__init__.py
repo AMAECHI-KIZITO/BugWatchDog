@@ -19,6 +19,6 @@ app.config.from_object(config.ApplicationSettings)
 db=SQLAlchemy(app)
 
 migrate=Migrate(app,db)
-from application.routes import user_routes, create_acct_and_login_routes, inbox_routes, projects_routes
+from application.routes import user_routes, create_acct_and_login_routes, inbox_routes, projects_routes, bugs_routes
 from application import models
 

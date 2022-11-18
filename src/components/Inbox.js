@@ -41,7 +41,7 @@ const Inbox=({userSession})=>{
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="mb-3" style={{color:"gold"}}>Inbox</h2><hr/>
+                            <h2 className="mb-3 ms-1" style={{color:"gold"}}>Inbox</h2><hr/>
 
                             {(typeof myInbox === "string")?(
                                 <div className="row" style={{minHeight:"300px", alignItems:"center"}}>
@@ -81,7 +81,7 @@ const Inbox=({userSession})=>{
                                             </>
                                         ))
                                     }
-                                    <button className="btn btn-warning float-end" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
+                                    <button className="btn btn-warning float-end me-2" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
                                         <i className="fa-regular fa-comment"></i>
                                     </button>
                                 </div>

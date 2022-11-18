@@ -96,3 +96,8 @@ hr{
 #messageSentByThemTimeStamp{
     line-height: 0px;
 }
+
+#profileHorizontalLine{
+    height:1px;
+    background-color: #05204a;
+}

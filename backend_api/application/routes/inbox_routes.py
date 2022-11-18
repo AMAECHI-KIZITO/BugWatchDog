@@ -110,3 +110,16 @@ def get_inbox_messages(id):
         all_message_log.append(info)
     return {"status":True, "senderName":sender_name, 'details':all_message_log}
 
+
+
+
+# Get Developer Profile
+@app.route('/api/v1/get-developer-profile/<id>/')
+def developer_profile(id):
+    dev_deets=User.query.filter(User.user_id==id).first()
+    dev_stack=Techstack.query.filter(Techstack.stack_id==dev_deets.user_stack).first()
+    dev_stack_name=dev_stack.stack_name
+    
+    profile={"dev_name":dev_deets.user_nickname, "dev_email":dev_deets.user_email, "dev_stack":dev_stack_name, "date_reg":dev_deets.date_reg.strftime("%d %b %Y")}
+    return {"status":True, "information":profile}
+    

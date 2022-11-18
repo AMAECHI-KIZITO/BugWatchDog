@@ -24,7 +24,7 @@ const SingleProject= ({userSession}) => {
             <h2 style={{color:"gold"}}>
                 <span className="float-start me-3">
                     <Link to="/dashboard/myprojects">
-                        <button className="btn btn-warning btn-sm">
+                        <button className="btn btn-warning btn-sm ms-1">
                             <i className="fa-solid fa-arrow-left" style={{fontSize:"12px"}}></i>
                         </button>
                     </Link>
@@ -37,8 +37,8 @@ const SingleProject= ({userSession}) => {
 
             <div className="row">
                 <div className="col-md-11 specificProjectDetails">
-                    <p>{specificProject[1]}</p>
-                    <p style={{fontSize:'12px',color:'gold'}}><i className='fa-solid fa-calendar-days fa-2x'></i> {specificProject[0]}</p><br/>
+                    <p className="ms-1">{specificProject[1]}</p>
+                    <p className="ms-1" style={{fontSize:'12px',color:'gold'}}><i className='fa-solid fa-calendar-days fa-2x'></i> {specificProject[0]}</p><br/>
                     <button className="btn btn-danger btn-sm float-end">View <i className="fa-solid fa-bug"></i></button>
                 </div>
             </div>
