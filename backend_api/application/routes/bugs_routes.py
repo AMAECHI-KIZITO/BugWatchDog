@@ -1,3 +1,4 @@
+import os
 from flask import jsonify,request
 from application import app
 from application.models import *
@@ -28,10 +29,16 @@ def create_new_bug():
     data=request.get_json()
     project_affected=data.get('affectedProject')
     bug_description_received=data.get('bugDescription')
+    code_image=data.get('codeSnippet')
     
-    new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved")
+    # original_filename=code_image.filename
+    # originalfile = "application/bugs_images/"+original_filename
+    # code_image.save(originalfile)
+    
+    new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved", bug_image=code_image)
     db.session.add(new_bug)
     db.session.commit()
     
     return {"status":"True", "message":"Bug Added"}
-    
+
+

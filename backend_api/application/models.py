@@ -25,6 +25,7 @@ class Bugsheet(db.Model):
     bug_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
     bug_project=db.Column(db.Integer(), db.ForeignKey("project.project_id"))
     bug_description=db.Column(db.Text(), nullable=False)
+    bug_image=db.Column(db.String(50), nullable=True)
     bug_status=db.Column(db.Enum('Unsolved','Fixed'), nullable=False)
     date_added=db.Column(db.Date(), nullable=False, default=date.today())
     
