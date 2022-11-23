@@ -8,6 +8,7 @@ class User(db.Model):
     user_lastname=db.Column(db.String(50), nullable=False)
     user_nickname=db.Column(db.String(50), nullable=False)
     user_stack=db.Column(db.Integer(), db.ForeignKey("techstack.stack_id"))
+    user_num_of_friends=db.Column(db.Integer(), nullable=False, default=0)
     user_email=db.Column(db.String(80), nullable=False, unique=True)
     user_pswd=db.Column(db.String(200),nullable=False)
     date_reg=db.Column(db.DateTime(), nullable=False, default=date.today())
@@ -40,3 +41,11 @@ class Inbox(db.Model):
     msg_recipient=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
     message=db.Column(db.Text(), nullable=False)
     datesent=db.Column(db.DateTime(), nullable=False, default=datetime.now())
+    
+    
+class Friend_Request(db.Model):
+    request_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    request_sent_by=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    request_sent_to=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    request_status=db.Column(db.Enum('P','A','R'), nullable=False, default="P")
+    request_date=db.Column(db.Date(), nullable=False, default=date.today())

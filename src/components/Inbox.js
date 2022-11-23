@@ -25,7 +25,8 @@ const Inbox=({userSession})=>{
             }
         })
     },[])
-
+    
+    //Getting all developers
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/developers/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
