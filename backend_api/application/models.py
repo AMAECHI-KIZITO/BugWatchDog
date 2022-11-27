@@ -8,7 +8,6 @@ class User(db.Model):
     user_lastname=db.Column(db.String(50), nullable=False)
     user_nickname=db.Column(db.String(50), nullable=False)
     user_stack=db.Column(db.Integer(), db.ForeignKey("techstack.stack_id"))
-    user_num_of_friends=db.Column(db.Integer(), nullable=False, default=0)
     user_email=db.Column(db.String(80), nullable=False, unique=True)
     user_pswd=db.Column(db.String(200),nullable=False)
     date_reg=db.Column(db.DateTime(), nullable=False, default=date.today())

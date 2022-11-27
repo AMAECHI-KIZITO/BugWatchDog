@@ -115,7 +115,11 @@ function Dashboard({userSession}){
                             fetch(`http://localhost:5000/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${dev.dev_id}`)
                             .then( rsp => rsp.json())
                             .then( data => {
-                              document.getElementById('closeOffCanvas').click();
+                              fetch(`http://localhost:5000/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
+                              .then(rsp=>rsp.json())
+                              .then(data=>{
+                                setAvailableDevelopers(data.developers);
+                              })
                             })
                           }}>Add</button>
                         </td>
@@ -165,16 +169,58 @@ function Dashboard({userSession}){
                         <td key={dev.serial_no}>{dev.serial_no}</td>
                         <td key={dev.dev_nickname}>{dev.dev_nickname[0].toUpperCase()  + dev.dev_nickname.substring(1)}</td>
                         <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>
-                        <td key={`message${dev.dev_id}`}>
-                          <button className="btn btn-warning btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
+                        <td key={`acceptRequest${dev.dev_id}`}>
+                          <button className="btn btn-success btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
 
                             fetch(`http://localhost:5000/api/v1/accept-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
                             .then( rsp => rsp.json())
                             .then( data => {
                               alert(data.message);
-                              document.getElementById('closeFriendReqOffCanvas').click();
+
+                              fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
+                              .then(rsp=>rsp.json())
+                              .then(data=>{
+                                setfriendrequest(data.developers);
+                              })
+
+                              fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
+                              .then( rsp => rsp.json())
+                              .then( data => {
+                                let statistics=data
+                                setTotalProjects(statistics.total_projects);
+                                setOutstandingBugs(statistics.bugs_outstanding);
+                                setAverageBugs(statistics.average_bugs);
+                                setFriends(statistics.friends);
+                              })
                             })
-                          }}>Accept</button>
+                          }}><i className="fa-solid fa-check"></i></button>
+                        </td>
+
+                        <td key={`rejectRequest${dev.dev_id}`}>
+                          <button className="btn btn-danger btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
+
+                            fetch(`http://localhost:5000/api/v1/reject-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
+                            .then( rsp => rsp.json())
+                            .then( data => {
+                              alert(data.message);
+                              
+                              fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
+                              .then(rsp=>rsp.json())
+                              .then(data=>{
+                                setfriendrequest(data.developers);
+                              })
+
+                              fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
+                              .then( rsp => rsp.json())
+                              .then( data => {
+                                let statistics=data
+                                setTotalProjects(statistics.total_projects);
+                                setOutstandingBugs(statistics.bugs_outstanding);
+                                setAverageBugs(statistics.average_bugs);
+                                setFriends(statistics.friends);
+                              })
+                            })
+                          }}><i className="fa-solid fa-xmark"></i></button>
                         </td>
                         
                       </tr>

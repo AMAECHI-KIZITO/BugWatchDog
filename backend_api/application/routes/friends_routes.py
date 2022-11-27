@@ -111,9 +111,10 @@ def retrieve_friend_requests():
         return{"status":False, "developers":"No Pending Requests"}
 
 
+
 # Accept Friend Requests
 @app.route('/api/v1/accept-friend-request/')
-def accept_friend_requests():
+def accept_friend_request():
     invitee=request.args.get('invitee')
     invited=request.args.get('invited')
     
@@ -125,4 +126,24 @@ def accept_friend_requests():
     accept_request=db.session.query(Friend_Request).filter(Friend_Request.request_sent_by==invited, Friend_Request.request_sent_to==invitee).first()
     accept_request.request_status='A'
     db.session.commit()
+    
+    
+    
     return {"status":True, "message":f"{captitalized_name} is now your friend."}
+
+
+# Reject Friend Requests
+@app.route('/api/v1/reject-friend-request/')
+def reject_friend_request():
+    invitee=request.args.get('invitee')
+    invited=request.args.get('invited')
+    
+    invited_deets=User.query.get(invited)
+    name_of_friend=invited_deets.user_nickname
+    captitalized_name=name_of_friend[0].upper() + name_of_friend[1:]
+    
+    #accept request process
+    accept_request=db.session.query(Friend_Request).filter(Friend_Request.request_sent_by==invited, Friend_Request.request_sent_to==invitee).first()
+    accept_request.request_status='R'
+    db.session.commit()
+    return {"status":True, "message":f"You have declined the request from {captitalized_name}"}

@@ -19,8 +19,13 @@ def get_dashboard_stats():
     total_bugs=0
     outstanding_bugs=0
     dev_total_projects=db.session.query(Project).filter(Project.project_owner==dev_user_id).count()
-    num_of_friends=db.session.query(User).filter(User.user_id==dev_user_id).first()
-    dev_friends=num_of_friends.user_num_of_friends
+    
+    #getting the total number of friends
+    friends_i_accepted=Friend_Request.query.filter(Friend_Request.request_sent_to==dev_user_id, Friend_Request.request_status=="A").count()
+    
+    friends_who_accepted_my_request=Friend_Request.query.filter(Friend_Request.request_sent_by==dev_user_id, Friend_Request.request_status=="A").count()
+    
+    total_friends = friends_i_accepted + friends_who_accepted_my_request
     
     if dev_total_projects != 0:
         dev_projects=db.session.query(Project).filter(Project.project_owner==dev_user_id).all()
@@ -43,14 +48,14 @@ def get_dashboard_stats():
             "total_projects":f"{dev_total_projects}",
             "bugs_outstanding": f"{outstanding_bugs}",
             "average_bugs": f"{average_bugs}",
-            "friends":f"{dev_friends}"
+            "friends":f"{total_friends}"
         }
     else:
         return {
             "total_projects":0,
             "bugs_outstanding":0,
             "average_bugs":0,
-            "friends":f"{dev_friends}"
+            "friends":f"{total_friends}"
         }
 
     
