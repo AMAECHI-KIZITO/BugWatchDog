@@ -28,7 +28,7 @@ const Inbox=({userSession})=>{
     
     //Getting all developers
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/developers/?currentDev=${userSession}`)
+        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setAvailableDevelopers(data.developers);
@@ -97,7 +97,7 @@ const Inbox=({userSession})=>{
 
                 
                     <div className="offcanvas-header">
-                        <h5 id="developersContacts" className="text-light">Contact a Developer <i className="fa-solid fa-bugs"></i></h5>
+                        <h5 id="developersContacts" className="text-light">Start a conversation<i className="fa-solid fa-user-group"></i></h5>
                         <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
                     </div><hr/>
 
@@ -105,7 +105,12 @@ const Inbox=({userSession})=>{
                     <div className="row offcanvas-body">
                         <div className="col-12">
                             {(typeof availableDevelopers==="string")?(
-                                <h2 style={{color:"white"}}>No Developers Available</h2>
+                                <div className="row align-items-center" style={{minHeight:'400px'}}>
+                                    <div className="col">
+                                        <h4 className="text-center" style={{color:"grey"}}>Ouch <i className='fa-solid fa-heart-crack text-danger'></i></h4>
+                                        <p className="text-center" style={{color:"grey"}}>You haven't made any friends yet</p>
+                                    </div>
+                                </div>
                             ):(
                                 <>
                                     <table className="table">

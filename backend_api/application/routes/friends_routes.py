@@ -2,6 +2,7 @@ from flask import jsonify, session,request
 from application import app
 from application.models import *
 
+# Getting unfriended developers to enable sending of requests to
 @app.route('/api/v1/get-unfriended-developers/')
 def get_unfriended_devs():
     current_dev=request.args.get('currentDev')
@@ -147,3 +148,55 @@ def reject_friend_request():
     accept_request.request_status='R'
     db.session.commit()
     return {"status":True, "message":f"You have declined the request from {captitalized_name}"}
+
+def friends_i_accepted(id):
+    f_i_a=[]
+    
+    friend_req_i_accepted= db.session.query(Friend_Request).filter(Friend_Request.request_sent_to==id, Friend_Request.request_status=='A').all()
+    if friend_req_i_accepted != []:
+        for accepted in friend_req_i_accepted:
+            f_i_a.append(accepted.request_sent_by)
+    
+    return f_i_a
+    
+
+def friends_that_accepted_me(id):
+    f_t_a_m=[]
+    friends_that_accepted_me= db.session.query(Friend_Request).filter(Friend_Request.request_sent_by==id, Friend_Request.request_status=='A').all()
+    
+    if friends_that_accepted_me != []:
+        for accepted in friends_that_accepted_me:
+            f_t_a_m.append(accepted.request_sent_to)
+    
+    return f_t_a_m
+
+#getting my friends
+@app.route('/api/v1/get-friends/')
+def get_my_dev_friends():
+    logged_in_dev=request.args.get("currentDev")
+    
+    friends_records=[]
+    counter=0
+    
+    accepted_by_me=friends_i_accepted(logged_in_dev)
+    accepted_by_others=friends_that_accepted_me(logged_in_dev)
+    all_friends= sorted(accepted_by_me + accepted_by_others)
+    
+    #getting friends deets
+    if all_friends!=[]:
+        for friend in all_friends:
+            friend_history=User.query.get(friend)
+            counter+=1
+            stack_id=friend_history.user_stack
+            stack=db.session.query(Techstack).filter(Techstack.stack_id==stack_id).first()
+            stack_name=stack.stack_name
+                
+            dev_info={}
+            dev_info["serial_no"]=counter
+            dev_info["dev_id"]=friend_history.user_id
+            dev_info["dev_nickname"]=friend_history.user_nickname
+            dev_info["dev_stack"]=stack_name
+            friends_records.append(dev_info)
+        return {"status":True, "developers":friends_records}
+    else:
+        return {"status":True, "developers":"You don't have any friends."}

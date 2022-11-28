@@ -90,8 +90,12 @@ function Dashboard({userSession}){
 
             <div className="row offcanvas-body">
               <div className="col-12">
-                {(typeof availableDevelopers==="string")?(
-                  <h2 style={{color:"white"}}>No Developers Available</h2>
+                {(typeof availableDevelopers==="string" || availableDevelopers.length==0)?(
+                  <div className="row align-items-center" style={{minHeight:'400px'}}>
+                    <div className="col">
+                      <h4 className="text-center" style={{color:"grey"}}>No Developers Available</h4>
+                    </div>
+                  </div>
                 ):(
                 <>
                   <table className="table">

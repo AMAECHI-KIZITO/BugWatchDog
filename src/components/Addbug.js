@@ -76,11 +76,11 @@ function Addbug({userSession}){
                                     </select>
                                 </div>
 
-                                <div className="mb-3">
+                                {/*<div className="mb-3">
                                     <label htmlFor="bugCodeSnippet" style={{color:"gold"}} className="ms-1 form-label">Upload code snippet screenshot</label>
                                     <input type="file" className="form-control" name="codeSnippet" id='bugCodeSnippet' onChange={imageChoice}/>
                                     <p style={{color:'white'}}>{codeSnippet}</p>
-                                </div>
+                                </div>*/}
 
                                 <div>
                                     <button className="btn ms-1" id="btnCreateBug" style={{backgroundColor:"gold"}}>Create</button>
