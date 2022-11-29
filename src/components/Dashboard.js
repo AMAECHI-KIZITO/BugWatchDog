@@ -8,7 +8,7 @@ function Dashboard({userSession}){
   const [availableDevelopers, setAvailableDevelopers]=useState([])
   const [friends, setFriends]=useState("")
   const [friendRequest, setfriendrequest]=useState([])
-
+  const [numberOfFriendRequest, setNumberOfFriendRequest]=useState("")
   
   //Get developer statistics
   useEffect( () => {
@@ -25,22 +25,25 @@ function Dashboard({userSession}){
   }, [])
 
   //Getting unfriended developers
-  const getDevelopers=()=>{
+  useEffect( ()=> {
     fetch(`http://localhost:5000/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
     .then(rsp=>rsp.json())
     .then(data=>{
       setAvailableDevelopers(data.developers);
     })
-  }
+  }, [])
+  
 
-  const getFriendRequest=()=>{
+  //get friend requests
+  useEffect( ()=> {
     fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
     .then(rsp=>rsp.json())
     .then(data=>{
       setfriendrequest(data.developers);
+      setNumberOfFriendRequest(data.no_of_requests);
     })
-  }
-
+  }, [])
+  
 
   return(
     <>
@@ -48,32 +51,35 @@ function Dashboard({userSession}){
         <div className="col-md-11">
           <h2 style={{color:"gold"}}>Statistics</h2><hr/>
           <div className="row" style={{minHeight:"400px", alignItems:'center', color:"white"}}>
-            <div className="dashboardInfo col-md-4">
+            <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center">Total <br/> Projects</h4>
               <p className="text-center">{totalProjects}</p>
             </div>
-            <div className="dashboardInfo col-md-4">
+            <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center"><i className="fa-solid fa-bugs"></i> Outstanding</h4>
               <p className="text-center">{outstandingBugs}</p>
             </div>
-            <div className="dashboardInfo col-md-4">
+            <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center">Average <i className="fa-solid fa-bugs"></i> per Project</h4>
               <p className="text-center">{averageBugs}</p>
             </div>
 
-            <div className="dashboardInfo col-md-4">
+            <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center"><i className="fa-solid fa-user-group"></i> Friends</h4>
               <p className="text-center">{friends}</p>
             </div>
 
-            <div className="dashboardInfo col-md-4">
-              <h4 className="text-center">Friend Requests</h4>
-              <p className="text-center"><button type='button' className="btn btn-warning btn-sm" data-bs-toggle="offcanvas" data-bs-target="#getFriendRequest" onClick={getFriendRequest}>View Requests</button></p>
+            <div className="dashboardInfo col-6 col-md-4">
+              <h4 className="text-center">
+                Friend Requests
+                <span className="badge bg-danger rounded-pill" id='view_friend_req' style={{position:"absolute", fontSize:'10px'}}>{numberOfFriendRequest}</span>
+              </h4>
+              <p className="text-center"><button type='button' className="btn btn-warning btn-sm" data-bs-toggle="offcanvas" data-bs-target="#getFriendRequest">View Requests</button></p>
             </div>
 
-            <div className="dashboardInfo col-md-4">
+            <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center">Add Friend</h4>
-              <p className="text-center"><button className="btn btn-warning btn-sm"  data-bs-toggle="offcanvas" data-bs-target="#addFriend" onClick={getDevelopers}>Find a Dev</button></p>
+              <p className="text-center"><button className="btn btn-warning btn-sm"  data-bs-toggle="offcanvas" data-bs-target="#addFriend">Find a Dev</button></p>
             </div>
 
           </div>
@@ -87,7 +93,7 @@ function Dashboard({userSession}){
               <button type="button" className="btn-close text-reset" id='closeOffCanvas' data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
             </div><hr/>
 
-
+            {/* Send a Friend Request*/}
             <div className="row offcanvas-body">
               <div className="col-12">
                 {(typeof availableDevelopers==="string" || availableDevelopers.length==0)?(
@@ -138,7 +144,8 @@ function Dashboard({userSession}){
             </div>
           </div>
         </div>
-
+        
+        {/* Accept or Decline Friend Request Off Canvas*/}
         <div id="OffcanvasSection">
           <div className="offcanvas offcanvas-start" tabIndex="-1" id="getFriendRequest" aria-labelledby="getFriendRequestList" style={{backgroundColor:"#05204a"}}>
 
@@ -185,6 +192,7 @@ function Dashboard({userSession}){
                               .then(rsp=>rsp.json())
                               .then(data=>{
                                 setfriendrequest(data.developers);
+                                setNumberOfFriendRequest(data.no_of_requests);
                               })
 
                               fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
@@ -212,6 +220,7 @@ function Dashboard({userSession}){
                               .then(rsp=>rsp.json())
                               .then(data=>{
                                 setfriendrequest(data.developers);
+                                setNumberOfFriendRequest(data.no_of_requests);
                               })
 
                               fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)

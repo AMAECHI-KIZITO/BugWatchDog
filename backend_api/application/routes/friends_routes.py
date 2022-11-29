@@ -94,6 +94,8 @@ def retrieve_friend_requests():
     get_all_my_pending_requests=Friend_Request.query.filter(Friend_Request.request_sent_to==current_dev, Friend_Request.request_status=='P').all()
     
     if get_all_my_pending_requests != []:
+        num_of_pending_requests=Friend_Request.query.filter(Friend_Request.request_sent_to==current_dev, Friend_Request.request_status=='P').count()
+        
         for dev in get_all_my_pending_requests:
             dev_info=db.session.query(User).filter(User.user_id == dev.request_sent_by).first()
             counter+=1
@@ -107,9 +109,9 @@ def retrieve_friend_requests():
             developer_info["dev_nickname"]=dev_info.user_nickname
             developer_info["dev_stack"]=stack_name
             developers_list.append(developer_info)
-        return {"status":True, "developers":developers_list}
+        return {"status":True, "developers":developers_list, 'no_of_requests':num_of_pending_requests}
     else:
-        return{"status":False, "developers":"No Pending Requests"}
+        return{"status":False, "developers":"No Pending Requests", 'no_of_requests':0}
 
 
 
@@ -149,6 +151,8 @@ def reject_friend_request():
     db.session.commit()
     return {"status":True, "message":f"You have declined the request from {captitalized_name}"}
 
+
+
 def friends_i_accepted(id):
     f_i_a=[]
     
@@ -169,6 +173,9 @@ def friends_that_accepted_me(id):
             f_t_a_m.append(accepted.request_sent_to)
     
     return f_t_a_m
+
+
+
 
 #getting my friends
 @app.route('/api/v1/get-friends/')
