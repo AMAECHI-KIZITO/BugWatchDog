@@ -3,7 +3,6 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
-import Navigation from "./components/Navigation";
 import Error from "./components/Error";
 import Signup from "./components/Signup";
 import SharedDashboardLinks from "./components/SharedDashboardLinks";
@@ -17,6 +16,7 @@ import Seekhelp from "./components/Seekhelp";
 import Inbox from "./components/Inbox";
 import Sharedinboxlayout from "./components/Sharedinboxlayout";
 import Inboxmessage from "./components/Inboxmessages";
+import Newgroup from "./components/NewGroup";
 
 
 function App(){
@@ -31,8 +31,6 @@ function App(){
           <Route path="/" element={ <Home setUser={setUser} setUserSession={setUserSession}/> } />
 
           <Route path="signup" element={ <Signup/> } />
-
-          <Route path="navigation" element={ <Navigation/> } />
 
           <Route path="sharedlayout" element={ <SharedDashboardLinks/> } />
 
@@ -50,6 +48,7 @@ function App(){
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
             <Route path="seekhelp" element={<Seekhelp userSession={userSession}/>}/>
             <Route path="inbox" element={<Inbox userSession={userSession}/>}/>
+            <Route path="creategroup" element={< Newgroup userSession={userSession} />}/>
 
             <Route path="myprojects" element={<Sharedprojectslayout userSession={userSession}/>}>
               <Route index element={ <Viewprojects userSession={userSession}/> } />

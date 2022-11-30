@@ -26,7 +26,7 @@ const Inbox=({userSession})=>{
         })
     },[])
     
-    //Getting all developers
+    //Get my friends
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
