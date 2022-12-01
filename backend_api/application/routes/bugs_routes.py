@@ -62,3 +62,15 @@ def get_project_bug(id):
         return {"status":True, "bugRecords":bug_records}
     else:
         return {"status":True, "bugRecords":"No bugs found for this project"}
+    
+    
+# Update bug status
+@app.route('/api/v1/update-bug-status/', methods=['POST'])
+def update_bug_status():
+    data=request.get_json()
+    bug_id=data.get("updateBugId")
+    
+    bug_details=Bugsheet.query.get(bug_id)
+    bug_details.bug_status="Fixed"
+    db.session.commit()
+    return {"status":True, "message":'Bug Updated'}
