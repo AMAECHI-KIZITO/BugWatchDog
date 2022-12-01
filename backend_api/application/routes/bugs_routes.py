@@ -35,10 +35,30 @@ def create_new_bug():
     # originalfile = "application/bugs_images/"+original_filename
     # code_image.save(originalfile)
     
-    new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved", bug_image=code_image)
+    new_bug=Bugsheet(bug_project=project_affected, bug_description=bug_description_received, bug_status="Unsolved", bug_image=code_image, date_added=date.today())
     db.session.add(new_bug)
     db.session.commit()
     
     return {"status":"True", "message":"Bug Added"}
 
 
+#Find bugs assigned to a project
+@app.route('/api/v1/get-project-bugs/<id>/')
+def get_project_bug(id):
+    project_bugs=Bugsheet.query.filter(Bugsheet.bug_project==id).all()
+    bug_records=[]
+    counter=0
+    if project_bugs != []:
+        
+        for bug in project_bugs:
+            counter+=1
+            bug_report={}
+            bug_report['bug_id']=bug.bug_id
+            bug_report['bug_name']=bug.bug_description
+            bug_report['bug_status']=bug.bug_status
+            bug_report['bug_date'] = bug.date_added
+            bug_report['serial_no']=counter
+            bug_records.append(bug_report)
+        return {"status":True, "bugRecords":bug_records}
+    else:
+        return {"status":True, "bugRecords":"No bugs found for this project"}

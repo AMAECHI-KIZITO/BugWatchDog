@@ -39,7 +39,11 @@ const SingleProject= ({userSession}) => {
                 <div className="col-md-11 specificProjectDetails">
                     <p className="ms-1">{specificProject[1]}</p>
                     <p className="ms-1" style={{fontSize:'12px',color:'gold'}}><i className='fa-solid fa-calendar-days fa-2x'></i> {specificProject[0]}</p><br/>
-                    <button className="btn btn-danger btn-sm float-end">View <i className="fa-solid fa-bug"></i></button>
+
+                    <Link to={`/dashboard/myprojects/${specificProject[2]}/viewbugs`}>
+                        <button className="btn btn-danger btn-sm float-end">View <i className="fa-solid fa-bug"></i></button>
+                    </Link>
+                    
                 </div>
             </div>
         </>

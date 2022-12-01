@@ -27,7 +27,7 @@ def get_dashboard_stats():
     
     total_friends = friends_i_accepted + friends_who_accepted_my_request
     
-    if dev_total_projects != 0:
+    if dev_total_projects > 0:
         dev_projects=db.session.query(Project).filter(Project.project_owner==dev_user_id).all()
         
         for project in dev_projects:
@@ -42,7 +42,7 @@ def get_dashboard_stats():
                 outstanding_bugs = outstanding_bugs + project_outstanding_bugs
             
         
-        average_bugs=total_bugs/dev_total_projects
+        average_bugs = dev_total_projects/total_bugs
 
         return {
             "total_projects":f"{dev_total_projects}",

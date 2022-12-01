@@ -20,18 +20,18 @@ function Addbug({userSession}){
         })
     },[])
 
-    const imageChoice=(event)=>{
-        setCodeSnippet(event.target.value);
-    }
+    // const imageChoice=(event)=>{
+    //     setCodeSnippet(event.target.value);
+    // }
     
     const submitBug=(event)=>{
         event.preventDefault();
-        if(!bugDescription ||!affectedProject || affectedProject=="#" || !codeSnippet){
+        if(!bugDescription ||!affectedProject || affectedProject=="#"){
             alert('One or more form data provided isn\'t valid. Please try again');
             return;
         }
         let bugData={
-            bugDescription,affectedProject,codeSnippet
+            bugDescription,affectedProject
         }
 
         fetch("http://localhost:5000/api/v1/create-new-bug/",{

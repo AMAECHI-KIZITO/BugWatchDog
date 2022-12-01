@@ -48,7 +48,7 @@
 }
 
 
-/* View project Styles*/
+/* View project and project bugs Styles*/
 .table{
     color:#fff;
     font-size: 13px;
@@ -58,7 +58,7 @@ hr{
     height:7px;
     background-color: gold;
 }
-.specificProjectDetails{
+.specificProjectDetails, .specificProjectBugsDetails{
     color:#ffffff;
 }
 
