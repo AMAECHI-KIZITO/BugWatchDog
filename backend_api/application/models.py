@@ -48,3 +48,16 @@ class Friend_Request(db.Model):
     request_sent_to=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
     request_status=db.Column(db.Enum('P','A','R'), nullable=False, default="P")
     request_date=db.Column(db.Date(), nullable=False, default=date.today())
+    
+class Groups(db.Model):
+    group_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    group_name=db.Column(db.String(150), nullable=False)
+    group_description=db.Column(db.Text(), nullable=False)
+    group_founder=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    group_creation_date=db.Column(db.Date(), nullable=False, default=date.today())
+    
+class Group_Members(db.Model):
+    group_member_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    chat_group_id=db.Column(db.Integer(), db.ForeignKey("groups.group_id"))
+    member=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    date_added=db.Column(db.Date(), nullable=False, default=date.today())

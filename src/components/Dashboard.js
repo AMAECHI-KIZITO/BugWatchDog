@@ -48,7 +48,7 @@ function Dashboard({userSession}){
     <>
       <div className="row dashboardlinks">
         <div className="col-md-11">
-          <h2 style={{color:"gold"}}>Statistics</h2><hr/>
+          <h2 style={{color:"gold"}} className="ms-1">Statistics</h2><hr/>
           <div className="row" style={{minHeight:"400px", alignItems:'center', color:"white"}}>
             <div className="dashboardInfo col-6 col-md-4">
               <h4 className="text-center">Total <br/> Projects</h4>

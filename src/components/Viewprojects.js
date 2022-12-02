@@ -21,7 +21,7 @@ const Viewprojects=({userSession})=>{
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 style={{color:"gold"}}>My Projects</h2><hr/>
+                            <h2 style={{color:"gold"}} className="ms-1">My Projects</h2><hr/>
 
                             {(typeof allDevProjects==='string')?(
                                     <div className="row" style={{minHeight:"300px", alignItems:"center"}}>

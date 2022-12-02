@@ -58,7 +58,7 @@ const Seekhelp=({userSession})=>{
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="mb-3" style={{color:"gold"}}>Ask For Help</h2><hr/>
+                            <h2 className="mb-3 ms-1" style={{color:"gold"}}>Ask For Help</h2><hr/>
                             
                             {(typeof availableDevelopers==="string")?(
                                 <h2 style={{color:"white"}}>No Developers Available</h2>
