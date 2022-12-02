@@ -49,15 +49,22 @@ class Friend_Request(db.Model):
     request_status=db.Column(db.Enum('P','A','R'), nullable=False, default="P")
     request_date=db.Column(db.Date(), nullable=False, default=date.today())
     
-class Groups(db.Model):
+class Chatgroups(db.Model):
     group_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    group_name=db.Column(db.String(150), nullable=False)
+    group_name=db.Column(db.String(155), nullable=False)
     group_description=db.Column(db.Text(), nullable=False)
-    group_founder=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    group_founder=db.Column(db.Integer(), db.ForeignKey("user.user_id") )
+    group_identifier=db.Column(db.String(20), unique=True, nullable=False)
     group_creation_date=db.Column(db.Date(), nullable=False, default=date.today())
     
 class Group_Members(db.Model):
     group_member_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    chat_group_id=db.Column(db.Integer(), db.ForeignKey("groups.group_id"))
+    chat_group_id=db.Column(db.Integer(), db.ForeignKey("chatgroups.group_id"))
     member=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
     date_added=db.Column(db.Date(), nullable=False, default=date.today())
+    
+class Group_Inbox(db.Model):
+    grp_msg_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    grp_msg_sender=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
+    message=db.Column(db.Text(), nullable=False)
+    datesent=db.Column(db.DateTime(), nullable=False, default=datetime.now())

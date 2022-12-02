@@ -1,23 +1,13 @@
-import React, {useEffect, useState} from "react"
-
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 
 
 function Newgroup({userSession}){
+    const {groupid} = useParams()
     const[myFriends, setMyFriends]=useState([])
     const[groupMembers, setGroupMembers]=useState([])
     const[groupMembersNames, setGroupMembersNames]=useState([])
-
-    // let selectedMembers=[]
-
-    // if (groupMembers.length > 0){
-    //     for(let x in groupMembers){
-    //         fetch(`http://localhost:5000/api/v1/get-developer-profile/${x}/`)
-    //         .then(rsp=>rsp.json())
-    //         .then(data=>{
-    //             selectedMembers.push(data.information.dev_name)
-    //         })
-    //     }
-    // }
+    const[groupDetails, setGroupDetails]=useState([])
     
     //get my friends
     useEffect( ()=>{
@@ -28,6 +18,41 @@ function Newgroup({userSession}){
         })
     },[])
 
+    //get group information
+    useEffect( ()=>{
+        fetch(`http://localhost:5000/api/v1/get-group-info/?groupId=${groupid}`)
+        .then(rsp=>rsp.json())
+        .then(data=>{
+            console.log(data);
+            setGroupDetails(data.details[0]);
+        })
+    },[])
+
+    let membersData = { groupMembers, groupid, userSession }
+
+    //add members to the group
+    const addMembers=()=>{
+        if(groupMembers.length==0){
+            alert('No members selected');
+            return;
+        }else{
+            fetch("http://localhost:5000/api/v1/add-group-members/",{
+                method:"POST",
+                mode:'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Credentials":true
+                },
+                body: JSON.stringify(membersData)
+            })
+            .then(resp=> {
+                if(resp.status=="200"){
+                    alert(`Members Successfully Added to ${groupDetails.name} Group.`);
+                }
+            })
+        }
+    }
 
     return(
     <>
@@ -35,26 +60,13 @@ function Newgroup({userSession}){
             <div className="col-md-11">
                 <div className="row">
                     <div className="col-12">
-                        <h2 className="ms-1" style={{color:"gold"}}>New Group</h2>
+                        <h2 className="ms-1" style={{color:"gold"}}>
+                            {groupDetails.name} Group
+                        </h2>
                         <p className='mb-3 ms-1 text-light'>Add participants</p><hr/>
                     </div>
 
-                    <div className="col-12">
-                        {groupMembers.length>0 ? 
-                        <>
-                            {/*{groupMembers.map(value=>
-                                fetch(`http://localhost:5000/api/v1/get-developer-profile/${value}/`)
-                                .then(rsp=>rsp.json())
-                                .then(data=>{
-                                    console.log(data)
-                                })    
-                            )}*/}
-                            <p className='text-light ms-2'>{groupMembers.join(' ')}</p> 
-                        </>
-                        :
-                        <span></span>
-                        }
-                    </div>
+                    
 
                     <div className="col-12">
                         {(typeof myFriends==="string")?(
@@ -71,18 +83,29 @@ function Newgroup({userSession}){
                                         <>
                                             <div className='row mb-4' key={friend.serial_no} onClick={
                                                 
-                                                groupMembers.includes(friend.dev_id) 
+                                                (
+                                                    groupMembers.includes(friend.dev_id)
+                                                )
                                                 ?
 
-                                                ()=>setGroupMembers(groupMembers => groupMembers.filter(member=>member!== friend.dev_id))
+                                                (
+                                                    ()=>setGroupMembers(groupMembers => groupMembers.filter(member=>member!== friend.dev_id))
+                                                )
 
                                                 : 
-                                                ()=>setGroupMembers(groupMembers => groupMembers.concat(friend.dev_id))}>
+                                                (
+                                                    ()=>setGroupMembers(groupMembers => groupMembers.concat(friend.dev_id))
+                                                )
+                                                
+                                                }>
 
                                                 <div className="col-12">
                                                     <div className="float-start mx-2">
                                                         <i className="fa-solid fa-user text-warning float-start fa-3x me-2"></i>
                                                     </div>
+                                                    <span className="text-light float-end">
+                                                        <input type='checkbox' className='form-check-input'/>
+                                                    </span>
                                                     <div>
                                                         <span className="text-light">{friend.dev_nickname[0].toUpperCase()  + friend.dev_nickname.substring(1)}</span>
                                                         <p className="text-light" style={{fontSize:'10px'}}>
@@ -90,11 +113,15 @@ function Newgroup({userSession}){
                                                         </p>
                                                     </div>
                                                 </div>
-                                                
                                             </div>
                                         </>
                                     )
                                 }
+                                <div>
+                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}>
+                                        <i className="fa-solid fa-arrow-right" onClick={addMembers}></i>
+                                    </button>
+                                </div>
                             </>
                         )}
                     </div>

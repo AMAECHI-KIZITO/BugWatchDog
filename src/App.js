@@ -16,8 +16,9 @@ import Seekhelp from "./components/Seekhelp";
 import Inbox from "./components/Inbox";
 import Sharedinboxlayout from "./components/Sharedinboxlayout";
 import Inboxmessage from "./components/Inboxmessages";
-import Newgroup from "./components/NewGroup";
 import ViewSingleProjectBugs from "./components/Viewprojectbugs";
+import Creategroup from "./components/CreateGroup";
+import Newgroup from "./components/NewGroup";
 
 
 function App(){
@@ -49,7 +50,9 @@ function App(){
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
             <Route path="seekhelp" element={<Seekhelp userSession={userSession}/>}/>
             <Route path="inbox" element={<Inbox userSession={userSession}/>}/>
-            <Route path="creategroup" element={< Newgroup userSession={userSession} />}/>
+            
+            <Route path="creategroup" element={< Creategroup userSession={userSession} />}/>
+            <Route path="creategroup/:groupid/add-members" element={< Newgroup userSession={userSession} />}/>
 
             <Route path="myprojects" element={<Sharedprojectslayout userSession={userSession}/>}>
               <Route index element={ <Viewprojects userSession={userSession}/> } />

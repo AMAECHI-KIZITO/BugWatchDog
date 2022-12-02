@@ -38,13 +38,14 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
 
         <div className="col-md-3 d-none d-md-block" id="dashboardNav">
 
-          <p className="text-center"><Link to="/dashboard" className="quickDashboardLinks">Dashboard</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks">New Project</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/myprojects" className="quickDashboardLinks">View Projects</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p><br/>
-          <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p><br/>
+          <p className="text-center my-4"><Link to="/dashboard" className="quickDashboardLinks">Dashboard</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/newproject" className="quickDashboardLinks">New Project</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/myprojects" className="quickDashboardLinks">View Projects</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/groupinbox" className="quickDashboardLinks">Group Messages</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p>
+          <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p>
           <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
 
         </div>
@@ -75,6 +76,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
             <p className="text-center"><Link to="/dashboard/myprojects" className="quickDashboardLinks text-warning">View Projects</Link></p>
             <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks text-warning">Add Bug</Link></p>
             <p className="text-center"><Link to="/dashboard/inbox" className="quickDashboardLinks text-warning">Inbox</Link></p>
+            <p className="text-center"><Link to="/dashboard/groupinbox" className="quickDashboardLinks text-warning">Group Messages</Link></p>
             <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks text-warning">Create Group</Link></p>
             <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning">Find Help</Link></p>
             <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
