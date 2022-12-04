@@ -2,7 +2,7 @@ from datetime import datetime,date
 from flask import jsonify,request
 from application import app
 from application.models import *
-# from . import friends_routes
+from . import friends_routes
 
 
 @app.route("/api/v1/create-group/")

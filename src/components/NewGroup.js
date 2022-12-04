@@ -81,30 +81,30 @@ function Newgroup({userSession}){
                                 {
                                     myFriends.map(friend=>
                                         <>
-                                            <div className='row mb-4' key={friend.serial_no} onClick={
-                                                
-                                                (
-                                                    groupMembers.includes(friend.dev_id)
-                                                )
-                                                ?
-
-                                                (
-                                                    ()=>setGroupMembers(groupMembers => groupMembers.filter(member=>member!== friend.dev_id))
-                                                )
-
-                                                : 
-                                                (
-                                                    ()=>setGroupMembers(groupMembers => groupMembers.concat(friend.dev_id))
-                                                )
-                                                
-                                                }>
+                                            <div className='row mb-4' key={friend.serial_no}>
 
                                                 <div className="col-12">
                                                     <div className="float-start mx-2">
                                                         <i className="fa-solid fa-user text-warning float-start fa-3x me-2"></i>
                                                     </div>
                                                     <span className="text-light float-end">
-                                                        <input type='checkbox' className='form-check-input'/>
+                                                        <input type='checkbox' className='form-check-input' onClick={
+                                                
+                                                        (
+                                                            groupMembers.includes(friend.dev_id)
+                                                        )
+                                                        ?
+
+                                                        (
+                                                            ()=>setGroupMembers(groupMembers => groupMembers.filter(member=>member!== friend.dev_id))
+                                                        )
+
+                                                        : 
+                                                        (
+                                                            ()=>setGroupMembers(groupMembers => groupMembers.concat(friend.dev_id))
+                                                        )
+                                                    
+                                                    }/>
                                                     </span>
                                                     <div>
                                                         <span className="text-light">{friend.dev_nickname[0].toUpperCase()  + friend.dev_nickname.substring(1)}</span>

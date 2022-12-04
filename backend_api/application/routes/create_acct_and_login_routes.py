@@ -65,11 +65,11 @@ def login_user():
     if verify_user:
         if verify_user and check_password_hash(protected_password, user_password):
             return {
-                "status":"True",
+                "status":True,
                 "dev_username":f"{verify_user.user_nickname}",
                 "sessionId":f"{verify_user.user_id}"
             }
         else:
-            return {"status":"Invalid Credentials"} 
+            return {"status":False,"message":"Invalid Credentials"} 
     else:
-        return {"status":"User Not Found"} 
+        return {"status":False, "message":"User Not Found"} 

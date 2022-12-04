@@ -44,7 +44,7 @@ function Home({setUser, setUserSession}){
         .then( resp => resp.json())
         .then( data =>{
             let logindata=data
-            if(logindata.status=="True"){
+            if(logindata.status==true){
                 setUser(logindata.dev_username);
                 setUserSession(logindata.sessionId);
                 navigate("/dashboard");

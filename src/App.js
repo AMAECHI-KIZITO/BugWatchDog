@@ -19,6 +19,7 @@ import Inboxmessage from "./components/Inboxmessages";
 import ViewSingleProjectBugs from "./components/Viewprojectbugs";
 import Creategroup from "./components/CreateGroup";
 import Newgroup from "./components/NewGroup";
+import GroupInbox from "./components/GroupInbox";
 
 
 function App(){
@@ -50,7 +51,7 @@ function App(){
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
             <Route path="seekhelp" element={<Seekhelp userSession={userSession}/>}/>
             <Route path="inbox" element={<Inbox userSession={userSession}/>}/>
-            
+            <Route path="groupinbox" element={< GroupInbox userSession={userSession} />} />
             <Route path="creategroup" element={< Creategroup userSession={userSession} />}/>
             <Route path="creategroup/:groupid/add-members" element={< Newgroup userSession={userSession} />}/>
 
