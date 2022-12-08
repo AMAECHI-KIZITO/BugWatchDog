@@ -65,6 +65,7 @@ class Group_Members(db.Model):
     
 class Group_Inbox(db.Model):
     grp_msg_id=db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    group_id=db.Column(db.Integer(), db.ForeignKey("chatgroups.group_id"))
     grp_msg_sender=db.Column(db.Integer(), db.ForeignKey("user.user_id"))
     message=db.Column(db.Text(), nullable=False)
     datesent=db.Column(db.DateTime(), nullable=False, default=datetime.now())

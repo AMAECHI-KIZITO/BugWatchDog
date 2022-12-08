@@ -44,7 +44,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           <p className="text-center my-4"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p>
           <p className="text-center my-4"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p>
           <p className="text-center my-4"><Link to="/dashboard/groupinbox" className="quickDashboardLinks">Group Messages</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p>
+          {/* <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p> */}
           <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p>
           <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
 
@@ -77,7 +77,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
             <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks text-warning">Add Bug</Link></p>
             <p className="text-center"><Link to="/dashboard/inbox" className="quickDashboardLinks text-warning">Inbox</Link></p>
             <p className="text-center"><Link to="/dashboard/groupinbox" className="quickDashboardLinks text-warning">Group Messages</Link></p>
-            <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks text-warning">Create Group</Link></p>
+            {/* <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks text-warning">Create Group</Link></p> */}
             <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning">Find Help</Link></p>
             <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
           </div>

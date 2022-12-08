@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 
 function Newgroup({userSession}){
+    const navigate = useNavigate()
     const {groupid} = useParams()
     const[myFriends, setMyFriends]=useState([])
     const[groupMembers, setGroupMembers]=useState([])
@@ -23,7 +24,6 @@ function Newgroup({userSession}){
         fetch(`http://localhost:5000/api/v1/get-group-info/?groupId=${groupid}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            console.log(data);
             setGroupDetails(data.details[0]);
         })
     },[])
@@ -49,6 +49,7 @@ function Newgroup({userSession}){
             .then(resp=> {
                 if(resp.status=="200"){
                     alert(`Members Successfully Added to ${groupDetails.name} Group.`);
+                    navigate("/dashboard/groupinbox")
                 }
             })
         }
@@ -118,8 +119,8 @@ function Newgroup({userSession}){
                                     )
                                 }
                                 <div>
-                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}>
-                                        <i className="fa-solid fa-arrow-right" onClick={addMembers}></i>
+                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}  onClick={addMembers}>
+                                        <i className="fa-solid fa-arrow-right"></i>
                                     </button>
                                 </div>
                             </>

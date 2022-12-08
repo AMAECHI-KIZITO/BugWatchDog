@@ -1,40 +1,21 @@
 import React, {useEffect, useState} from "react"
-import { format, isSameDay, isSameWeek, isSameYear } from "date-fns"
 import { Link } from "react-router-dom";
 
 
 const GroupInbox=({userSession})=>{
-    const [availableDevelopers, setAvailableDevelopers]=useState([])
-    const [senders, setSenders]=useState([]);
-    const [sendersIdentityNumber, setSendersIdentityNumber]=useState([]);
     const [myInbox, setMyInbox]=useState([]);
-    const [timeDelivered, setTimeDelivered]=useState([]);
+    const [loadingStatus, setLoadingStatus]=useState("Loading");
 
-    //getting the inbox
+    //Getting my groups inbox
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/inbox/?devId=${userSession}`)
+        fetch(`http://localhost:5000/api/v1/group-inbox/?devId=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            if(data.status!=false){
-                setSenders(data.names);
-                setMyInbox(data.message);
-                setTimeDelivered(data.timestamp);
-                setSendersIdentityNumber(data.list_of_senders);
-            }else{
-                setMyInbox(data.message);
-            }
+            setMyInbox(data.message);
+            setLoadingStatus('Loaded');
+            //console.log(data);
         })
     },[])
-    
-    //Get my friends
-    useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
-        .then(rsp=>rsp.json())
-        .then(data=>{
-            setAvailableDevelopers(data.developers);
-        })
-    },[])
-
 
     return(
         <>
@@ -42,101 +23,57 @@ const GroupInbox=({userSession})=>{
                 <div className="col-md-11">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="mb-3 ms-1" style={{color:"gold"}}>Inbox</h2><hr/>
+                            <h2 className="mb-3 ms-1" style={{color:"gold"}}>Group Inbox</h2><hr/>
 
-                            {(typeof myInbox === "string")?(
-                                <div className="row" style={{minHeight:"300px", alignItems:"center"}}>
-                                <div className="col-12 text-center" style={{color:"grey"}}>
-                                    <h3>Inbox Empty</h3>
-                                    <p>Start a chat by clicking below</p>
-
-                                    <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
-                                        <i className="fa-regular fa-comment"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            ):(
-                                <div>
-                                    {
-                                        senders.map( (value,key)=>(
-                                            <>
-                                                <Link to={`/dashboard/inbox/${sendersIdentityNumber[key]}`} style={{textDecoration:'None'}}  key={key}>
-                                                    <div className="row mb-1" style={{color:"white"}}>
-                                                        <div classname="col-12">
-                                                            <div className="float-start mx-2">
-                                                                <i className="fa-solid fa-user text-warning float-start fa-3x me-2"></i>
-                                                            </div>
-                                                            <div>
-                                                                <span>
-                                                                    {value[0].toUpperCase()  + value.substring(1)}
-                                                                </span>
-
-                                                                <span style={{fontSize:"9px"}} className="float-end pe-3">
-                                                                    {timeDelivered[key]}
-                                                                </span>
-                                                                <p style={{fontSize:"12px"}}>{myInbox[key]}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                            </>
-                                        ))
-                                    }
-                                    <button className="btn btn-warning float-end me-2" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
-                                        <i className="fa-regular fa-comment"></i>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="OffcanvasSection">
-                <div className="offcanvas offcanvas-end" tabIndex="-1" id="developersContact" aria-labelledby="developersContactList" style={{backgroundColor:"#05204a"}}>
-
-                
-                    <div className="offcanvas-header">
-                        <h5 id="developersContacts" className="text-light">Start a conversation<i className="fa-solid fa-user-group"></i></h5>
-                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
-                    </div><hr/>
-
-
-                    <div className="row offcanvas-body">
-                        <div className="col-12">
-                            {(typeof availableDevelopers==="string")?(
-                                <div className="row align-items-center" style={{minHeight:'400px'}}>
-                                    <div className="col">
-                                        <h4 className="text-center" style={{color:"grey"}}>Ouch <i className='fa-solid fa-heart-crack text-danger'></i></h4>
-                                        <p className="text-center" style={{color:"grey"}}>You haven't made any friends yet</p>
+                            {(loadingStatus === "Loading")?(
+                                <div className="row" style={{minHeight:"350px", alignItems:"center"}}>
+                                    <div className="text-center">
+                                        <div className="spinner-border text-warning" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
                             ):(
                                 <>
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th>S/N</th>
-                                                <th>Developer</th>
-                                                <th>Stack</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {Object.values(availableDevelopers).map(dev => 
-                                                <tr>
-                                                    <td key={dev.serial_no}>{dev.serial_no}</td>
-                                                    <td key={dev.dev_nickname}>{dev.dev_nickname[0].toUpperCase()  + dev.dev_nickname.substring(1)}</td>
-                                                    <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>
-                                                    <td key={`message${dev.dev_id}`}>
-                                                        <Link to={`/dashboard/inbox/${dev.dev_id}`} style={{textDecoration:'None'}}>
-                                                            <button className="btn btn-warning btn-sm">Msg</button>
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
+                                    {
+                                        typeof myInbox === "string"
+
+                                        ?
+                                        <div className="row" style={{minHeight:"300px", alignItems:"center"}}>
+                                            <div className="col-12 text-center" style={{color:"grey"}}>
+                                                <h3>Group Inbox Empty</h3>
+                                                <p>Start a group chat by clicking below</p>
+
+                                                <Link to={`/dashboard/creategroup`} style={{textDecoration:'None'}}>
+                                                    <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button">
+                                                        <i className="fa-regular fa-comment"></i>
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        :
+                                        myInbox.map(info=>
+                                            <Link to={`/dashboard`} key={info.id} style={{textDecoration:'None'}}>
+                                                <div className="row mb-1" style={{color:"#fff"}}>
+                                                    <div className="col-12">
+                                                        <div className="row">
+                                                            <div className="col-12">
+                                                                <h4 className=" ms-1">
+                                                                    {info.groupname} 
+                                                                    <span className="float-end" style={{fontSize:"11px"}}>
+                                                                        {info.last_message_timestamp}
+                                                                    </span>
+                                                                </h4>
+                                                            </div>
+                                                            <div className="col-12">
+                                                                <p className=" ms-1" style={{color:'#AAAAAA', fontSize:'13px'}}>{info.last_message_sender[0].toUpperCase()  + info.last_message_sender.substring(1)}: {info.last_message}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        )
+                                    }
                                 </>
                             )}
                         </div>

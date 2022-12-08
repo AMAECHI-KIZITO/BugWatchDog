@@ -46,15 +46,15 @@ const Inbox=({userSession})=>{
 
                             {(typeof myInbox === "string")?(
                                 <div className="row" style={{minHeight:"300px", alignItems:"center"}}>
-                                <div className="col-12 text-center" style={{color:"grey"}}>
-                                    <h3>Inbox Empty</h3>
-                                    <p>Start a chat by clicking below</p>
+                                    <div className="col-12 text-center" style={{color:"grey"}}>
+                                        <h3>Inbox Empty</h3>
+                                        <p>Start a chat by clicking below</p>
 
-                                    <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
-                                        <i className="fa-regular fa-comment"></i>
-                                    </button>
+                                        <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#developersContact" aria-controls="developersContactList">
+                                            <i className="fa-regular fa-comment"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
                             ):(
                                 <div>
                                     {
