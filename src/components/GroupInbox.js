@@ -53,7 +53,7 @@ const GroupInbox=({userSession})=>{
                                         </div>
                                         :
                                         myInbox.map(info=>
-                                            <Link to={`/dashboard`} key={info.id} style={{textDecoration:'None'}}>
+                                            <Link to={`/dashboard/groupinbox/${info.id}`} key={info.id} style={{textDecoration:'None'}}>
                                                 <div className="row mb-1" style={{color:"#fff"}}>
                                                     <div className="col-12">
                                                         <div className="row">

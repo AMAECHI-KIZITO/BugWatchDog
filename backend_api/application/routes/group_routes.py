@@ -4,6 +4,18 @@ from application import app
 from application.models import *
 from . import friends_routes
 
+def group_information(identity):
+    information=[]
+    group_deets=Chatgroups.query.filter(Chatgroups.group_identifier==identity).first()
+    grp_info={}
+    grp_info['name']=group_deets.group_name
+    grp_info['bio']=group_deets.group_description
+    grp_info['date_formed']=group_deets.group_creation_date
+    grp_info['id']=group_deets.group_id
+    information.append(grp_info)
+    
+    return information
+
 
 @app.route("/api/v1/create-group/")
 def create_new_group():
@@ -118,3 +130,47 @@ def get_group_inbox():
         return {"status": True, "message":group_information}
     else:
         return {"status": True, "message":"No groups Found"}
+    
+    
+#get my groups chats
+@app.route("/api/v1/group-inbox-messages/")
+def get_group_chats():
+    group_identity=request.args.get('grpID')
+    logged_in_dev=request.args.get('dev')
+    
+    #fetching group information
+    group_data=group_information(group_identity)
+    
+    for group in group_data:
+        the_group_id=group['id']
+        
+    chats=Group_Inbox.query.filter(Group_Inbox.group_id==the_group_id).all()
+    if chats != []:
+        messages=[]
+        for msg in chats:
+            user_name=User.query.filter(User.user_id==msg.grp_msg_sender).first()
+            nickname=user_name.user_nickname
+            chat_info={}
+            chat_info['msgId']=msg.grp_msg_id
+            chat_info['senderId']=msg.grp_msg_sender
+            chat_info['senderName']=nickname
+            chat_info['message']=msg.message
+            chat_info['timestamp']=msg.datesent.strftime("%a, %d %b %y %H:%M:%S %p")
+            messages.append(chat_info)
+        return {"status":True, "group_info":group_data, "chat_history":messages}
+    else:
+        return {"status":True, "group_info":group_data, "chat_history":"No message has been sent to this group"}
+    
+
+# Send Group Message
+@app.route("/api/v1/send-group-message/", methods=["POST"])
+def send_group_message():
+    data=request.get_json()
+    content=data.get("message")
+    sender=data.get("userSession")
+    group=data.get('currentGroupId')
+    
+    send_message=Group_Inbox(group_id=group, grp_msg_sender=sender, message=content, datesent=datetime.now())
+    db.session.add(send_message)
+    db.session.commit()
+    return{"status":True, "message":"Message Sent"}

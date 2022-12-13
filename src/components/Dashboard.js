@@ -114,7 +114,7 @@ function Dashboard({userSession}){
                     </thead>
                     <tbody>
                       {Object.values(availableDevelopers).map(dev => 
-                      <tr>
+                      <tr key={dev.serial_no}>
                         <td key={dev.serial_no}>{dev.serial_no}</td>
                         <td key={dev.dev_nickname}>{dev.dev_nickname[0].toUpperCase()  + dev.dev_nickname.substring(1)}</td>
                         <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>

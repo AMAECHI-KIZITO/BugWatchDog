@@ -20,6 +20,8 @@ import ViewSingleProjectBugs from "./components/Viewprojectbugs";
 import Creategroup from "./components/CreateGroup";
 import Newgroup from "./components/NewGroup";
 import GroupInbox from "./components/GroupInbox";
+import Sharedgroupinboxlayout from "./components/Sharedgroupinboxlayout";
+import Groupinboxmessage from "./components/Groupinboxmessages";
 
 
 function App(){
@@ -40,18 +42,18 @@ function App(){
           <Route path="*" element={ <Error/> } />
 
           
-          <Route path='/dashboard' element={ 
+          <Route path='dashboard' element={ 
             <ProtectDashboard user={user}>
               <SharedDashboardLinks user={user} userSession={userSession} setUser={setUser} setUserSession={setUserSession}/> 
             </ProtectDashboard>
-            }>
+          }>
 
             <Route index element={<Dashboard userSession={userSession}/>} />
             <Route path="newproject" element={ <Newproject userSession={userSession}/> } />
             <Route path="addbug" element={ <Addbug userSession={userSession}/> } />
             <Route path="seekhelp" element={<Seekhelp userSession={userSession}/>}/>
-            <Route path="inbox" element={<Inbox userSession={userSession}/>}/>
-            <Route path="groupinbox" element={< GroupInbox userSession={userSession} />} />
+            
+
             <Route path="creategroup" element={< Creategroup userSession={userSession} />}/>
             <Route path="creategroup/:groupid/add-members" element={< Newgroup userSession={userSession} />}/>
 
@@ -66,6 +68,10 @@ function App(){
               <Route path=":msg" element={ <Inboxmessage userSession={userSession}/> } />
             </Route>
             
+            <Route path="groupinbox" element={< Sharedgroupinboxlayout userSession={userSession} />}>
+              <Route index element={< GroupInbox userSession={userSession} />}/>
+              <Route path=":groupIdentity" element={< Groupinboxmessage userSession={userSession}/>}/>
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
