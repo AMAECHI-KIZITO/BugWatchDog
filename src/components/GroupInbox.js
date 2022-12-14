@@ -46,7 +46,7 @@ const GroupInbox=({userSession})=>{
 
                                                 <Link to={`/dashboard/creategroup`} style={{textDecoration:'None'}}>
                                                     <button className="btn btn-warning btn-lg" style={{borderRadius:"50%"}} type="button">
-                                                        <i className="fa-regular fa-comment"></i>
+                                                        <i className="fa-solid fa-people-group"></i>
                                                     </button>
                                                 </Link>
                                             </div>
@@ -74,6 +74,11 @@ const GroupInbox=({userSession})=>{
                                             </Link>
                                         )
                                     }
+                                    <Link to={`/dashboard/creategroup`} style={{textDecoration:'None'}}>
+                                        <button className="btn btn-warning float-end me-2" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button">
+                                            <i className="fa-solid fa-people-group"></i>
+                                        </button>
+                                    </Link>
                                 </>
                             )}
                         </div>

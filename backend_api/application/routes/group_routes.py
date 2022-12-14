@@ -7,16 +7,60 @@ from . import friends_routes
 def group_information(identity):
     information=[]
     group_deets=Chatgroups.query.filter(Chatgroups.group_identifier==identity).first()
+    total_members=Group_Members.query.filter(Group_Members.chat_group_id==group_deets.group_id).count()
     grp_info={}
     grp_info['name']=group_deets.group_name
     grp_info['bio']=group_deets.group_description
     grp_info['date_formed']=group_deets.group_creation_date
     grp_info['id']=group_deets.group_id
+    grp_info["participants"]=total_members
     information.append(grp_info)
     
     return information
 
+def get_my_group_membership(id):
+    check_group_membembership= Group_Members.query.filter(Group_Members.member==id).all()
+    if check_group_membembership != []:
+        my_groups=[]
+        for group in check_group_membembership:
+            if group.chat_group_id not in my_groups:
+                my_groups.append(group.chat_group_id)
+        return my_groups
+    else:
+        return "You do not belong to a group"
 
+
+def get_group_last_message(group_id):
+    group_chat_log=Group_Inbox.query.filter(Group_Inbox.group_id==group_id).all()
+    if group_chat_log!=[]:
+        last_msg_deets=group_chat_log[-1]
+        
+        message_time=last_msg_deets.datesent
+        message_sender=last_msg_deets.grp_msg_sender
+        sender_deets=User.query.filter(User.user_id==message_sender).first()
+        last_message=last_msg_deets.message
+        return {"timesent":message_time, "sender":sender_deets.user_nickname, "last_msg":last_message}
+    else:
+        group_info=Chatgroups.query.filter(Chatgroups.group_id==group_id).first()
+        message_time=group_info.group_creation_date
+        message_sender="Debugger Team"
+        last_message="You just created this group"
+        return {"timesent":message_time, "sender":message_sender, "last_msg":last_message}
+    
+    
+
+def get_group_members(group_id):
+    members=Group_Members.query.filter(Group_Members.chat_group_id==group_id).all()
+    if members != []:
+        membership=[]
+        for member in members:
+            membership.append(member.member)
+        return membership
+    else:
+        return "No Members Found"
+    
+    
+      
 @app.route("/api/v1/create-group/")
 def create_new_group():
     group_name_tag=request.args.get("groupName")
@@ -75,41 +119,12 @@ def add_group_members():
 # test()
 
 
-def get_group_membership(id):
-    check_group_membembership= Group_Members.query.filter(Group_Members.member==id).all()
-    if check_group_membembership != []:
-        my_groups=[]
-        for group in check_group_membembership:
-            if group.chat_group_id not in my_groups:
-                my_groups.append(group.chat_group_id)
-        return my_groups
-    else:
-        return "You do not belong to a group"
-
-
-def get_group_last_message(group_id):
-    group_chat_log=Group_Inbox.query.filter(Group_Inbox.group_id==group_id).all()
-    if group_chat_log!=[]:
-        last_msg_deets=group_chat_log[-1]
-        
-        message_time=last_msg_deets.datesent
-        message_sender=last_msg_deets.grp_msg_sender
-        sender_deets=User.query.filter(User.user_id==message_sender).first()
-        last_message=last_msg_deets.message
-        return {"timesent":message_time, "sender":sender_deets.user_nickname, "last_msg":last_message}
-    else:
-        group_info=Chatgroups.query.filter(Chatgroups.group_id==group_id).first()
-        message_time=group_info.group_creation_date
-        message_sender="Debugger Team"
-        last_message="You just created this group"
-        return {"timesent":message_time, "sender":message_sender, "last_msg":last_message}
-
 #get my groups inbox deets
 @app.route("/api/v1/group-inbox/")
 def get_group_inbox():
     logged_in_developer = request.args.get("devId")
     
-    my_membership=get_group_membership(logged_in_developer)
+    my_membership=get_my_group_membership(logged_in_developer)
     
     if my_membership != 'You do not belong to a group':
         group_information=[]
@@ -174,3 +189,24 @@ def send_group_message():
     db.session.add(send_message)
     db.session.commit()
     return{"status":True, "message":"Message Sent"}
+
+
+
+    
+# Get all members of a group
+@app.route("/api/v1/get-group-membership")
+def get_group_membership():
+    group_identity=request.args.get('grpID')
+    group_integer_id=Chatgroups.query.get(group_identity)
+    id=group_integer_id.group_id
+    
+    members_ids=get_group_members(id)
+    if members_ids != "No Members Found":
+        member_info=[]
+        for mem in members_ids:
+            member_details={}
+            the_member=User.query.filter(User.user_id==mem).first()
+            member_details['dev_nickname']=the_member.user_nickname
+            member_details['dev_id']=the_member.user_id
+            member_info.append(member_details)
+        return{"status":True, "membership":member_info}
