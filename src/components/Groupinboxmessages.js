@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 const Groupinboxmessage= ({userSession}) => {
     const {groupIdentity}=useParams();
@@ -10,6 +9,11 @@ const Groupinboxmessage= ({userSession}) => {
     const [currentGroupId, setCurrentGroupId] = useState('');
     const [groupChatData, setGroupChatData]=useState([]);
     const [groupMembers, setGroupMembers]=useState('');
+    const [myFriends, setMyFriends]=useState('');
+    
+    //My friends Ids
+    const friendsId=[];
+
 
     //sending a new message variables
     const[message,setNewMessage]=useState(null);
@@ -24,15 +28,29 @@ const Groupinboxmessage= ({userSession}) => {
         setNewMessage(event.target.value);
     }
 
+    //Get my friends
+    useEffect( ()=>{
+        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
+        .then(rsp=>rsp.json())
+        .then(data=>{
+            //console.log(data);
+           //setMyFriends(data.developers);
+           data.developers.forEach(friend =>{
+                friendsId.push(friend.dev_id);
+            })
+            //console.log(friendsId);
+        })
+    },[])
 
+    
     // get group data information
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/group-inbox-messages/?dev=${userSession}&grpID=${groupIdentity}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             let the_data = Object.values(data.group_info[0]);
-            console.log(the_data);
-            console.log(data);
+            //console.log(the_data);
+            //console.log(data);
             setLoadData('Loaded');
             setGroupData(the_data);
             setCurrentGroupId(the_data[2]);
@@ -42,10 +60,10 @@ const Groupinboxmessage= ({userSession}) => {
 
     // get group Membership information
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}`)
+        fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            console.log(data);
+            //console.log(data);
             setGroupMembers(data.membership);
         })
     },[msgStatus])
@@ -117,7 +135,7 @@ const Groupinboxmessage= ({userSession}) => {
                                         <i className="float-start me-2 ms-1 btn btn-warning fa-solid fa-arrow-left" onClick={()=>navigate(-1)}></i>
                                         <h3 style={{color:"gold"}}>
                                             {groupData[3]}
-                                            <i className="mt-2 fa-solid fa-ellipsis-vertical float-end" type='button' data-bs-toggle="offcanvas" data-bs-target="#groupLinks" aria-controls="offcanvasEnd"></i>
+                                            <i className="btn btn-outline-warning mt-2 fa-solid fa-ellipsis-vertical float-end" type='button' data-bs-toggle="offcanvas" data-bs-target="#groupLinks" aria-controls="offcanvasEnd"></i>
                                         </h3>
                                     </div>
                                     <small style={{color:"#AAAAAA"}}>{groupData[0]}</small>
@@ -238,9 +256,9 @@ const Groupinboxmessage= ({userSession}) => {
                     <div>
                         <div className="d-flex align-items-center justify-content-center">
                             <div style={{border:"1px solid gold"}}>
-                                <p data-bs-toggle="modal" data-bs-target="#groupInfoModal" onClick={closeLink}>Group info</p>
-                                <p>Exit group</p>
-                                <p>Remove member</p>
+                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}} data-bs-toggle="modal" data-bs-target="#groupInfoModal" onClick={closeLink}>Group info</a></p>
+                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}}>Exit group</a></p>
+                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}}>Remove member</a></p>
                             </div>
                         </div>
                     </div>
@@ -273,12 +291,21 @@ const Groupinboxmessage= ({userSession}) => {
                                         :
                                         <>
                                             {
-                                                groupMembers.map(member =>
-                                                    
-                                                    <div key={member.dev_id}>
-                                                        <p style={{lineHeight:"10px"}}>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)}</p>
+                                                groupMembers.map(member =>{
+                                                    if (member.friend_status=="Friend"){
+                                                        return<div key={member.dev_id}>
+                                                                <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)}</p>
+                                                            </div>
+                                                    }
+                                                    else if(member.dev_id==userSession){
+                                                        return <div key={member.dev_id}>
+                                                            <p className="py-2">You</p>
+                                                        </div>
+                                                    }
+                                                    return <div key={member.dev_id}>
+                                                        <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end">Add friend</a></p>
                                                     </div>
-                                                )
+                                                })
                                             }
                                         </>
                                     }

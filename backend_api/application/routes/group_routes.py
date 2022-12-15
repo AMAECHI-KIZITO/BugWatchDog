@@ -112,12 +112,6 @@ def add_group_members():
     
     return {'status':True, "message":"Members Added"}
 
-# def test():
-#     x=friends_routes.friends_i_accepted(1)
-#     print(x)
-    
-# test()
-
 
 #get my groups inbox deets
 @app.route("/api/v1/group-inbox/")
@@ -197,6 +191,7 @@ def send_group_message():
 @app.route("/api/v1/get-group-membership")
 def get_group_membership():
     group_identity=request.args.get('grpID')
+    developer_id=request.args.get('dev')
     group_integer_id=Chatgroups.query.get(group_identity)
     id=group_integer_id.group_id
     
@@ -206,7 +201,17 @@ def get_group_membership():
         for mem in members_ids:
             member_details={}
             the_member=User.query.filter(User.user_id==mem).first()
+            friend_stats=friends_routes.check_friend_status(developer_id,mem)
+            
             member_details['dev_nickname']=the_member.user_nickname
             member_details['dev_id']=the_member.user_id
+            member_details['friend_status']=friend_stats
             member_info.append(member_details)
         return{"status":True, "membership":member_info}
+    
+    
+# def test():
+#     x=friends_routes.friends_i_accepted(1)
+#     print(x)
+    
+# test()
