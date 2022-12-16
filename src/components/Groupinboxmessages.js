@@ -123,7 +123,7 @@ const Groupinboxmessage= ({userSession}) => {
                                             <i className="btn btn-outline-warning mt-2 fa-solid fa-ellipsis-vertical float-end" type='button' data-bs-toggle="offcanvas" data-bs-target="#groupLinks" aria-controls="offcanvasEnd"></i>
                                         </h3>
                                     </div>
-                                    <small style={{color:"#AAAAAA"}}>{groupData[0]}</small>
+                                    <small style={{color:"#AAAAAA"}}>{groupData[0].slice(0,30)}...</small>
                                 </div>
                             </div>
                         </>
