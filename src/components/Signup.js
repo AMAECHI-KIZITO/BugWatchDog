@@ -3,30 +3,30 @@ import {Link} from "react-router-dom"
 
 const Signup = ()=>{
     
-    const [fname, setFname] = useState(null)
-    const [lname, setLname] = useState(null)
-    const [nickname, setNickname] = useState(null)
-    const [regemail, setRegemail] = useState("")
-    const [pswd, setPswd] = useState(null)
-    const[signupresp, setSignupresp]=useState(null)
-    const[emailcheck,setEmailcheck]=useState(null)
-    const [developerStack, setDeveloperStack]=useState('#')
-    const [techstack, setTechstack]=useState([])
-
+    const [fname, setFname] = useState(null);
+    const [lname, setLname] = useState(null);
+    const [nickname, setNickname] = useState(null);
+    const [regemail, setRegemail] = useState("");
+    const [pswd, setPswd] = useState(null);
+    const[signupresp, setSignupresp]=useState(null);
+    const[emailcheck,setEmailcheck]=useState(null);
+    const [developerStack, setDeveloperStack]=useState('#');
+    const [techstack, setTechstack]=useState([]);
+    document.title='Debugger - Sign Up';
     
 
 
-    const setfirstname=(event)=>setFname(event.target.value)
-    const setlastname=(event)=>setLname(event.target.value)
-    const setnickname=(event)=>setNickname(event.target.value)
-    const setpswd=(event)=>setPswd(event.target.value)
-    const setemail = (event) => {setRegemail(event.target.value);}
-    const chooseTechnology=(event)=>setDeveloperStack(event.target.value)
+    const setfirstname=(event)=>setFname(event.target.value);
+    const setlastname=(event)=>setLname(event.target.value);
+    const setnickname=(event)=>setNickname(event.target.value);
+    const setpswd=(event)=>setPswd(event.target.value);
+    const setemail = (event) => {setRegemail(event.target.value)};
+    const chooseTechnology=(event)=>setDeveloperStack(event.target.value);
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/tech-stacks`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            setTechstack(data.stacks)
+            setTechstack(data.stacks);
         })
     },[])
     

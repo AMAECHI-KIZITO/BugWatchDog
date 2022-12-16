@@ -4,7 +4,7 @@ import oops from "../images/oops.png"
 
 function Error(){
     const navigate = useNavigate()
-    
+    document.title='Debugger - Error 404';
     return(
         <>
             

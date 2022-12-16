@@ -9,6 +9,7 @@ const Inbox=({userSession})=>{
     const [sendersIdentityNumber, setSendersIdentityNumber]=useState([]);
     const [myInbox, setMyInbox]=useState([]);
     const [timeDelivered, setTimeDelivered]=useState([]);
+    document.title='Debugger - Personal Inbox';
 
     //getting the inbox
     useEffect( ()=>{

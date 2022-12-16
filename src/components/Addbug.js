@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 
 function Addbug({userSession}){
-    const navigate=useNavigate()
-    const [projects, setProjects]=useState('')
-    const [bugDescription, setBugSummary]=useState('')
-    const [affectedProject, setAffectedProject] = useState("#")
-    const [codeSnippet, setCodeSnippet] = useState('')
-    const [codeImageExt, setCodeImageExt] = useState('')
+    const navigate=useNavigate();
+    const [projects, setProjects]=useState('');
+    const [bugDescription, setBugSummary]=useState('');
+    const [affectedProject, setAffectedProject] = useState("#");
+    const [codeSnippet, setCodeSnippet] = useState('');
+    const [codeImageExt, setCodeImageExt] = useState('');
+    document.title='Debugger - Add Bug';
 
     //get existing projects
     useEffect(() => {

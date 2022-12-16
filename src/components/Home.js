@@ -4,13 +4,13 @@ import {Link,useNavigate} from "react-router-dom";
 
 
 function Home({setUser, setUserSession}){
-    const [emailInput,setEmailInput]=useState(null)
-    const [passwordInput, setPasswordInput]=useState(null)
+    const [emailInput,setEmailInput]=useState(null);
+    const [passwordInput, setPasswordInput]=useState(null);
+    document.title='Debugger - Login';
+    const emailEntry = (event) => setEmailInput(event.target.value);
+    const passwordEntry = (event) => setPasswordInput(event.target.value);
 
-    const emailEntry = (event) => setEmailInput(event.target.value)
-    const passwordEntry = (event) => setPasswordInput(event.target.value)
-
-    const navigate=useNavigate()
+    const navigate=useNavigate();
 
 
     //login user

@@ -3,12 +3,12 @@ import { Link, useParams } from "react-router-dom";
 
 
 const ViewSingleProjectBugs= ({userSession}) => {
-    const {projectId} = useParams()
-    const[specificProject, setSpecificProject]=useState([])
-    const[specificProjectBugs, setSpecificProjectBugs]=useState([])
-    const[loadData, setLoadData]=useState("loading")
-    const[updateBugId, setUpdateBugId]=useState(0)
-
+    const {projectId} = useParams();
+    const[specificProject, setSpecificProject]=useState([]);
+    const[specificProjectBugs, setSpecificProjectBugs]=useState([]);
+    const[loadData, setLoadData]=useState("loading");
+    const[updateBugId, setUpdateBugId]=useState(0);
+    document.title='Debugger - View Project Bugs';
 
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/find/project/?projectId=${projectId}`)

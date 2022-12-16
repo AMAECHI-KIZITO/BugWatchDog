@@ -8,7 +8,9 @@ function Dashboard({userSession}){
   const [friends, setFriends]=useState("")
   const [friendRequest, setfriendrequest]=useState([])
   const [numberOfFriendRequest, setNumberOfFriendRequest]=useState("")
-  
+  document.title='Debugger - Dashboard';
+
+
   //Get developer statistics
   useEffect( () => {
     fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
@@ -40,6 +42,7 @@ function Dashboard({userSession}){
     .then(data=>{
       setfriendrequest(data.developers);
       setNumberOfFriendRequest(data.no_of_requests);
+      //console.log(data);
     })
   }, [])
   
@@ -175,7 +178,7 @@ function Dashboard({userSession}){
                     </thead>
                     <tbody>
                       {Object.values(friendRequest).map(dev => 
-                      <tr>
+                      <tr key={dev.serial_no}>
                         <td key={dev.serial_no}>{dev.serial_no}</td>
                         <td key={dev.dev_nickname}>{dev.dev_nickname[0].toUpperCase()  + dev.dev_nickname.substring(1)}</td>
                         <td key={`stack ${dev.dev_stack}`}>{dev.dev_stack}</td>
@@ -245,7 +248,6 @@ function Dashboard({userSession}){
             </div>
           </div>
         </div>
-
       </div>
     </>
   )

@@ -3,16 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 
 
 const Inboxmessage= ({userSession}) => {
-    const {msg}=useParams()
-    const navigate=useNavigate()
+    const {msg}=useParams();
+    const navigate=useNavigate();
 
-    const[specificMessage, setSpecificMessage]=useState([])
-    const[senderName, setSenderName]=useState('')
-    const[profileData, setProfileData]=useState({})
+    const[specificMessage, setSpecificMessage]=useState([]);
+    const[senderName, setSenderName]=useState('');
+    const[profileData, setProfileData]=useState({});
 
     //sending a new message variables
-    const[message,setNewMessage]=useState(null)
-    const[msgStatus, setMsgStatus]=useState(0)
+    const[message,setNewMessage]=useState(null);
+    const[msgStatus, setMsgStatus]=useState(0);
     let receiver=msg;
 
     useEffect( ()=>{

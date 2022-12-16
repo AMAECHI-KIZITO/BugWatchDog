@@ -6,14 +6,23 @@ from application.models import *
 def check_friend_status(user_id,friend_id):
     
     friend_status_1=Friend_Request.query.filter(Friend_Request.request_sent_by==user_id, Friend_Request.request_sent_to==friend_id, Friend_Request.request_status=='A').first()
-    if friend_status_1:
+    
+    friend_status_2=Friend_Request.query.filter(Friend_Request.request_sent_by==friend_id, Friend_Request.request_sent_to==user_id, Friend_Request.request_status=='A').first()
+    
+    if friend_status_1 or friend_status_2:
         return "Friend"
     else:
-        friend_status_2=Friend_Request.query.filter(Friend_Request.request_sent_by==friend_id, Friend_Request.request_sent_to==user_id, Friend_Request.request_status=='A').first()
-        if friend_status_2:
-            return "Friend"
+        check_pending_request_1=Friend_Request.query.filter(Friend_Request.request_sent_by==user_id, Friend_Request.request_sent_to==friend_id, Friend_Request.request_status=='P').first()
+            
+        check_pending_request_2=Friend_Request.query.filter(Friend_Request.request_sent_by==friend_id, Friend_Request.request_sent_to==user_id, Friend_Request.request_status=='P').first()
+            
+        if check_pending_request_1:
+            return "Friend Request Sent"
+        elif check_pending_request_2:
+            return "Friend Request Pending"
         else:
-            return "Not Friends Yet"
+            return "Friend Request Not Found. Not Yet Friends."
+
 
 # Getting unfriended developers to enable sending of requests to
 @app.route('/api/v1/get-unfriended-developers/')

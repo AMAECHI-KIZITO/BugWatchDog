@@ -49,8 +49,8 @@ def get_group_last_message(group_id):
     
     
 
-def get_group_members(group_id):
-    members=Group_Members.query.filter(Group_Members.chat_group_id==group_id).all()
+def get_group_members(group_id, developer):
+    members=Group_Members.query.filter(Group_Members.chat_group_id == group_id).all()
     if members != []:
         membership=[]
         for member in members:
@@ -195,7 +195,7 @@ def get_group_membership():
     group_integer_id=Chatgroups.query.get(group_identity)
     id=group_integer_id.group_id
     
-    members_ids=get_group_members(id)
+    members_ids=get_group_members(id,developer_id)
     if members_ids != "No Members Found":
         member_info=[]
         for mem in members_ids:

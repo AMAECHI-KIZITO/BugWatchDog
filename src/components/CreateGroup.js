@@ -9,7 +9,9 @@ function Creategroup({userSession}){
     const [groupName, setGroupName]=useState(null);
     const [groupBio, setGroupBio]=useState(null);
     const [userId, setUserId]=useState(userSession);
+    document.title='Debugger - Create Group';
 
+    
     //get my friends
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)

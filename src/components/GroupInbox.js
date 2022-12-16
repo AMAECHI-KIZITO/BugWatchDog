@@ -13,6 +13,7 @@ const GroupInbox=({userSession})=>{
         .then(data=>{
             setMyInbox(data.message);
             setLoadingStatus('Loaded');
+            document.title='Debugger - Group Inbox';
             //console.log(data);
         })
     },[])

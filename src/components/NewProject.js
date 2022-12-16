@@ -7,6 +7,8 @@ function Newproject({userSession}){
   const [projectname, setProjectName]=useState(null);
   const [projectsummary, setProjectSummary]=useState(null);
   const [userId, setUserId]=useState(null);
+  document.title='Debugger - Create Project';
+
 
   const nameProject=(event)=>{
     setProjectName(event.target.value);

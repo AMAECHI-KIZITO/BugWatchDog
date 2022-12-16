@@ -9,11 +9,7 @@ const Groupinboxmessage= ({userSession}) => {
     const [currentGroupId, setCurrentGroupId] = useState('');
     const [groupChatData, setGroupChatData]=useState([]);
     const [groupMembers, setGroupMembers]=useState('');
-    const [myFriends, setMyFriends]=useState('');
     
-    //My friends Ids
-    const friendsId=[];
-
 
     //sending a new message variables
     const[message,setNewMessage]=useState(null);
@@ -28,19 +24,7 @@ const Groupinboxmessage= ({userSession}) => {
         setNewMessage(event.target.value);
     }
 
-    //Get my friends
-    useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
-        .then(rsp=>rsp.json())
-        .then(data=>{
-            //console.log(data);
-           //setMyFriends(data.developers);
-           data.developers.forEach(friend =>{
-                friendsId.push(friend.dev_id);
-            })
-            //console.log(friendsId);
-        })
-    },[])
+    
 
     
     // get group data information
@@ -55,6 +39,7 @@ const Groupinboxmessage= ({userSession}) => {
             setGroupData(the_data);
             setCurrentGroupId(the_data[2]);
             setGroupChatData(data.chat_history);
+            document.title=the_data[3];
         })
     },[msgStatus])
 
@@ -287,23 +272,52 @@ const Groupinboxmessage= ({userSession}) => {
                                     {
                                         typeof groupMembers === 'string'
                                         ?
-                                        <p>Amaechi Tochukwu</p>
+                                        <p>Loading...</p>
                                         :
                                         <>
                                             {
                                                 groupMembers.map(member =>{
                                                     if (member.friend_status=="Friend"){
                                                         return<div key={member.dev_id}>
-                                                                <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)}</p>
-                                                            </div>
+                                                            <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)}</p>
+                                                        </div>
                                                     }
                                                     else if(member.dev_id==userSession){
                                                         return <div key={member.dev_id}>
                                                             <p className="py-2">You</p>
                                                         </div>
                                                     }
+                                                    else if(member.friend_status=="Friend Request Pending"){
+                                                        return <div key={member.dev_id}>
+                                                            <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end" id={`btn${member.dev_id}`} onClick={()=>{
+
+                                                                fetch(`http://localhost:5000/api/v1/accept-friend-request/?invitee=${userSession}&invited=${member.dev_id}`)
+                                                                .then( rsp => rsp.json())
+                                                                .then( data => {
+                                                                    alert(data.message);
+
+                                                                    return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                                                                    .then(rsp=>rsp.json())
+                                                                    .then(data=>{
+                                                                        setGroupMembers(data.membership);
+                                                                    })
+                                                                })
+                                                            }}>Accept Request</a></p>
+                                                        </div>
+                                                    }
+                                                    else if(member.friend_status=="Friend Request Sent"){
+                                                        return <div key={member.dev_id}>
+                                                        <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <button type='button' className="btn btn-dark btn-sm float-end" id={`btn${member.dev_id}`} disabled>Friend Request Sent</button></p>
+                                                        </div>
+                                                    }
                                                     return <div key={member.dev_id}>
-                                                        <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end">Add friend</a></p>
+                                                        <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end" id={`btn${member.dev_id}`} onClick={()=>{
+                                                            fetch(`http://localhost:5000/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${member.dev_id}`)
+                                                            .then( rsp => rsp.json())
+                                                            .then( data => {
+                                                                document.getElementById(`btn${member.dev_id}`).style.display="none";
+                                                            })
+                                                        }}>Add friend</a></p>
                                                     </div>
                                                 })
                                             }

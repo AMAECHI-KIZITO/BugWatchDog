@@ -3,8 +3,8 @@ import { Link } from "react-router-dom"
 
 
 const Viewprojects=({userSession})=>{
-    const [allDevProjects, setAllDevProjects]=useState([])
-
+    const [allDevProjects, setAllDevProjects]=useState([]);
+    document.title='Debugger - View Project';
 
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/view-projects/${userSession}`)

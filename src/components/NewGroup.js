@@ -9,6 +9,8 @@ function Newgroup({userSession}){
     const[groupMembers, setGroupMembers]=useState([])
     const[groupMembersNames, setGroupMembersNames]=useState([])
     const[groupDetails, setGroupDetails]=useState([])
+    document.title='Debugger - Create Group';
+
     
     //get my friends
     useEffect( ()=>{
