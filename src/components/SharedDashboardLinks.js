@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 import {Link, Outlet} from "react-router-dom"
 
 
@@ -11,7 +11,9 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
     clearUser();
   }
 
-
+  const closeMenu=()=>{
+    document.getElementById('closeMenuOffCanvas').click();
+  }
   return(
     <>
       <div className="row">
@@ -34,7 +36,7 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
 
 
 
-      <div className="row dashboardlinks">
+      <div className="row dashboardlinks" style={{minHeight:'500px'}}>
 
         <div className="col-md-3 d-none d-md-block" id="dashboardNav">
 
@@ -45,8 +47,8 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           <p className="text-center my-4"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p>
           <p className="text-center my-4"><Link to="/dashboard/groupinbox" className="quickDashboardLinks">Group Messages</Link></p>
           {/* <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p> */}
-          <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p>
-          <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
+          {/* <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p> */}
+          <p className="text-center" style={{position:'sticky', bottom:'0px'}}><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
 
         </div>
 
@@ -66,19 +68,27 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
           
           <div className="offcanvas-header">
             <h5 id="debuggerApp" className="text-light">Quick Links <i className="fa-solid fa-bugs"></i></h5>
-            <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
+            <button type="button" id="closeMenuOffCanvas" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
           </div>
 
 
           <div className="row offcanvas-body">
-            <p className="text-center"><Link to="/dashboard" className="quickDashboardLinks text-warning">Dashboard</Link></p>
-            <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks text-warning">New Project</Link></p>
-            <p className="text-center"><Link to="/dashboard/myprojects" className="quickDashboardLinks text-warning">View Projects</Link></p>
-            <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks text-warning">Add Bug</Link></p>
-            <p className="text-center"><Link to="/dashboard/inbox" className="quickDashboardLinks text-warning">Inbox</Link></p>
-            <p className="text-center"><Link to="/dashboard/groupinbox" className="quickDashboardLinks text-warning">Group Messages</Link></p>
+            <p className="text-center"><Link to="/dashboard" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Dashboard</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/newproject" className="quickDashboardLinks text-warning"  onClick={closeMenu}>New Project</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/myprojects" className="quickDashboardLinks text-warning"  onClick={closeMenu}>View Projects</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/addbug" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Add Bug</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/inbox" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Inbox</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/groupinbox" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Group Messages</Link></p>
+
             {/* <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks text-warning">Create Group</Link></p> */}
-            <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning">Find Help</Link></p>
+
+            <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Find Help</Link></p>
+
             <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
           </div>
         </div>

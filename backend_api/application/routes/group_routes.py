@@ -14,6 +14,7 @@ def group_information(identity):
     grp_info['date_formed']=group_deets.group_creation_date
     grp_info['id']=group_deets.group_id
     grp_info["participants"]=total_members
+    grp_info["founder"]=group_deets.group_founder
     information.append(grp_info)
     
     return information
