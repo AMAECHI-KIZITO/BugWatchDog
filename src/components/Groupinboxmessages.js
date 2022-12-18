@@ -33,8 +33,8 @@ const Groupinboxmessage= ({userSession}) => {
         .then(rsp=>rsp.json())
         .then(data=>{
             let the_data = Object.values(data.group_info[0]);
-            //console.log(the_data);
-            //console.log(data);
+            console.log(the_data);
+            console.log(data);
             setLoadData('Loaded');
             setGroupData(the_data);
             setCurrentGroupId(the_data[2]);
@@ -91,17 +91,27 @@ const Groupinboxmessage= ({userSession}) => {
     }
 
     const exitGroupChat=()=>{
-        if(userSession == groupData[3]){
+        if(userSession == groupData[2]){
             if(window.confirm('You are about to leave the group you created. Your admin rights will be passed onto someone else. Proceed?')){
-                alert('You left the group');
+                fetch(`http://localhost:5000/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
+                .then(rsp=>rsp.json())
+                .then(data=>{
+                    console.log(data);
+                    navigate(-1);
+                })
             }
         }
         else if(window.confirm('Do you want to leave the group?')){
-            alert('You are leaving the group');
+            fetch(`http://localhost:5000/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
+            .then(rsp=>rsp.json())
+            .then(data=>{
+                console.log(data);
+                navigate(-1);
+            })
         }
     }
 
-    
+
     return(
         <>
             <div>
@@ -253,9 +263,16 @@ const Groupinboxmessage= ({userSession}) => {
                     <div>
                         <div className="d-flex align-items-center justify-content-center">
                             <div style={{border:"1px solid gold"}}>
-                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}} data-bs-toggle="modal" data-bs-target="#groupInfoModal" onClick={closeLink}>Group info</a></p>
-                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}} onClick={exitGroupChat}>Exit group</a></p>
-                                <p><a className='btn btn-sm btn-outline-dark' style={{textDecoration:"None"}}>Remove member</a></p>
+                                <p><a className='btn' style={{textDecoration:"None"}} data-bs-toggle="modal" data-bs-target="#groupInfoModal" onClick={closeLink}>Group info</a></p>
+                                <p><a className='btn' style={{textDecoration:"None"}} onClick={exitGroupChat}>Exit group</a></p>
+                                {
+                                    userSession == groupData[2]
+                                    ?
+                                    <p><a className='btn' style={{textDecoration:"None"}}>Remove member</a></p>
+                                    :
+                                    <p></p>
+                                }
+                                
                             </div>
                         </div>
                     </div>

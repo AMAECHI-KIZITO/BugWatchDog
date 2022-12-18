@@ -39,16 +39,25 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
       <div className="row dashboardlinks" style={{minHeight:'500px'}}>
 
         <div className="col-md-3 d-none d-md-block" id="dashboardNav">
+          <div className='row'>
+            <div className='col'>
+              <p className="text-center my-4"><Link to="/dashboard" className="quickDashboardLinks">Dashboard</Link></p>
+              <p className="text-center my-4"><Link to="/dashboard/newproject" className="quickDashboardLinks">New Project</Link></p>
+              <p className="text-center my-4"><Link to="/dashboard/myprojects" className="quickDashboardLinks">View Projects</Link></p>
+              <p className="text-center my-4"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p>
+              <p className="text-center my-4"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p>
+              <p className="text-center my-4"><Link to="/dashboard/groupinbox" className="quickDashboardLinks">Group Messages</Link></p>
+              {/* <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p> */}
+              {/* <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p> */}
+            </div>
+          </div><hr></hr>
 
-          <p className="text-center my-4"><Link to="/dashboard" className="quickDashboardLinks">Dashboard</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/newproject" className="quickDashboardLinks">New Project</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/myprojects" className="quickDashboardLinks">View Projects</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/addbug" className="quickDashboardLinks">Add Bug</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/inbox" className="quickDashboardLinks">Inbox</Link></p>
-          <p className="text-center my-4"><Link to="/dashboard/groupinbox" className="quickDashboardLinks">Group Messages</Link></p>
-          {/* <p className="text-center my-4"><Link to="/dashboard/creategroup" className="quickDashboardLinks">Create Group</Link></p> */}
-          {/* <p className="text-center my-4"><Link to="/dashboard/seekhelp" className="quickDashboardLinks">Find Help</Link></p> */}
-          <p className="text-center" style={{position:'sticky', bottom:'0px'}}><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
+
+          <div className='row'>
+            <div className='col'>
+              <p className="text-center" style={{position:'sticky', bottom:'0px'}}><button className="btn btn-warning btn-sm" onClick={logout}>Sign Out</button></p>
+            </div>
+          </div>
 
         </div>
 
@@ -87,9 +96,9 @@ function SharedDashboardLinks({user,userSession, setUser, setUserSession}){
 
             {/* <p className="text-center"><Link to="/dashboard/creategroup" className="quickDashboardLinks text-warning">Create Group</Link></p> */}
 
-            <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Find Help</Link></p>
+            {/* <p className="text-center"><Link to="/dashboard/seekhelp" className="quickDashboardLinks text-warning"  onClick={closeMenu}>Find Help</Link></p> */}
 
-            <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Logout</button></p>
+            <p className="text-center"><button className="btn btn-warning btn-sm" onClick={logout}>Sign Out</button></p>
           </div>
         </div>
       </div>

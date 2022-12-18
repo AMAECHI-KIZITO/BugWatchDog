@@ -1,3 +1,4 @@
+import random
 from datetime import datetime,date
 from flask import jsonify,request
 from application import app
@@ -50,7 +51,7 @@ def get_group_last_message(group_id):
     
     
 
-def get_group_members(group_id, developer):
+def get_group_members(group_id):
     members=Group_Members.query.filter(Group_Members.chat_group_id == group_id).all()
     if members != []:
         membership=[]
@@ -193,10 +194,10 @@ def send_group_message():
 def get_group_membership():
     group_identity=request.args.get('grpID')
     developer_id=request.args.get('dev')
-    group_integer_id=Chatgroups.query.get(group_identity)
+    group_integer_id=Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
     id=group_integer_id.group_id
     
-    members_ids=get_group_members(id,developer_id)
+    members_ids=get_group_members(id)
     if members_ids != "No Members Found":
         member_info=[]
         for mem in members_ids:
@@ -210,9 +211,42 @@ def get_group_membership():
             member_info.append(member_details)
         return{"status":True, "membership":member_info}
     
+
+# Leave group
+@app.route('/api/v1/leave-group-chat')
+def exit_group_chat():
+    group_identity=request.args.get('grpID')
+    developer_id=request.args.get('dev')
+    group_to_leave=Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
+    the_group_id=group_to_leave.group_id
+    the_group_founder=group_to_leave.group_founder
     
-# def test():
-#     x=friends_routes.friends_i_accepted(1)
-#     print(x)
+    leave_group=Group_Members.query.filter(Group_Members.member==developer_id, Group_Members.chat_group_id==the_group_id).first()
     
-# test()
+    if developer_id != the_group_founder:
+        db.session.delete(leave_group)
+        db.session.commit()
+    else:
+        members=Group_Members.query.filter(Group_Members.chat_group_id == the_group_id, Group_Members.member!=developer_id).all()
+        
+        
+        membership=[]
+        if members != []:
+            for member in members:
+                membership.append(member.member)
+                
+        
+            #create a new admin
+            make_new_admin = random.choice(range(len(membership)))
+            change_admin = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
+            change_admin.group_founder = make_new_admin
+        
+        
+            #delete membership record
+            db.session.delete(leave_group)
+            db.session.commit()
+        else:
+            db.session.delete(leave_group)
+            db.session.commit()
+            
+    return {"status":True, "message":"You have left the group chat"}

@@ -54,32 +54,35 @@ const GroupInbox=({userSession})=>{
                                         </div>
                                         :
                                         myInbox.map(info=>
-                                            <Link to={`/dashboard/groupinbox/${info.id}`} key={info.id} style={{textDecoration:'None'}}>
-                                                <div className="row mb-1" style={{color:"#fff"}}>
-                                                    <div className="col-12">
-                                                        <div className="row">
-                                                            <div className="col-12">
-                                                                <h4 className=" ms-1">
-                                                                    {info.groupname} 
-                                                                    <span className="float-end" style={{fontSize:"11px"}}>
-                                                                        {info.last_message_timestamp}
-                                                                    </span>
-                                                                </h4>
-                                                            </div>
-                                                            <div className="col-12">
-                                                                <p className=" ms-1" style={{color:'#AAAAAA', fontSize:'13px'}}>{info.last_message_sender[0].toUpperCase()  + info.last_message_sender.substring(1)}: {info.last_message}</p>
+                                            <>
+                                                <Link to={`/dashboard/groupinbox/${info.id}`} key={info.id} style={{textDecoration:'None'}}>
+                                                    <div className="row mb-1" style={{color:"#fff"}} key={info.id}>
+                                                        <div className="col-12">
+                                                            <div className="row">
+                                                                <div className="col-12">
+                                                                    <h4 className=" ms-1">
+                                                                        {info.groupname} 
+                                                                        <span className="float-end" style={{fontSize:"11px"}}>
+                                                                            {info.last_message_timestamp}
+                                                                        </span>
+                                                                    </h4>
+                                                                </div>
+                                                                <div className="col-12">
+                                                                    <p className=" ms-1" style={{color:'#AAAAAA', fontSize:'13px'}}>{info.last_message_sender[0].toUpperCase()  + info.last_message_sender.substring(1)}: {info.last_message}</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </Link>
+                                                </Link>
+
+                                                <Link to={`/dashboard/creategroup`} style={{textDecoration:'None'}}>
+                                                    <button className="btn btn-warning float-end me-2" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button">
+                                                    <i className="fa-solid fa-people-group"></i>
+                                                    </button>
+                                                </Link>
+                                            </>
                                         )
                                     }
-                                    <Link to={`/dashboard/creategroup`} style={{textDecoration:'None'}}>
-                                        <button className="btn btn-warning float-end me-2" style={{borderRadius:"50%", position:'sticky', bottom:'0px'}} type="button">
-                                            <i className="fa-solid fa-people-group"></i>
-                                        </button>
-                                    </Link>
                                 </>
                             )}
                         </div>
