@@ -33,8 +33,8 @@ const Groupinboxmessage= ({userSession}) => {
         .then(rsp=>rsp.json())
         .then(data=>{
             let the_data = Object.values(data.group_info[0]);
-            console.log(the_data);
-            console.log(data);
+            //console.log(the_data);
+            //console.log(data);
             setLoadData('Loaded');
             setGroupData(the_data);
             setCurrentGroupId(the_data[2]);
@@ -93,10 +93,10 @@ const Groupinboxmessage= ({userSession}) => {
     const exitGroupChat=()=>{
         if(userSession == groupData[2]){
             if(window.confirm('You are about to leave the group you created. Your admin rights will be passed onto someone else. Proceed?')){
-                fetch(`http://localhost:5000/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
+                fetch(`http://localhost:5000/api/v1/admin-leave-group-chat/?grpID=${groupIdentity}&dev=${userSession}`)
                 .then(rsp=>rsp.json())
                 .then(data=>{
-                    console.log(data);
+                    //console.log(data);
                     navigate(-1);
                 })
             }
@@ -105,7 +105,7 @@ const Groupinboxmessage= ({userSession}) => {
             fetch(`http://localhost:5000/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
             .then(rsp=>rsp.json())
             .then(data=>{
-                console.log(data);
+                //console.log(data);
                 navigate(-1);
             })
         }
