@@ -25,7 +25,14 @@ const Groupinboxmessage= ({userSession}) => {
     }
 
     
-
+    //Get friends that have not been added to the group
+    useEffect( ()=>{
+        fetch(`http://localhost:5000/api/v1/add-more-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+        .then(rsp=>rsp.json())
+        .then(data=>{
+            console.log(data);
+        })
+    },[])
     
     // get group data information
     useEffect( ()=>{
@@ -268,17 +275,32 @@ const Groupinboxmessage= ({userSession}) => {
                                 {
                                     userSession == groupData[2]
                                     ?
-                                    <p><a className='btn' style={{textDecoration:"None"}}>Remove member</a></p>
+                                    <>
+                                        <p><a className='btn' style={{textDecoration:"None"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">Add new member</a></p>
+                                        <p><a className='btn' style={{textDecoration:"None"}}>Remove member</a></p>
+                                    </>
                                     :
                                     <p></p>
                                 }
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
+
+            {/* Add new members off canvas */}
+            <div class="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasEndLabel">Add a Group Member</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
+                </div>
+                <div class="offcanvas-body">
+                    
+                </div>
+            </div>
+
+
             {/* Group Info Modal */}
             <div className="modal fade" id="groupInfoModal" tabIndex="-1" aria-labelledby="groupInfoModalModalLabel" aria-hidden="true" data-bs-backdrop='static' data-bs-keyboard='false'>
                 <div className="modal-dialog modal-fullscreen-md-down">

@@ -219,7 +219,6 @@ def exit_group_chat():
     developer_id = request.args.get('dev')
     group_to_leave = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
     the_group_id = group_to_leave.group_id
-    the_group_founder = group_to_leave.group_founder
     
     leave_group = Group_Members.query.filter(Group_Members.member==developer_id, Group_Members.chat_group_id==the_group_id).first()
     
@@ -236,7 +235,6 @@ def admin_exit_group_chat():
     developer_id = request.args.get('dev')
     group_to_leave = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
     the_group_id = group_to_leave.group_id
-    the_group_founder = group_to_leave.group_founder
     
     leave_group = Group_Members.query.filter(Group_Members.member==developer_id, Group_Members.chat_group_id==the_group_id).first()
     
@@ -261,3 +259,41 @@ def admin_exit_group_chat():
         db.session.delete(leave_group)
         db.session.commit()
         return {"status":True, "message":"You have left the group chat with no members."}
+    
+    
+#add new group members
+@app.route('/api/v1/add-more-group-members/')
+def unadded_members():
+    group_identity = request.args.get('grpID')
+    developer_id = request.args.get('dev')
+    the_group = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
+    the_group_id = the_group.group_id
+    
+    current_group_members=get_group_members(the_group_id)
+    my_friends=friends_routes.friends_i_accepted(developer_id) + friends_routes.friends_that_accepted_me(developer_id)
+    not_added=[]
+    
+    for pal in my_friends:
+        if pal not in current_group_members:
+            not_added.append(pal)
+    
+    friends_records=[]
+    counter=0
+    #getting friends deets
+    if not_added!=[]:
+        for friend in not_added:
+            friend_history=User.query.get(friend)
+            counter+=1
+            stack_id=friend_history.user_stack
+            stack=db.session.query(Techstack).filter(Techstack.stack_id==stack_id).first()
+            stack_name=stack.stack_name
+                
+            dev_info={}
+            dev_info["serial_no"]=counter
+            dev_info["dev_id"]=friend_history.user_id
+            dev_info["dev_nickname"]=friend_history.user_nickname
+            dev_info["dev_stack"]=stack_name
+            friends_records.append(dev_info)
+        return {"status":True,"members":friends_records}  
+    else:
+        return {"status":True,"members":"No new members to add."}
