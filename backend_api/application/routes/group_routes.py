@@ -102,18 +102,31 @@ def add_group_members():
     group_deets=Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
     group_id=group_deets.group_id
     
-    #Add the group founder
-    add_developer=Group_Members(chat_group_id=group_id, member=developer, date_added=date.today())
-    db.session.add(add_developer)
+    #check if the group founder is already in group
+    my_membership=Group_Members.query.filter(Group_Members.chat_group_id==group_id, Group_Members.member==developer).first()
     
-    #Add the chosen members
-    for person in group_selected_members:
-        new_member=Group_Members(chat_group_id=group_id, member=person, date_added=date.today())
-        db.session.add(new_member)
-    db.session.commit()
-    
-    return {'status':True, "message":"Members Added"}
-
+    if my_membership == None:
+        #Add the group founder
+        add_developer=Group_Members(chat_group_id=group_id, member=developer, date_added=date.today())
+        db.session.add(add_developer)
+        
+        #Add the chosen members
+        for person in group_selected_members:
+            new_member=Group_Members(chat_group_id=group_id, member=person, date_added=date.today())
+            db.session.add(new_member)
+        db.session.commit()
+        
+        return {'status':True, "message":"Members Added"}
+    else:
+        group_selected_members=data.get('newMembers')
+        
+        #Add the chosen members
+        for person in group_selected_members:
+            new_member=Group_Members(chat_group_id=group_id, member=person, date_added=date.today())
+            db.session.add(new_member)
+        db.session.commit()
+        
+        return {'status':True, "message":"Members Added"}
 
 #get my groups inbox deets
 @app.route("/api/v1/group-inbox/")
@@ -261,9 +274,9 @@ def admin_exit_group_chat():
         return {"status":True, "message":"You have left the group chat with no members."}
     
     
-#add new group members
-@app.route('/api/v1/add-more-group-members/')
-def unadded_members():
+#fetch unadded group members
+@app.route('/api/v1/fetch-unadded-group-members/')
+def fetch_unadded_members():
     group_identity = request.args.get('grpID')
     developer_id = request.args.get('dev')
     the_group = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
@@ -294,6 +307,6 @@ def unadded_members():
             dev_info["dev_nickname"]=friend_history.user_nickname
             dev_info["dev_stack"]=stack_name
             friends_records.append(dev_info)
-        return {"status":True,"members":friends_records}  
+        return {"status":True,"members":friends_records}
     else:
         return {"status":True,"members":"No new members to add."}

@@ -9,7 +9,8 @@ const Groupinboxmessage= ({userSession}) => {
     const [currentGroupId, setCurrentGroupId] = useState('');
     const [groupChatData, setGroupChatData]=useState([]);
     const [groupMembers, setGroupMembers]=useState('');
-    
+    const [nonGroupMembers, setNonGroupMembers] = useState([]);
+    const [newMembers, setNewMembers] = useState([]);
 
     //sending a new message variables
     const[message,setNewMessage]=useState(null);
@@ -27,10 +28,11 @@ const Groupinboxmessage= ({userSession}) => {
     
     //Get friends that have not been added to the group
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/add-more-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+        fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             console.log(data);
+            setNonGroupMembers(data.members);
         })
     },[])
     
@@ -92,6 +94,37 @@ const Groupinboxmessage= ({userSession}) => {
             }
         })
     }
+
+    //add members to the group
+    const addMembers=()=>{
+        let groupid = groupIdentity
+        let membersData = { newMembers, groupid, userSession }
+
+        if(newMembers.length==0){
+            alert('No members selected');
+            return;
+        }else{
+            fetch("http://localhost:5000/api/v1/add-group-members/",{
+                method:"POST",
+                mode:'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Credentials":true
+                },
+                body: JSON.stringify(membersData)
+            })
+            .then(resp=> {
+                if(resp.status=="200" && newMembers.length==1){
+                    alert(`Member Successfully Added.`);
+                }
+                else{
+                    alert(`Members Successfully Added.`);
+                }
+            })
+        }
+    }
+
 
     const closeLink =()=>{
         document.getElementById('btnCloseGroupLink').click();
@@ -290,13 +323,60 @@ const Groupinboxmessage= ({userSession}) => {
 
 
             {/* Add new members off canvas */}
-            <div class="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
-                <div class="offcanvas-header">
+            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
+                <div className="offcanvas-header">
                     <h5 id="offcanvasEndLabel">Add a Group Member</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
-                </div>
-                <div class="offcanvas-body">
-                    
+                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
+                </div><hr></hr>
+
+
+                <div className="row offcanvas-body">
+                    <div className="col-12">
+                    {   
+                        (typeof nonGroupMembers.length==0)
+                        ?
+                        (
+                            <div className="row align-items-center" style={{minHeight:'400px'}}>
+                                <div className="col">
+                                <h4 className="text-center" style={{color:"grey"}}>No Friends Missing from Group.</h4>
+                                </div>
+                            </div>
+                        ):(
+                            <>
+                                {
+                                    nonGroupMembers.map(member =>
+                                        <div className="row" key={member.serial_no} style={{borderBotton:'1px solid gold'}}>
+                                            <div className="col-12 py-2">
+                                                <p>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <input type='checkbox' className='form-check-input float-end' onClick={
+                                                
+                                                (
+                                                    newMembers.includes(member.dev_id)
+                                                )
+                                                ?
+
+                                                (
+                                                    ()=>setNewMembers(newMembers => newMembers.filter(newMember=>newMember!== member.dev_id))
+                                                )
+
+                                                : 
+                                                (
+                                                    ()=>setNewMembers(newMembers => newMembers.concat(member.dev_id))
+                                                )
+                                            
+                                                }/></p>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                <div>
+                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}  onClick={addMembers}>
+                                        <i className="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </>
+                        )
+                    }
+                    </div>
                 </div>
             </div>
 
