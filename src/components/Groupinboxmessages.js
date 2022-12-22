@@ -309,8 +309,17 @@ const Groupinboxmessage= ({userSession}) => {
                                     userSession == groupData[2]
                                     ?
                                     <>
-                                        <p><a className='btn' style={{textDecoration:"None"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">Add new member</a></p>
-                                        <p><a className='btn' style={{textDecoration:"None"}}>Remove member</a></p>
+                                        <p>
+                                            <a className='btn' style={{textDecoration:"None"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#addMembersToGroupOffcanvas" aria-controls="offcanvasEnd">
+                                                Add new member
+                                            </a>
+                                        </p>
+
+                                        <p>
+                                            <a className='btn' style={{textDecoration:"None"}} type="button" data-bs-toggle="offcanvas" data-bs-target="#removeMembersToGroupOffcanvas" aria-controls="offcanvasEnd">
+                                                Remove a member
+                                            </a>
+                                        </p>
                                     </>
                                     :
                                     <p></p>
@@ -323,9 +332,9 @@ const Groupinboxmessage= ({userSession}) => {
 
 
             {/* Add new members off canvas */}
-            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
+            <div className="offcanvas offcanvas-end" tabIndex="-1" id="addMembersToGroupOffcanvas" aria-labelledby="addMembersToGroupOffcanvasLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
                 <div className="offcanvas-header">
-                    <h5 id="offcanvasEndLabel">Add a Group Member</h5>
+                    <h5 id="addMembersToGroupOffcanvasLabel">Add a Group Member</h5>
                     <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
                 </div><hr></hr>
 
@@ -333,12 +342,12 @@ const Groupinboxmessage= ({userSession}) => {
                 <div className="row offcanvas-body">
                     <div className="col-12">
                     {   
-                        (typeof nonGroupMembers.length==0)
+                        (nonGroupMembers.length==0 || typeof nonGroupMembers==='string')
                         ?
                         (
                             <div className="row align-items-center" style={{minHeight:'400px'}}>
                                 <div className="col">
-                                <h4 className="text-center" style={{color:"grey"}}>No Friends Missing from Group.</h4>
+                                <h4 className="text-center" style={{color:"grey"}}>No Friends Missing in Group.</h4>
                                 </div>
                             </div>
                         ):(
@@ -379,6 +388,67 @@ const Groupinboxmessage= ({userSession}) => {
                     </div>
                 </div>
             </div>
+
+            {/* Remove Group members off canvas */}
+            <div className="offcanvas offcanvas-end" tabIndex="-1" id="removeMembersToGroupOffcanvas" aria-labelledby="removeMembersToGroupOffcanvasLabel" style={{backgroundColor:"#05204a", color:"#ffffff"}}>
+                <div className="offcanvas-header">
+                    <h5 id="removeMembersToGroupOffcanvasLabel">Remove a Group Member</h5>
+                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style={{backgroundColor:"gold"}}></button>
+                </div><hr></hr>
+
+
+                <div className="row offcanvas-body">
+                    <div className="col-12">
+                    {   
+                        (nonGroupMembers.length==0 || typeof nonGroupMembers==='string')
+                        ?
+                        (
+                            <div className="row align-items-center" style={{minHeight:'400px'}}>
+                                <div className="col">
+                                <h4 className="text-center" style={{color:"grey"}}>No Friends Missing in Group.</h4>
+                                </div>
+                            </div>
+                        ):(
+                            <>
+                                {
+                                    nonGroupMembers.map(member =>
+                                        <div className="row" key={member.serial_no} style={{borderBotton:'1px solid gold'}}>
+                                            <div className="col-12 py-2">
+                                                <p>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <input type='checkbox' className='form-check-input float-end' onClick={
+                                                
+                                                (
+                                                    newMembers.includes(member.dev_id)
+                                                )
+                                                ?
+
+                                                (
+                                                    ()=>setNewMembers(newMembers => newMembers.filter(newMember=>newMember!== member.dev_id))
+                                                )
+
+                                                : 
+                                                (
+                                                    ()=>setNewMembers(newMembers => newMembers.concat(member.dev_id))
+                                                )
+                                            
+                                                }/></p>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                <div>
+                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}  onClick={addMembers}>
+                                        <i className="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </>
+                        )
+                    }
+                    </div>
+                </div>
+            </div>
+
+
+
 
 
             {/* Group Info Modal */}
