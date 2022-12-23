@@ -13,10 +13,11 @@ function Newproject({userSession}){
   const nameProject=(event)=>{
     setProjectName(event.target.value);
     setUserId(userSession);
-  }
+  };
+  
   const describeProject=(event)=>{
     setProjectSummary(event.target.value);
-  }
+  };
 
 
 

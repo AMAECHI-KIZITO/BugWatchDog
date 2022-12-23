@@ -28,7 +28,7 @@ const Signup = ()=>{
         .then(data=>{
             setTechstack(data.stacks);
         })
-    },[])
+    },[]);
     
     const checkEmailAvailability = ()=>{
         if(regemail != ""){
@@ -42,7 +42,7 @@ const Signup = ()=>{
             })
         }
         return;
-    }
+    };
 
 
     const registerUser= (event)=>{
@@ -86,7 +86,7 @@ const Signup = ()=>{
                 window.location.href="/"
             }
         })
-    }
+    };
 
 
 

@@ -23,7 +23,7 @@ const Groupinboxmessage= ({userSession}) => {
         }
         setMsgStatus(0);
         setNewMessage(event.target.value);
-    }
+    };
 
     
     //Get friends that have not been added to the group
@@ -31,10 +31,10 @@ const Groupinboxmessage= ({userSession}) => {
         fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
         .then(rsp=>rsp.json())
         .then(data=>{
-            console.log(data);
+            //console.log(data);
             setNonGroupMembers(data.members);
         })
-    },[])
+    },[]);
     
     // get group data information
     useEffect( ()=>{
@@ -50,7 +50,7 @@ const Groupinboxmessage= ({userSession}) => {
             setGroupChatData(data.chat_history);
             document.title=the_data[4];
         })
-    },[msgStatus])
+    },[msgStatus]);
 
     // get group Membership information
     useEffect( ()=>{
@@ -60,7 +60,7 @@ const Groupinboxmessage= ({userSession}) => {
             //console.log(data);
             setGroupMembers(data.membership);
         })
-    },[msgStatus])
+    },[msgStatus]);
     
 
     //send a new group message
@@ -93,9 +93,9 @@ const Groupinboxmessage= ({userSession}) => {
                 document.getElementById("writeMessage").value="";
             }
         })
-    }
+    };
 
-    //add members to the group
+    //add new members to the group
     const addMembers=()=>{
         let groupid = groupIdentity
         let membersData = { newMembers, groupid, userSession }
@@ -116,20 +116,65 @@ const Groupinboxmessage= ({userSession}) => {
             })
             .then(resp=> {
                 if(resp.status=="200" && newMembers.length==1){
-                    alert(`Member Successfully Added.`);
+                    fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                    .then(rsp=>rsp.json())
+                    .then(data=>{
+                        setNonGroupMembers(data.members);
+                        setNewMembers([]);
+
+                        return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                        .then(rsp=>rsp.json())
+                        .then(data=>{
+                            setGroupMembers(data.membership);
+                            
+                            let selectedChoices=document.getElementsByClassName('selectPossibleMember');
+                            for(let i = 0; i < selectedChoices.length; ++i){
+                                if(selectedChoices[i].checked){
+                                    selectedChoices[i].checked=false;
+                                }
+                            }
+
+                            setNewMembers([]);
+
+                            alert(`Member Successfully Added.`);
+                        })
+                    })
                 }
                 else{
-                    alert(`Members Successfully Added.`);
+                    fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                    .then(rsp=>rsp.json())
+                    .then(data=>{
+                        setNonGroupMembers(data.members);
+                        setNewMembers([]);
+                        
+                        return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                        .then(rsp=>rsp.json())
+                        .then(data=>{
+                            setGroupMembers(data.membership);
+                            
+                            let selectedChoices=document.getElementsByClassName('selectPossibleMember');
+                            for(let i = 0; i < selectedChoices.length; ++i){
+                                if(selectedChoices[i].checked){
+                                    selectedChoices[i].checked=false;
+                                }
+                            }
+
+                            setNewMembers([]);
+
+                            alert(`Members Successfully Added.`);
+                        })
+                    })
                 }
             })
         }
-    }
+    };
 
-
+    //Close Menu Offcanvas
     const closeLink =()=>{
         document.getElementById('btnCloseGroupLink').click();
-    }
+    };
 
+    //Exit group chat
     const exitGroupChat=()=>{
         if(userSession == groupData[2]){
             if(window.confirm('You are about to leave the group you created. Your admin rights will be passed onto someone else. Proceed?')){
@@ -149,8 +194,42 @@ const Groupinboxmessage= ({userSession}) => {
                 navigate(-1);
             })
         }
-    }
+    };
 
+    //Remove a member (For group admins only)
+    const removeMember=(memberId, memberName)=>{
+        if(window.confirm(`Remove ${memberName} from group?`)){
+            let removeData={
+                groupIdentity,memberId
+            }
+            fetch(`http://localhost:5000/api/v1/remove-group-member/`,{
+                method:"POST",
+                mode:'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Credentials":true
+                },
+                body: JSON.stringify(removeData)
+            })
+            .then(resp=> {
+                if(resp.status=="200"){
+                    return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                    .then(rsp=>rsp.json())
+                    .then(data=>{
+                        setGroupMembers(data.membership);
+                        return fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                        .then(rsp=>rsp.json())
+                        .then(data=>{
+                            //console.log(data);
+                            setNonGroupMembers(data.members);
+                            alert(`You have removed ${memberName} from the groupchat.`);
+                        })
+                    })
+                }
+            });
+        }
+    };
 
     return(
         <>
@@ -354,9 +433,9 @@ const Groupinboxmessage= ({userSession}) => {
                             <>
                                 {
                                     nonGroupMembers.map(member =>
-                                        <div className="row" key={member.serial_no} style={{borderBotton:'1px solid gold'}}>
+                                        <div className="row" key={member.serial_no}>
                                             <div className="col-12 py-2">
-                                                <p>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <input type='checkbox' className='form-check-input float-end' onClick={
+                                                <p>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <input type='checkbox' className='selectPossibleMember form-check-input float-end' onClick={
                                                 
                                                 (
                                                     newMembers.includes(member.dev_id)
@@ -400,46 +479,40 @@ const Groupinboxmessage= ({userSession}) => {
                 <div className="row offcanvas-body">
                     <div className="col-12">
                     {   
-                        (nonGroupMembers.length==0 || typeof nonGroupMembers==='string')
+                        (typeof groupMembers === 'string')
                         ?
                         (
                             <div className="row align-items-center" style={{minHeight:'400px'}}>
                                 <div className="col">
-                                <h4 className="text-center" style={{color:"grey"}}>No Friends Missing in Group.</h4>
+                                    <h6 className="text-center" style={{color:"grey"}}>Loading...</h6>
                                 </div>
                             </div>
                         ):(
                             <>
                                 {
-                                    nonGroupMembers.map(member =>
-                                        <div className="row" key={member.serial_no} style={{borderBotton:'1px solid gold'}}>
-                                            <div className="col-12 py-2">
-                                                <p>{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <input type='checkbox' className='form-check-input float-end' onClick={
-                                                
-                                                (
-                                                    newMembers.includes(member.dev_id)
-                                                )
-                                                ?
-
-                                                (
-                                                    ()=>setNewMembers(newMembers => newMembers.filter(newMember=>newMember!== member.dev_id))
-                                                )
-
-                                                : 
-                                                (
-                                                    ()=>setNewMembers(newMembers => newMembers.concat(member.dev_id))
-                                                )
-                                            
-                                                }/></p>
+                                    groupMembers.map(member =>{
+                                        if(member.dev_id==userSession){
+                                            return <div className="row" key={member.dev_id}>
+                                                <div className="col-12 py-2">
+                                                    <p className="py-2">You</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )
+                                        }
+                                        else{
+                                            return <div className="row" key={member.dev_id}>
+                                                <div className="col-12 py-2">
+                                                    <p className="py-2">
+                                                        {member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)}
+                                                        <button className="btn btn-warning btn-sm float-end" onClick={()=>removeMember(member.dev_id, member.dev_nickname)}>
+                                                            <i className="fa-solid fa-trash text-danger">
+                                                            </i>
+                                                        </button>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    })
                                 }
-                                <div>
-                                    <button className="btn btn-outline-warning float-end" style={{borderRadius:"50%"}}  onClick={addMembers}>
-                                        <i className="fa-solid fa-arrow-right"></i>
-                                    </button>
-                                </div>
                             </>
                         )
                     }

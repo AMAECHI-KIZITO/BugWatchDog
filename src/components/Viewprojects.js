@@ -12,7 +12,7 @@ const Viewprojects=({userSession})=>{
         .then(data=>{
             setAllDevProjects(data.dev_projects);
         })
-    },[])
+    },[]);
 
     
     return(

@@ -18,7 +18,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
             let feedback=Object.values(api_data);
             setSpecificProject(feedback);
         })
-    },[])
+    },[]);
    
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/get-project-bugs/${projectId}/`)
@@ -27,11 +27,11 @@ const ViewSingleProjectBugs= ({userSession}) => {
             setSpecificProjectBugs(data.bugRecords);
             setLoadData("loaded");
         })
-    },[])
+    },[]);
 
     let bugData={
         updateBugId
-    }
+    };
 
     const handleUpdate=(event)=>{
         event.preventDefault();
@@ -59,7 +59,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
                 })
             }
         })
-    }
+    };
 
 
     return(

@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router-dom";
 
 
 const SingleProject= ({userSession}) => {
-    const {projectId} = useParams()
-    const[specificProject, setSpecificProject]=useState([])
-    const[loadData, setLoadData]=useState("loading")
+    const {projectId} = useParams();
+    const[specificProject, setSpecificProject]=useState([]);
+    const[loadData, setLoadData]=useState("loading");
 
     useEffect( ()=>{
         fetch(`http://localhost:5000/api/v1/find/project/?projectId=${projectId}`)
@@ -16,7 +16,7 @@ const SingleProject= ({userSession}) => {
             setSpecificProject(feedback);
             setLoadData("loaded");
         })
-    },[])
+    },[]);
 
 
 

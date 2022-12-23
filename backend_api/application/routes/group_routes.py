@@ -122,8 +122,12 @@ def add_group_members():
         
         #Add the chosen members
         for person in group_selected_members:
-            new_member=Group_Members(chat_group_id=group_id, member=person, date_added=date.today())
-            db.session.add(new_member)
+            person_membership=Group_Members.query.filter(Group_Members.chat_group_id==group_id, Group_Members.member==person).first()
+            if person_membership == None:
+                new_member=Group_Members(chat_group_id=group_id, member=person, date_added=date.today())
+                db.session.add(new_member)
+            else:
+                pass
         db.session.commit()
         
         return {'status':True, "message":"Members Added"}
@@ -310,3 +314,20 @@ def fetch_unadded_members():
         return {"status":True,"members":friends_records}
     else:
         return {"status":True,"members":"No new members to add."}
+
+# Remove group member
+@app.route('/api/v1/remove-group-member/', methods=["POST"])
+def remove_group_member():
+    data=request.get_json()
+    
+    group_identity=data.get("groupIdentity")
+    developer_to_remove=data.get("memberId")
+    
+    the_group = Chatgroups.query.filter(Chatgroups.group_identifier==group_identity).first()
+    the_group_id = the_group.group_id
+    
+    get_dev_record=Group_Members.query.filter(Group_Members.chat_group_id==the_group_id, Group_Members.member==developer_to_remove).first()
+    
+    db.session.delete(get_dev_record)
+    db.session.commit()
+    return{"status":True, "message":"Member Deleted!"}
