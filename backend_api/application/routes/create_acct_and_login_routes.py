@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from application import app, mail
 from application.models import *
 
-serializer=URLSafeTimedSerializer('sscewykbsxnfhqhv')
+s=URLSafeTimedSerializer('sscewykdfsFbsxnfhqhv')
 
 # Check if email availability
 @app.route('/api/v1/check_email_availability/')
@@ -44,11 +44,14 @@ def register_user():
             db.session.add(newUser)
             db.session.commit()
             
-            token = serializer.dumps(email, salt='email_confirm')
-            confirm_email_link = url_for(confirm_email, token=token, external=True)
+            token = s.dumps(email, salt='email-confirm')
             
-            msg = Message("Verify your account",sender=('Debugger', 'konkakira1960@gmail.com'), recipients=[f"{email}"])
-            msg.html = render_template('confirm_email.html', token=token)
+            
+            msg = Message("Confirm Email", sender=('Debugger', 'konkakira1960@gmail.com'), recipients=[email])
+            email_link = url_for('confirm_email', token=token, _external=True)
+            
+            msg.body = f"WELCOME TO DEBUGGER\n\nTo confirm your email address click here {email_link}\n\nIf you do not recognize this email please ignore.\n\nWarm Regards\nThe Debugger Team."
+            #msg.html = render_template('confirm_email.html', token=token)
             mail.send(msg)
             
             
@@ -69,12 +72,19 @@ def register_user():
 @app.route('/api/v1/confirm-email/<token>')
 def confirm_email(token):
     try:
-        email=serializer.loads(token, salt='email_confirm', max_age=120)
-        return 'it works'
+        email=s.loads(token, salt='email-confirm', max_age=120)
+        checking_email=db.session.query(User).filter(User.user_email==email).first()
+        if checking_email:
+            checking_email.confirm_email='True'
+            db.session.commit()
+            return 'Email Confirmed'
     except SignatureExpired:
         return 'Token expired'
     except BadTimeSignature:
         return 'Invalid token'
+    
+    
+    
     
 # Login User
 @app.route('/api/v1/login-user/')
