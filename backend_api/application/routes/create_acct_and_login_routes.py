@@ -1,7 +1,11 @@
-from flask import jsonify,request
+from flask import jsonify,request, render_template, url_for
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 from werkzeug.security import generate_password_hash,check_password_hash
-from application import app
+from application import app, mail
 from application.models import *
+
+serializer=URLSafeTimedSerializer('sscewykbsxnfhqhv')
 
 # Check if email availability
 @app.route('/api/v1/check_email_availability/')
@@ -40,6 +44,14 @@ def register_user():
             db.session.add(newUser)
             db.session.commit()
             
+            token = serializer.dumps(email, salt='email_confirm')
+            confirm_email_link = url_for(confirm_email, token=token, external=True)
+            
+            msg = Message("Verify your account",sender=('Debugger', 'konkakira1960@gmail.com'), recipients=[f"{email}"])
+            msg.html = render_template('confirm_email.html', token=token)
+            mail.send(msg)
+            
+            
             return jsonify({
                 "message":"Registration Successful"
             })
@@ -52,6 +64,17 @@ def register_user():
             "message":"Registration Failed. Incomplete Form Data"
         })
     
+
+# confirm email
+@app.route('/api/v1/confirm-email/<token>')
+def confirm_email(token):
+    try:
+        email=serializer.loads(token, salt='email_confirm', max_age=120)
+        return 'it works'
+    except SignatureExpired:
+        return 'Token expired'
+    except BadTimeSignature:
+        return 'Invalid token'
     
 # Login User
 @app.route('/api/v1/login-user/')

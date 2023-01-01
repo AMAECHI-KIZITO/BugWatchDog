@@ -10,7 +10,8 @@ class User(db.Model):
     user_stack=db.Column(db.Integer(), db.ForeignKey("techstack.stack_id"))
     user_email=db.Column(db.String(80), nullable=False, unique=True)
     user_pswd=db.Column(db.String(200),nullable=False)
-    date_reg=db.Column(db.DateTime(), nullable=False, default=date.today())
+    confirm_email = db.Column(db.Enum("False",'True',), nullable=False, default='False')
+    date_reg=db.Column(db.Date(), nullable=False, default=date.today())
     
     
 class Project(db.Model):

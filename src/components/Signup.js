@@ -58,7 +58,7 @@ const Signup = ()=>{
             return;
         }
         else if (emailcheck != "Email Is Available"){
-            alert("This email is already in use");
+            //alert("This email is already in use");
             return;
         } 
         
@@ -132,7 +132,14 @@ const Signup = ()=>{
                             <span className="input-group-text"><i className="fa-solid fa-envelope"></i></span>
                             <input type='email' className="form-control py-2" name="emailAddressRegistration" id="emailAddressRegistration" placeholder="Email address" onChange={setemail}/>
                         </div>
-                        <p style={{fontSize:'12px'}}>{emailcheck}</p>
+                        {
+                            emailcheck == 'Email Already Registered'
+                            ?
+                            <p style={{fontSize:'15px', color:'red'}}>{emailcheck}</p>
+                            :
+                            <p style={{fontSize:'15px', color:'greenyellow'}}>{emailcheck}</p>
+                        }
+                        
 
                         <div className="input-group mb-2">
                             <span className="input-group-text"><i className="fa-solid fa-lock"></i></span>

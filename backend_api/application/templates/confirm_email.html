@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{%block title%}Weddings by Rexx - Home{%endblock%}</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.css')}}">
+        <style type="text/css">
+            
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            
+            {% block content %}
+            <header>
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="text-center">
+                            Welcome to DEBUGGER
+                        </h3>
+                        <p>Click the button below to confirm your email.</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Message body-->
+            <section>
+                <div class='row'>
+                    <div class="col-12">
+                        <a href={{url_for("confirm_email", token=token, external=True)}} class="btn btn-warning btn-lg">
+                            Verify Email
+                        </a> <br/>
+                        <p>If you didn't request a sign up, please ignore this email.</p>
+                        <p>Yours truly,</p>
+                        <p>Debugger.</p>
+                    </div>
+                </div>
+            </section>
+
+            {% endblock content %}
+
+
+            
+        </div>
+    </body>
+</html>

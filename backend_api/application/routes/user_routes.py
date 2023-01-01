@@ -4,11 +4,6 @@ from application import app
 from application.models import *
 
 
-@app.route('/api/v1/sampleapi/')
-def test_backend():
-    return {
-        "members":["Amaechi","Sandra","Cynthia","Chinedu 69rc","Iyovwaro Mary"]
-    }
 
 # get dashboard statistics
 @app.route('/api/v1/get_dashboard_numbers/')

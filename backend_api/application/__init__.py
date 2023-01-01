@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_mail import Mail
 from application import config
 from flask_cors import CORS,cross_origin
 
@@ -16,6 +17,17 @@ CORS(app, supports_credentials=True, resources={
 
 app.config.from_pyfile("config.py")
 app.config.from_object(config.ApplicationSettings)
+
+mail=Mail(app)
+app.config['TESTING'] = False
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'konkakira1960@gmail.com'
+app.config['MAIL_PASSWORD'] = 'sscewykbsxnfhqhv'
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_SUPPRESS_SEND '] = False
+mail=Mail(app)
+
 db=SQLAlchemy(app)
 
 migrate=Migrate(app,db)
