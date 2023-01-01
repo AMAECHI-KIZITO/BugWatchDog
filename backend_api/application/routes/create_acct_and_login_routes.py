@@ -77,7 +77,7 @@ def confirm_email(token):
         if checking_email:
             checking_email.confirm_email='True'
             db.session.commit()
-            return 'Email Confirmed'
+            return 'Email Successfully Verified'
     except SignatureExpired:
         return 'Token expired'
     except BadTimeSignature:
