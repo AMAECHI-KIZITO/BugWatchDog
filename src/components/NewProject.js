@@ -49,7 +49,7 @@ function Newproject({userSession}){
       body: JSON.stringify(projectData)
     })
     .then(resp=> {
-      if(resp.status=="200"){
+      if(resp.status >=  200 && resp.status <=299){
         alert('Project Added');
         navigate("/dashboard")
       }

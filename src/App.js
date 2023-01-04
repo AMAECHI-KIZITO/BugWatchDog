@@ -22,7 +22,9 @@ import Newgroup from "./components/NewGroup";
 import GroupInbox from "./components/GroupInbox";
 import Sharedgroupinboxlayout from "./components/Sharedgroupinboxlayout";
 import Groupinboxmessage from "./components/Groupinboxmessages";
-
+import ExpiredToken from "./components/TokenExpired";
+import InvalidToken from "./components/InvalidToken";
+import ValidatedAccount from "./components/ValidatedAccount";
 
 function App(){
   const [user, setUser]=useState(null)
@@ -40,6 +42,12 @@ function App(){
           <Route path="sharedlayout" element={ <SharedDashboardLinks/> } />
 
           <Route path="*" element={ <Error/> } />
+
+          <Route path="/token-expired/:gmail" element={ <ExpiredToken/> } />
+
+          <Route path="/invalid-token/:gmail" element={ <InvalidToken/> } />
+
+          <Route path="/account-verified" element={ <ValidatedAccount/> } />
 
           
           <Route path='dashboard' element={ 

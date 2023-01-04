@@ -49,7 +49,7 @@ function Newgroup({userSession}){
                 body: JSON.stringify(membersData)
             })
             .then(resp=> {
-                if(resp.status=="200"){
+                if(resp.status >=  200 && resp.status <=299){
                     alert(`Members Successfully Added to ${groupDetails.name} Group.`);
                     navigate("/dashboard/groupinbox")
                 }

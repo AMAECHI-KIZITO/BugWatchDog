@@ -7,6 +7,18 @@ function Error(){
     document.title='Debugger - Error 404';
     return(
         <>
+            <div className="row">
+                <div className="col-12">
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div className="container-fluid">
+                            <a className="navbar-brand">DEBUGGER <i className="fa-solid fa-bugs"></i></a>
+                            <button className='btn btn-success btn-lg float-end d-md-none' type="button" data-bs-toggle="offcanvas" data-bs-target="#debuggerAppLinks" aria-controls="debuggerAppLinks" style={{backgroundColor:"gold"}}>
+                                <i className="fa-solid fa-bars"></i>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </div>
             
             <div className="row error404">
                 <div className="col-12"></div>

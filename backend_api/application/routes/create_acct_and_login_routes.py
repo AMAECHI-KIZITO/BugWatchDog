@@ -1,4 +1,4 @@
-from flask import jsonify,request, render_template, url_for
+from flask import jsonify,request, render_template, url_for, redirect
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -50,7 +50,7 @@ def register_user():
             msg = Message("Confirm Email", sender=('Debugger', 'konkakira1960@gmail.com'), recipients=[email])
             email_link = url_for('confirm_email', token=token, _external=True)
             
-            msg.body = f"WELCOME TO DEBUGGER\n\nTo confirm your email address click here {email_link}\n\nIf you do not recognize this email please ignore.\n\nWarm Regards\nThe Debugger Team."
+            msg.body = f"WELCOME TO DEBUGGER\n\nTo confirm your email address click here {email_link}\n\nIf you do not recognize this email please ignore.\n\nKeep Debugging,\nThe Debugger Team."
             #msg.html = render_template('confirm_email.html', token=token)
             mail.send(msg)
             
@@ -77,11 +77,11 @@ def confirm_email(token):
         if checking_email:
             checking_email.confirm_email='True'
             db.session.commit()
-            return 'Email Successfully Verified'
+            return redirect(f'https://my-app-name.com/account-verified')
     except SignatureExpired:
-        return 'Token expired'
+        return redirect(f'https://my-app-name.com/token-expired/{email}')
     except BadTimeSignature:
-        return 'Invalid token'
+        return redirect('https://my-app-name.com/invalid-token')
     
     
     
@@ -106,3 +106,25 @@ def login_user():
             return {"status":False,"message":"Invalid Credentials"} 
     else:
         return {"status":False, "message":"User Not Found"} 
+
+
+# Resend Verification Link
+@app.route('/api/v1/resend-verification-link/', methods=['POST'])
+def reverify_email():
+    data=request.get_json()
+    account_email=data.get("gmail")
+    
+    
+    token = s.dumps(account_email, salt='email-confirm')
+
+    msg = Message("Confirm Email", sender=('Debugger', 'konkakira1960@gmail.com'), recipients=[account_email])
+    email_link = url_for('confirm_email', token=token, _external=True)
+            
+    msg.body = f"WELCOME TO DEBUGGER\n\nTo confirm your email address click here {email_link}\n\nIf you do not recognize this email please ignore.\n\nKeep Debugging,\nThe Debugger Team."
+    #msg.html = render_template('confirm_email.html', token=token)
+    mail.send(msg)
+            
+            
+    return jsonify({
+        "message":"Verication Link Sent"
+    })

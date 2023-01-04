@@ -46,7 +46,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
             body: JSON.stringify(bugData)
         })
         .then( resp=> {
-            if(resp.status=="200"){
+            if(resp.status >=  200 && resp.status <=299){
                 alert('Bug Status Updated');
                 document.getElementById("closeUpdateModal").click();
 

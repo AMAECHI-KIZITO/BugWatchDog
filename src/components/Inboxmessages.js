@@ -68,7 +68,7 @@ const Inboxmessage= ({userSession}) => {
             body: JSON.stringify(messageData)
         })
         .then(resp=> {
-            if(resp.status=="200"){
+            if(resp.status >=  200 && resp.status <=299){
                 setMsgStatus(1);
                 document.getElementById("writeMessage").value="";
             }

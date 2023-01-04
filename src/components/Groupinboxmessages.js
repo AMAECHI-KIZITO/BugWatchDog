@@ -115,7 +115,7 @@ const Groupinboxmessage= ({userSession}) => {
                 body: JSON.stringify(membersData)
             })
             .then(resp=> {
-                if(resp.status=="200" && newMembers.length==1){
+                if(resp.status >=  200 && resp.status <=299 && newMembers.length==1){
                     fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
                     .then(rsp=>rsp.json())
                     .then(data=>{

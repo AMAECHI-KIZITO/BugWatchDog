@@ -81,7 +81,7 @@ const Signup = ()=>{
             body: JSON.stringify(regData)
         })
         .then( resp =>{
-            if(resp.status==200){
+            if(resp.status >=  200 && resp.status <=299){
                 setSignupresp("Registration Successful")
                 window.location.href="/"
             }
