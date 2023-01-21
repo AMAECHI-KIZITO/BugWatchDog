@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 
 function InvalidToken(){
+    document.title = 'Account Validation Failed';
     const {gmail} = useParams();
 
 

@@ -64,7 +64,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
 
     return(
         <>
-            <h2 style={{color:"gold"}}>
+            <h3 style={{color:"gold"}}>
                 <span className="float-start me-3">
                     <Link to={`/dashboard/myprojects/${projectId}`}>
                         <button className="btn btn-warning btn-sm ms-1">
@@ -73,7 +73,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
                     </Link>
                 </span>
                 {specificProject[3]} Bugs
-            </h2> <hr/>
+            </h3> <hr/>
 
             
             {

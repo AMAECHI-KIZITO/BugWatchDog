@@ -2,7 +2,7 @@ import React from "react";
 
 
 function ValidatedAccount(){
-
+    document.title = 'Account Validated';
 
     const directUserToLogin = () => {
         window.location.href="http://localhost:3000/"

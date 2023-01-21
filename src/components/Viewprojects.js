@@ -38,16 +38,16 @@ const Viewprojects=({userSession})=>{
                                             <tr>
                                                 <th>S/N</th>
                                                 <th>Name</th>
-                                                <th>Description</th>
+                                                {/* <th>Description</th> */}
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {Object.values(allDevProjects).map(creation=> 
-                                                <tr>
+                                                <tr key={creation.serial_no}>
                                                     <td key={creation.serial_no}>{creation.serial_no}</td>
                                                     <td key={creation.project_name}>{creation.project_name}</td>
-                                                    <td key={creation.project_description}>{creation.project_description}</td>
+                                                    {/* <td key={creation.project_description}>{creation.project_description}</td> */}
                                                     <td key={`viewProject${creation.project_id}`}>
                                                         <Link to={`/dashboard/myprojects/${creation.project_id}`}>
                                                             <button className="btn btn-sm btn-warning">View</button>
