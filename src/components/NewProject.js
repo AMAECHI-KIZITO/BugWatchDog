@@ -7,7 +7,7 @@ function Newproject({userSession}){
   const [projectname, setProjectName]=useState(null);
   const [projectsummary, setProjectSummary]=useState(null);
   const [userId, setUserId]=useState(null);
-  document.title='Debugger - Create Project';
+  document.title='BugWatch - Create Project';
 
 
   const nameProject=(event)=>{
@@ -38,22 +38,21 @@ function Newproject({userSession}){
       projectname,projectsummary,userId
     }
 
-    fetch("http://localhost:5000/api/v1/createnewproject/",{
+    fetch("https://bugwatch.com.ng/api/v1/createnewproject/",{
       method:"POST",
       mode:'cors',
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin":"http://localhost:5000/",
+        "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
         "Access-Control-Allow-Credentials":true
       },
       body: JSON.stringify(projectData)
     })
-    .then(resp=> {
-      if(resp.status >=  200 && resp.status <=299){
-        alert('Project Added');
-        navigate("/dashboard")
-      }
-    })
+    .then(response => response.json())
+    .then(data => {
+      alert('Project Added');
+      navigate("/dashboard");
+    });
   }
 
 

@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 
 const Signup = ()=>{
-    
+    const navigate=useNavigate();
+
     const [fname, setFname] = useState(null);
     const [lname, setLname] = useState(null);
     const [nickname, setNickname] = useState(null);
     const [regemail, setRegemail] = useState("");
     const [pswd, setPswd] = useState(null);
     const[signupresp, setSignupresp]=useState(null);
-    const[emailcheck,setEmailcheck]=useState(null);
     const [developerStack, setDeveloperStack]=useState('#');
     const [techstack, setTechstack]=useState([]);
-    document.title='Debugger - Sign Up';
+    document.title='BugWatch - Sign Up';
     
 
 
@@ -23,31 +23,19 @@ const Signup = ()=>{
     const setemail = (event) => {setRegemail(event.target.value)};
     const chooseTechnology=(event)=>setDeveloperStack(event.target.value);
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/tech-stacks`)
+        fetch(`https://bugwatch.com.ng/api/v1/tech-stacks`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setTechstack(data.stacks);
         })
     },[]);
     
-    const checkEmailAvailability = ()=>{
-        if(regemail != ""){
-            fetch(`http://localhost:5000/api/v1/check_email_availability/?email=${regemail}`)
-            .then(resp=> resp.json())
-            .then(data=>{
-                let feedback=data;
-                let Reply=Object.values(feedback);
-                    
-                setEmailcheck(Reply);
-            })
-        }
-        return;
-    };
+    
 
 
     const registerUser= (event)=>{
         event.preventDefault();
-        checkEmailAvailability();
+        
         
         if(!fname || !lname || !nickname || !pswd || regemail==""){ 
             alert("Fill out all fields");
@@ -57,11 +45,6 @@ const Signup = ()=>{
             alert("Invalid choice of stack");
             return;
         }
-        else if (emailcheck != "Email Is Available"){
-            //alert("This email is already in use");
-            return;
-        } 
-        
         let regData={
             fname,
             lname,
@@ -70,22 +53,27 @@ const Signup = ()=>{
             pswd,
             developerStack
         }
-        fetch("http://localhost:5000/api/v1/registeruser/", {
+        fetch("https://bugwatch.com.ng/api/v1/registeruser/", {
             method:"POST",
             mode:'cors',
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                 "Access-Control-Allow-Credentials":true
             },
             body: JSON.stringify(regData)
         })
-        .then( resp =>{
-            if(resp.status >=  200 && resp.status <=299){
-                setSignupresp("Registration Successful")
-                window.location.href="/"
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.message == "Registration Successful"){
+                setSignupresp("Registration Successful. An activation link has been sent to your email");
+                document.getElementById("resetForm").click();
             }
-        })
+            else{
+                setSignupresp(data.message);
+            }
+        });
     };
 
 
@@ -97,9 +85,22 @@ const Signup = ()=>{
         <>
             <div className="row signUp">
                 <div className="col-md-6 offset-md-3">
-                    <h1 className="text-center" id="signUpHeader">Sign up To DEBUGGER</h1>
-                    <h6>Note: Click proceed when the email notification changes to <span id="emailFeedback">Email is available</span></h6><br/>
-                    <h4 className="text-center" style={{color:"green"}}>{signupresp}</h4>
+                    <h1 className="text-center mb-5 mt-3" id="signUpHeader">Sign up To BUGWATCH</h1>
+
+                    {
+                        signupresp == null
+                        ?
+                        <h5></h5>
+                        :
+                        (signupresp == 'Registration Successful. An activation link has been sent to your email'?<h5 className="text-center text-success alert alert-success">{signupresp}</h5>
+                        :
+                        (signupresp == 'This email has already been registered. Try again' || signupresp == 'Registration Failed. Incomplete Form Data' 
+                        ?
+                        <h5 className="text-center text-danger alert alert-danger">{signupresp}</h5>
+                        :
+                        <h5></h5>
+                        ))
+                    }
 
                     <form onSubmit={registerUser}>
 
@@ -132,15 +133,7 @@ const Signup = ()=>{
                             <span className="input-group-text"><i className="fa-solid fa-envelope"></i></span>
                             <input type='email' className="form-control py-2" name="emailAddressRegistration" id="emailAddressRegistration" placeholder="Email address" onChange={setemail}/>
                         </div>
-                        {
-                            emailcheck == 'Email Already Registered'
-                            ?
-                            <p style={{fontSize:'15px', color:'red'}}>{emailcheck}</p>
-                            :
-                            <p style={{fontSize:'15px', color:'greenyellow'}}>{emailcheck}</p>
-                        }
                         
-
                         <div className="input-group mb-2">
                             <span className="input-group-text"><i className="fa-solid fa-lock"></i></span>
                             <input type='password' className="form-control py-2" name="password" id="password" placeholder="Enter password" onChange={setpswd}/>
@@ -149,6 +142,9 @@ const Signup = ()=>{
                         <div>
                             <button className="btn btn-success float-end">Proceed</button>
                         </div>
+                        <div>
+                            <button className="btn btn-success d-none" type='reset' id='resetForm'>Reset</button>
+                        </div> 
                     </form>
                 </div><br/>
 

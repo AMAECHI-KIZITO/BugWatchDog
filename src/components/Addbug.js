@@ -9,11 +9,11 @@ function Addbug({userSession}){
     const [affectedProject, setAffectedProject] = useState("#");
     const [codeSnippet, setCodeSnippet] = useState('');
     const [codeImageExt, setCodeImageExt] = useState('');
-    document.title='Debugger - Add Bug';
+    document.title='BugWatch - Add Bug';
 
     //get existing projects
     useEffect(() => {
-        fetch(`http://localhost:5000/api/v1/fetch-user-projects/?userId=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/fetch-user-projects/?userId=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             let projectInformation=data;
@@ -28,29 +28,34 @@ function Addbug({userSession}){
     const submitBug=(event)=>{
         event.preventDefault();
         if(!bugDescription ||!affectedProject || affectedProject=="#"){
-            alert('One or more form data provided isn\'t valid. Please try again');
+            alert('Form data required');
             return;
         }
         let bugData={
             bugDescription,affectedProject
         }
 
-        fetch("http://localhost:5000/api/v1/create-new-bug/",{
+        fetch("https://bugwatch.com.ng/api/v1/create-new-bug/",{
             method:"POST",
             mode:'cors',
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                 "Access-Control-Allow-Credentials":true
             },
             body: JSON.stringify(bugData)
         })
-        .then(resp=> {
-            if(resp.status >=  200 && resp.status <=299){
-                alert('Bug Issue Created');
-                navigate("/dashboard")
-            }
-        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Bug Issue Created');
+            navigate("/dashboard");
+        });
+        // .then(resp=> {
+        //     if(resp.status >=  200 && resp.status <=299){
+        //         alert('Bug Issue Created');
+        //         navigate("/dashboard")
+        //     }
+        // })
     }
 
     

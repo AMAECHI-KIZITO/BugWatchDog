@@ -16,7 +16,7 @@ const Inboxmessage= ({userSession}) => {
     let receiver=msg;
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/inbox-details/${msg}/?loggedInDev=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/inbox-details/${msg}/?loggedInDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setSenderName(data.senderName[0].toUpperCase() + data.senderName.substring(1));
@@ -25,7 +25,7 @@ const Inboxmessage= ({userSession}) => {
     }, [msgStatus])
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-developer-profile/${msg}/`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-developer-profile/${msg}/`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setProfileData(data);
@@ -57,12 +57,12 @@ const Inboxmessage= ({userSession}) => {
         }
         
 
-        fetch("http://localhost:5000/api/v1/sendmessage/",{
+        fetch("https://bugwatch.com.ng/api/v1/sendmessage/",{
             method:"POST",
             mode:'cors',
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                 "Access-Control-Allow-Credentials":true
             },
             body: JSON.stringify(messageData)
@@ -98,9 +98,9 @@ const Inboxmessage= ({userSession}) => {
                             {specificMessage.map((msgRecord) =>
                                 {
                                     if(userSession==msgRecord.senderId){
-                                        return <div className='mb-4'><p  className="col-10 offset-2 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p> <p className="float-end" style={{fontSize:"8px"}} id="messageSentByMeTimeStamp">{msgRecord.timestamp}</p></div>
+                                        return <div className='mb-4' key={msgRecord.msgId}><p  className="col-10 offset-2 py-2 px-3" id="messageSentByMe">{msgRecord.message}</p> <p className="float-end" style={{fontSize:"8px"}} id="messageSentByMeTimeStamp">{msgRecord.timestamp}</p></div>
                                     }
-                                    return <><p className="col-10 py-2 px-3 ms-1" style={{color:"white"}} id="messageSentByThem">{msgRecord.message}</p> <p style={{fontSize:"8px"}} id="messageSentByThemTimeStamp" className='ms-1'>{msgRecord.timestamp}</p></>
+                                    return <><p className="col-10 py-2 px-3 ms-1" style={{color:"white"}} id="messageSentByThem" key={msgRecord.msgId}>{msgRecord.message}</p> <p style={{fontSize:"8px"}} id="messageSentByThemTimeStamp" className='ms-1'>{msgRecord.timestamp}</p></>
                                 }
                             )}
                         </div>

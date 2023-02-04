@@ -14,7 +14,7 @@ function Newgroup({userSession}){
     
     //get my friends
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-friends/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setMyFriends(data.developers);
@@ -23,7 +23,7 @@ function Newgroup({userSession}){
 
     //get group information
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-group-info/?groupId=${groupid}`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-group-info/?groupId=${groupid}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setGroupDetails(data.details[0]);
@@ -38,12 +38,12 @@ function Newgroup({userSession}){
             alert('No members selected');
             return;
         }else{
-            fetch("http://localhost:5000/api/v1/add-group-members/",{
+            fetch("https://bugwatch.com.ng/api/v1/add-group-members/",{
                 method:"POST",
                 mode:'cors',
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                     "Access-Control-Allow-Credentials":true
                 },
                 body: JSON.stringify(membersData)

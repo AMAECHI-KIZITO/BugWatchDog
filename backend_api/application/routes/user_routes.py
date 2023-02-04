@@ -36,8 +36,10 @@ def get_dashboard_stats():
                 project_outstanding_bugs= db.session.query(Bugsheet).filter(Bugsheet.bug_project==x, Bugsheet.bug_status=="Unsolved").count()
                 outstanding_bugs = outstanding_bugs + project_outstanding_bugs
             
-        
-        average_bugs = dev_total_projects/total_bugs
+        try:
+            average_bugs = dev_total_projects/total_bugs
+        except ZeroDivisionError:
+            average_bugs = 0
 
         return {
             "total_projects":f"{dev_total_projects}",

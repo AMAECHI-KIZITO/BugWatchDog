@@ -13,7 +13,7 @@ function Dashboard({userSession}){
 
   //Get developer statistics
   useEffect( () => {
-    fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
+    fetch(`https://bugwatch.com.ng/api/v1/get_dashboard_numbers/?userId=${userSession}`)
     .then( rsp => rsp.json())
     .then( data => {
       let statistics=data
@@ -27,7 +27,7 @@ function Dashboard({userSession}){
 
   //Getting unfriended developers
   useEffect( ()=> {
-    fetch(`http://localhost:5000/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
+    fetch(`https://bugwatch.com.ng/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
     .then(rsp=>rsp.json())
     .then(data=>{
       setAvailableDevelopers(data.developers);
@@ -37,7 +37,7 @@ function Dashboard({userSession}){
 
   //get friend requests
   useEffect( ()=> {
-    fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
+    fetch(`https://bugwatch.com.ng/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
     .then(rsp=>rsp.json())
     .then(data=>{
       setfriendrequest(data.developers);
@@ -124,10 +124,10 @@ function Dashboard({userSession}){
                         <td key={`message${dev.dev_id}`}>
                           <button className="btn btn-warning btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
 
-                            fetch(`http://localhost:5000/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${dev.dev_id}`)
+                            fetch(`https://bugwatch.com.ng/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${dev.dev_id}`)
                             .then( rsp => rsp.json())
                             .then( data => {
-                              fetch(`http://localhost:5000/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
+                              fetch(`https://bugwatch.com.ng/api/v1/get-unfriended-developers/?currentDev=${userSession}`)
                               .then(rsp=>rsp.json())
                               .then(data=>{
                                 setAvailableDevelopers(data.developers);
@@ -185,19 +185,19 @@ function Dashboard({userSession}){
                         <td key={`acceptRequest${dev.dev_id}`}>
                           <button className="btn btn-success btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
 
-                            fetch(`http://localhost:5000/api/v1/accept-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
+                            fetch(`https://bugwatch.com.ng/api/v1/accept-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
                             .then( rsp => rsp.json())
                             .then( data => {
                               alert(data.message);
 
-                              fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
+                              fetch(`https://bugwatch.com.ng/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
                               .then(rsp=>rsp.json())
                               .then(data=>{
                                 setfriendrequest(data.developers);
                                 setNumberOfFriendRequest(data.no_of_requests);
                               })
 
-                              fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
+                              fetch(`https://bugwatch.com.ng/api/v1/get_dashboard_numbers/?userId=${userSession}`)
                               .then( rsp => rsp.json())
                               .then( data => {
                                 let statistics=data
@@ -213,19 +213,19 @@ function Dashboard({userSession}){
                         <td key={`rejectRequest${dev.dev_id}`}>
                           <button className="btn btn-danger btn-sm" id={`btnSendRequest${dev.dev_id}`} onClick={()=>{
 
-                            fetch(`http://localhost:5000/api/v1/reject-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
+                            fetch(`https://bugwatch.com.ng/api/v1/reject-friend-request/?invitee=${userSession}&invited=${dev.dev_id}`)
                             .then( rsp => rsp.json())
                             .then( data => {
                               alert(data.message);
                               
-                              fetch(`http://localhost:5000/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
+                              fetch(`https://bugwatch.com.ng/api/v1/retrieve-friend-requests/?currentDev=${userSession}`)
                               .then(rsp=>rsp.json())
                               .then(data=>{
                                 setfriendrequest(data.developers);
                                 setNumberOfFriendRequest(data.no_of_requests);
                               })
 
-                              fetch(`http://localhost:5000/api/v1/get_dashboard_numbers/?userId=${userSession}`)
+                              fetch(`https://bugwatch.com.ng/api/v1/get_dashboard_numbers/?userId=${userSession}`)
                               .then( rsp => rsp.json())
                               .then( data => {
                                 let statistics=data

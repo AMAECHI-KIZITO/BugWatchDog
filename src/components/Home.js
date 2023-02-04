@@ -1,17 +1,19 @@
-import React, {useState,useEffect} from "react";
-import {Link,useNavigate} from "react-router-dom";
+import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 
 
 
 function Home({setUser, setUserSession}){
+    document.title='BugWatch - Login';
+    const navigate = useNavigate();
+
     const [emailInput,setEmailInput]=useState(null);
     const [passwordInput, setPasswordInput]=useState(null);
-    document.title='Debugger - Login';
     const emailEntry = (event) => setEmailInput(event.target.value);
     const passwordEntry = (event) => setPasswordInput(event.target.value);
 
-    const navigate=useNavigate();
-
+    const [loginFeedback, setLoginFeedback] = useState(null);
+    
 
     //login user
     const loginUser=(event) => {
@@ -20,47 +22,49 @@ function Home({setUser, setUserSession}){
             alert("Fill out all fields");
             return;
         }
-        // const loginData={
-        //     emailInput, passwordInput
-        // }
+
+        const loginData={
+            emailInput, passwordInput
+        }
 
         
-        // fetch("http://localhost:5000/api/v1/login-user/", {
-        //     method:"POST",
-        //     mode:'cors',
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Access-Control-Allow-Origin":"http://localhost:5000/",
-        //         "Access-Control-Allow-Credentials":true
-        //     },
-        //     body: JSON.stringify(loginData)
-        // })
-        // .then( resp => {
-        //     console.log(resp)
-        // })
-
-
-        fetch(`http://localhost:5000/api/v1/login-user/?email=${emailInput}&password=${passwordInput}`)
-        .then( resp => resp.json())
-        .then( data =>{
+        fetch("https://bugwatch.com.ng/api/v1/login-user/", {
+            method:"POST",
+            mode:'cors',
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
+                "Access-Control-Allow-Credentials":true
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(response => response.json())
+        .then(data => {
             let logindata=data
             if(logindata.status==true){
                 setUser(logindata.dev_username);
                 setUserSession(logindata.sessionId);
                 navigate("/dashboard");
             }else{
-                alert("Incorrect credentials");
+                setLoginFeedback(logindata.message);
                 return;
             }
-        })
-        .catch(error => console.log(error))
+            
+        });
     }
 
     return(
         <>
             <div className="row homeWelcome">
                 <div className="col-md-6 offset-md-3">
-                    <h1 className="text-center" id="welcomeMessage">Welcome To DEBUGGER</h1>
+                    <h1 className="text-center" id="welcomeMessage">Welcome To BUGWATCH</h1>
+                    {
+                        loginFeedback == null
+                        ?
+                        <h5></h5>
+                        :
+                        <h5 className="text-center text-danger alert alert-danger">{loginFeedback}</h5>
+                    }
                     <form onSubmit={loginUser}>
                         <div className="input-group mb-2">
                             <span className="input-group-text"><i className="fa-solid fa-envelope"></i></span>

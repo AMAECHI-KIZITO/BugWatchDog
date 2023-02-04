@@ -11,7 +11,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
     document.title='Debugger - View Project Bugs';
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/find/project/?projectId=${projectId}`)
+        fetch(`https://bugwatch.com.ng/api/v1/find/project/?projectId=${projectId}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             let api_data=data.dev_projects[0];
@@ -21,7 +21,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
     },[]);
    
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-project-bugs/${projectId}/`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-project-bugs/${projectId}/`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setSpecificProjectBugs(data.bugRecords);
@@ -35,12 +35,12 @@ const ViewSingleProjectBugs= ({userSession}) => {
 
     const handleUpdate=(event)=>{
         event.preventDefault();
-        fetch("http://localhost:5000/api/v1/update-bug-status/",{
+        fetch("https://bugwatch.com.ng/api/v1/update-bug-status/",{
             method:"POST",
             mode:'cors',
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                 "Access-Control-Allow-Credentials":true
             },
             body: JSON.stringify(bugData)
@@ -50,7 +50,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
                 alert('Bug Status Updated');
                 document.getElementById("closeUpdateModal").click();
 
-                fetch(`http://localhost:5000/api/v1/get-project-bugs/${projectId}/`)
+                fetch(`https://bugwatch.com.ng/api/v1/get-project-bugs/${projectId}/`)
                 .then(rsp=>rsp.json())
                 .then(data=>{
                     setSpecificProjectBugs(data.bugRecords);

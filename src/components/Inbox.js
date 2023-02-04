@@ -9,11 +9,11 @@ const Inbox=({userSession})=>{
     const [sendersIdentityNumber, setSendersIdentityNumber]=useState([]);
     const [myInbox, setMyInbox]=useState([]);
     const [timeDelivered, setTimeDelivered]=useState([]);
-    document.title='Debugger - Personal Inbox';
+    document.title='BugWatch - Personal Inbox';
 
     //getting the inbox
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/inbox/?devId=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/inbox/?devId=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             if(data.status!=false){
@@ -29,7 +29,7 @@ const Inbox=({userSession})=>{
     
     //Get my friends
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-friends/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setAvailableDevelopers(data.developers);
@@ -63,7 +63,7 @@ const Inbox=({userSession})=>{
                                             <>
                                                 <Link to={`/dashboard/inbox/${sendersIdentityNumber[key]}`} style={{textDecoration:'None'}}  key={key}>
                                                     <div className="row mb-1" style={{color:"white"}}>
-                                                        <div classname="col-12">
+                                                        <div className="col-12">
                                                             <div className="float-start mx-2">
                                                                 <i className="fa-solid fa-user text-warning float-start fa-3x me-2"></i>
                                                             </div>

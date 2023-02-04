@@ -9,12 +9,12 @@ function Creategroup({userSession}){
     const [groupName, setGroupName]=useState(null);
     const [groupBio, setGroupBio]=useState(null);
     const [userId, setUserId]=useState(userSession);
-    document.title='Debugger - Create Group';
+    document.title='BugWatch - Create Group';
 
     
     //get my friends
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-friends/?currentDev=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-friends/?currentDev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setMyFriends(data.developers);
@@ -47,7 +47,7 @@ function Creategroup({userSession}){
         return;
         }  
 
-        fetch(`http://localhost:5000/api/v1/create-group/?groupName=${groupName}&groupBio=${groupBio}&groupFounder=${userId}&uniqueId=${rString}`)
+        fetch(`https://bugwatch.com.ng/api/v1/create-group/?groupName=${groupName}&groupBio=${groupBio}&groupFounder=${userId}&uniqueId=${rString}`)
         .then(rsp=>rsp.json())
         .then(data=> {
             navigate(`/dashboard/creategroup/${data.group_id}/add-members`)

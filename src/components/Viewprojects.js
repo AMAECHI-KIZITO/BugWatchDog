@@ -4,10 +4,10 @@ import { Link } from "react-router-dom"
 
 const Viewprojects=({userSession})=>{
     const [allDevProjects, setAllDevProjects]=useState([]);
-    document.title='Debugger - View Project';
+    document.title='BugWatch - View Project';
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/view-projects/${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/view-projects/${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setAllDevProjects(data.dev_projects);

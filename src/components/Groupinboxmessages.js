@@ -28,7 +28,7 @@ const Groupinboxmessage= ({userSession}) => {
     
     //Get friends that have not been added to the group
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+        fetch(`https://bugwatch.com.ng/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             //console.log(data);
@@ -38,7 +38,7 @@ const Groupinboxmessage= ({userSession}) => {
     
     // get group data information
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/group-inbox-messages/?dev=${userSession}&grpID=${groupIdentity}`)
+        fetch(`https://bugwatch.com.ng/api/v1/group-inbox-messages/?dev=${userSession}&grpID=${groupIdentity}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             let the_data = Object.values(data.group_info[0]);
@@ -46,7 +46,7 @@ const Groupinboxmessage= ({userSession}) => {
             //console.log(data);
             setLoadData('Loaded');
             setGroupData(the_data);
-            setCurrentGroupId(the_data[2]);
+            setCurrentGroupId(the_data[3]);
             setGroupChatData(data.chat_history);
             document.title=the_data[4];
         })
@@ -54,7 +54,7 @@ const Groupinboxmessage= ({userSession}) => {
 
     // get group Membership information
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             //console.log(data);
@@ -77,22 +77,21 @@ const Groupinboxmessage= ({userSession}) => {
         }
         
 
-        fetch("http://localhost:5000/api/v1/send-group-message/",{
+        fetch("https://bugwatch.com.ng/api/v1/send-group-message/",{
             method:"POST",
             mode:'cors',
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin":"http://localhost:5000/",
+                "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                 "Access-Control-Allow-Credentials":true
             },
             body: JSON.stringify(messageData)
         })
-        .then(resp=> {
-            if(resp.status=="200"){
-                setMsgStatus(1);
-                document.getElementById("writeMessage").value="";
-            }
-        })
+        .then(response => response.json())
+        .then(data => {
+            setMsgStatus(1);
+            document.getElementById("writeMessage").value="";
+        });
     };
 
     //add new members to the group
@@ -104,25 +103,25 @@ const Groupinboxmessage= ({userSession}) => {
             alert('No members selected');
             return;
         }else{
-            fetch("http://localhost:5000/api/v1/add-group-members/",{
+            fetch("https://bugwatch.com.ng/api/v1/add-group-members/",{
                 method:"POST",
                 mode:'cors',
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                     "Access-Control-Allow-Credentials":true
                 },
                 body: JSON.stringify(membersData)
             })
             .then(resp=> {
                 if(resp.status >=  200 && resp.status <=299 && newMembers.length==1){
-                    fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                    fetch(`https://bugwatch.com.ng/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
                     .then(rsp=>rsp.json())
                     .then(data=>{
                         setNonGroupMembers(data.members);
                         setNewMembers([]);
 
-                        return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                        return fetch(`https://bugwatch.com.ng/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
                         .then(rsp=>rsp.json())
                         .then(data=>{
                             setGroupMembers(data.membership);
@@ -141,13 +140,13 @@ const Groupinboxmessage= ({userSession}) => {
                     })
                 }
                 else{
-                    fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                    fetch(`https://bugwatch.com.ng/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
                     .then(rsp=>rsp.json())
                     .then(data=>{
                         setNonGroupMembers(data.members);
                         setNewMembers([]);
                         
-                        return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                        return fetch(`https://bugwatch.com.ng/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
                         .then(rsp=>rsp.json())
                         .then(data=>{
                             setGroupMembers(data.membership);
@@ -178,7 +177,7 @@ const Groupinboxmessage= ({userSession}) => {
     const exitGroupChat=()=>{
         if(userSession == groupData[2]){
             if(window.confirm('You are about to leave the group you created. Your admin rights will be passed onto someone else. Proceed?')){
-                fetch(`http://localhost:5000/api/v1/admin-leave-group-chat/?grpID=${groupIdentity}&dev=${userSession}`)
+                fetch(`https://bugwatch.com.ng/api/v1/admin-leave-group-chat/?grpID=${groupIdentity}&dev=${userSession}`)
                 .then(rsp=>rsp.json())
                 .then(data=>{
                     //console.log(data);
@@ -187,7 +186,7 @@ const Groupinboxmessage= ({userSession}) => {
             }
         }
         else if(window.confirm('Do you want to leave the group?')){
-            fetch(`http://localhost:5000/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
+            fetch(`https://bugwatch.com.ng/api/v1/leave-group-chat?grpID=${groupIdentity}&dev=${userSession}`)
             .then(rsp=>rsp.json())
             .then(data=>{
                 //console.log(data);
@@ -202,23 +201,23 @@ const Groupinboxmessage= ({userSession}) => {
             let removeData={
                 groupIdentity,memberId
             }
-            fetch(`http://localhost:5000/api/v1/remove-group-member/`,{
+            fetch(`https://bugwatch.com.ng/api/v1/remove-group-member/`,{
                 method:"POST",
                 mode:'cors',
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin":"http://localhost:5000/",
+                    "Access-Control-Allow-Origin":"https://bugwatch.com.ng/",
                     "Access-Control-Allow-Credentials":true
                 },
                 body: JSON.stringify(removeData)
             })
             .then(resp=> {
                 if(resp.status=="200"){
-                    return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                    return fetch(`https://bugwatch.com.ng/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
                     .then(rsp=>rsp.json())
                     .then(data=>{
                         setGroupMembers(data.membership);
-                        return fetch(`http://localhost:5000/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
+                        return fetch(`https://bugwatch.com.ng/api/v1/fetch-unadded-group-members/?dev=${userSession}&grpID=${groupIdentity}`)
                         .then(rsp=>rsp.json())
                         .then(data=>{
                             //console.log(data);
@@ -565,12 +564,12 @@ const Groupinboxmessage= ({userSession}) => {
                                                         return <div key={member.dev_id}>
                                                             <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end" id={`btn${member.dev_id}`} onClick={()=>{
 
-                                                                fetch(`http://localhost:5000/api/v1/accept-friend-request/?invitee=${userSession}&invited=${member.dev_id}`)
+                                                                fetch(`https://bugwatch.com.ng/api/v1/accept-friend-request/?invitee=${userSession}&invited=${member.dev_id}`)
                                                                 .then( rsp => rsp.json())
                                                                 .then( data => {
                                                                     alert(data.message);
 
-                                                                    return fetch(`http://localhost:5000/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
+                                                                    return fetch(`https://bugwatch.com.ng/api/v1/get-group-membership?grpID=${groupIdentity}&dev=${userSession}`)
                                                                     .then(rsp=>rsp.json())
                                                                     .then(data=>{
                                                                         setGroupMembers(data.membership);
@@ -586,7 +585,7 @@ const Groupinboxmessage= ({userSession}) => {
                                                     }
                                                     return <div key={member.dev_id}>
                                                         <p className="py-2">{member.dev_nickname[0].toUpperCase() + member.dev_nickname.substring(1)} <a type='button' className="btn btn-dark btn-sm float-end" id={`btn${member.dev_id}`} onClick={()=>{
-                                                            fetch(`http://localhost:5000/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${member.dev_id}`)
+                                                            fetch(`https://bugwatch.com.ng/api/v1/send-friend-request/?userSession=${userSession}&friendRequestRecipient=${member.dev_id}`)
                                                             .then( rsp => rsp.json())
                                                             .then( data => {
                                                                 document.getElementById(`btn${member.dev_id}`).style.display="none";

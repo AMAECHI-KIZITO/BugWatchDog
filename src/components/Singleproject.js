@@ -8,7 +8,7 @@ const SingleProject= ({userSession}) => {
     const[loadData, setLoadData]=useState("loading");
 
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/find/project/?projectId=${projectId}`)
+        fetch(`https://bugwatch.com.ng/api/v1/find/project/?projectId=${projectId}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             let api_data=data.dev_projects[0];

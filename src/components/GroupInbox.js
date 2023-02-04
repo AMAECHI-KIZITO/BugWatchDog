@@ -8,12 +8,12 @@ const GroupInbox=({userSession})=>{
 
     //Getting my groups inbox
     useEffect( ()=>{
-        fetch(`http://localhost:5000/api/v1/group-inbox/?devId=${userSession}`)
+        fetch(`https://bugwatch.com.ng/api/v1/group-inbox/?devId=${userSession}`)
         .then(rsp=>rsp.json())
         .then(data=>{
             setMyInbox(data.message);
             setLoadingStatus('Loaded');
-            document.title='Debugger - Group Inbox';
+            document.title='BugWatch - Group Inbox';
             //console.log(data);
         })
     },[])
