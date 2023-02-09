@@ -48,7 +48,7 @@ const Groupinboxmessage= ({userSession}) => {
             setGroupData(the_data);
             setCurrentGroupId(the_data[3]);
             setGroupChatData(data.chat_history);
-            document.title=the_data[4];
+            document.title="BugWatch - "+the_data[4];
         })
     },[msgStatus]);
 

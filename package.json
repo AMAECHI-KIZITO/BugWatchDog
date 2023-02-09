@@ -1,5 +1,6 @@
 {
   "name": "debugger",
+  "homepage":"https://bugwatchdog.com.ng",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -38,7 +39,6 @@
     ]
   },
   "options": {
-    
     "proxy": "https://bugwatch.com.ng/"
   }
 }

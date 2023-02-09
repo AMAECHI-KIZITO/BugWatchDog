@@ -65,7 +65,7 @@ const Signup = ()=>{
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             if (data.message == "Registration Successful"){
                 setSignupresp("Registration Successful. An activation link has been sent to your email");
                 document.getElementById("resetForm").click();

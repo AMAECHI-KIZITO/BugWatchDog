@@ -8,7 +8,7 @@ function Dashboard({userSession}){
   const [friends, setFriends]=useState("")
   const [friendRequest, setfriendrequest]=useState([])
   const [numberOfFriendRequest, setNumberOfFriendRequest]=useState("")
-  document.title='Debugger - Dashboard';
+  document.title='BugWatch - Dashboard';
 
 
   //Get developer statistics

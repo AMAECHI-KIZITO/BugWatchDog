@@ -8,7 +8,7 @@ const ViewSingleProjectBugs= ({userSession}) => {
     const[specificProjectBugs, setSpecificProjectBugs]=useState([]);
     const[loadData, setLoadData]=useState("loading");
     const[updateBugId, setUpdateBugId]=useState(0);
-    document.title='Debugger - View Project Bugs';
+    document.title='BugWatch - View Project Bugs';
 
     useEffect( ()=>{
         fetch(`https://bugwatch.com.ng/api/v1/find/project/?projectId=${projectId}`)
