@@ -18,20 +18,11 @@ CORS(app, supports_credentials=True, resources={
 app.config.from_pyfile("config.py")
 app.config.from_object(config.ApplicationSettings)
 
-# mail=Mail(app)
-# app.config['TESTING'] = False
-# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USERNAME'] = 'konkakira1960@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'ooriyylqzqyrwyor'
-# app.config['MAIL_USE_SSL'] = True
-# app.config['MAIL_SUPPRESS_SEND '] = False
-# mail=Mail(app)
 
 mail=Mail(app)
-app.config['MAIL_SERVER'] = 'mail.bugwatch.com.ng'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'support@bugwatch.com.ng'
+app.config['MAIL_SERVER'] = '##########'
+app.config['MAIL_PORT'] = 'port number'
+app.config['MAIL_USERNAME'] = 'mail username'
 app.config['MAIL_PASSWORD'] = 'Secret Password Here'
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USE_TLS'] = True
