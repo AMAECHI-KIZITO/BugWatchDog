@@ -41,8 +41,6 @@ function App(){
 
           <Route path="sharedlayout" element={ <SharedDashboardLinks/> } />
 
-          <Route path="*" element={ <Error/> } />
-
           <Route path="/token-expired/:gmail" element={ <ExpiredToken/> } />
 
           <Route path="/invalid-token/:gmail" element={ <InvalidToken/> } />
@@ -81,6 +79,8 @@ function App(){
               <Route path=":groupIdentity" element={< Groupinboxmessage userSession={userSession}/>}/>
             </Route>
           </Route>
+
+          <Route path="*" element={ <Error/> } />
         </Routes>
       </BrowserRouter>
     </div>

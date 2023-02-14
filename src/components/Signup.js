@@ -94,7 +94,7 @@ const Signup = ()=>{
                         :
                         (signupresp == 'Registration Successful. An activation link has been sent to your email'?<h5 className="text-center text-success alert alert-success">{signupresp}</h5>
                         :
-                        (signupresp == 'This email has already been registered. Try again' || signupresp == 'Registration Failed. Incomplete Form Data' 
+                        (signupresp == 'This email has already been registered. Try again' || signupresp == 'Registration Failed. Incomplete Form Data' || signupresp == 'Invalid Email Format' 
                         ?
                         <h5 className="text-center text-danger alert alert-danger">{signupresp}</h5>
                         :
