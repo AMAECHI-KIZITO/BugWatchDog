@@ -1,6 +1,5 @@
-# DEBUGGER
-
-An application that helps developers track and monitor the progress of their projects by logging bugs, creating milestones as well, creating collaborative groups and seeking help from senior developers where needed.
+# BUGWATCHDOG
+This project allows developers to organize and document the challenges encountered in the course of a project development. It also connects developers through private inboxes as well as group chat feature.
 
 ## 👨🏽‍🍳Languages/Tools
 
